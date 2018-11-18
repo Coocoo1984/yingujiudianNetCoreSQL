@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2041
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAPI_SQL", "WebAPI_SQL\WebAPI_SQL.csproj", "{2F46E06E-0E05-4A11-B62E-450678BB9621}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL", "DAL\DAL.csproj", "{7D16D290-1954-452A-B76A-216DD3F13E24}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestProject", "UnitTestProject\UnitTestProject.csproj", "{E55B2014-3750-4F7A-918A-6BED280DDEA7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2F46E06E-0E05-4A11-B62E-450678BB9621}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F46E06E-0E05-4A11-B62E-450678BB9621}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F46E06E-0E05-4A11-B62E-450678BB9621}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F46E06E-0E05-4A11-B62E-450678BB9621}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D16D290-1954-452A-B76A-216DD3F13E24}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D16D290-1954-452A-B76A-216DD3F13E24}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D16D290-1954-452A-B76A-216DD3F13E24}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D16D290-1954-452A-B76A-216DD3F13E24}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E55B2014-3750-4F7A-918A-6BED280DDEA7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E55B2014-3750-4F7A-918A-6BED280DDEA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E55B2014-3750-4F7A-918A-6BED280DDEA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E55B2014-3750-4F7A-918A-6BED280DDEA7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {48B9067E-E282-4A9A-AD43-7585826DF213}
+	EndGlobalSection
+EndGlobal
