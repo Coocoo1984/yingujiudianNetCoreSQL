@@ -94,10 +94,156 @@ namespace DAL
                     result = DBHelper.ExecuteTable(sb.ToString());
                 }
                 catch (Exception) { throw; }
+            }
+            return result;
+        }
+
+        public static DataTable GetPOLists4Dept(int departmentID)
+        {
+            DataTable result = null;
+            if (departmentID > 1)
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.Append("SELECT * FROM ");
+                sb.Append("view_purchasing_order_list_4_dept");
+                sb.Append(" WHERE department_id=");
+                sb.Append(departmentID);
+                try
+                {
+                    result = DBHelper.ExecuteTable(sb.ToString());
+                }
+                catch (Exception) { throw; }
+            }
+            return result;
+        }
+
+        public static DataTable GetPODetailLists4Dept(int POid)
+        {
+            DataTable result = null;
+            if (POid > 1)
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.Append("SELECT * FROM ");
+                sb.Append("view_purchasing_order_detail_list_4_dept");
+                sb.Append(" AND pod.purchasing_order_id=");
+                sb.Append(POid);
+                try
+                {
+                    result = DBHelper.ExecuteTable(sb.ToString());
+                }
+                catch (Exception) { throw; }
+            }
+            return result;
+        }
+
+        public static DataTable GetPurchasingPlanCount4All()
+        {
+            DataTable result = null;
+            StringBuilder sb = new StringBuilder();
+            sb.Append("SELECT * FROM ");
+            sb.Append("view_purchasing_plan_count_4_all");
+            try
+            {
+                result = DBHelper.ExecuteTable(sb.ToString());
+            }
+            catch (Exception) { throw; }
+            finally { }
+            return result;
+        }
+
+        public static DataTable GetPurchasingPlanCount4Audit()
+        {
+            DataTable result = null;
+            StringBuilder sb = new StringBuilder();
+            sb.Append("SELECT * FROM ");
+            sb.Append("view_purchasing_plan_list_4_audit");
+            try
+            {
+                result = DBHelper.ExecuteTable(sb.ToString());
+            }
+            catch (Exception) { throw; }
+            finally { }
+            return result;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="purchasingPlanId"></param>
+        /// <returns></returns>
+        public static DataTable GetPurchasingPlanDetalGoodsCloassGroupCount(int purchasingPlanId)
+        {
+            DataTable result = null;
+            if (purchasingPlanId > 1)
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.Append("SELECT * FROM ");
+                sb.Append("view_purchasing_plan_detail_goods_class_group_count");
+                sb.Append(" AND ppd.purchasing_plan_id=");
+                sb.Append(purchasingPlanId);
+                try
+                {
+                    result = DBHelper.ExecuteTable(sb.ToString());
+                }
+                catch (Exception) { throw; }
                 finally { }
             }
             return result;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="purchasingPlanId"></param>
+        /// <returns></returns>
+        public static DataTable GetPurchasingPlanDetailList(int purchasingPlanId)
+        {
+            DataTable result = null;
+            if (purchasingPlanId > 1)
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.Append("SELECT * FROM ");
+                sb.Append("view_purchasing_plan_detail_list");
+                sb.Append(" AND ppd.purchasing_plan_id=");
+                sb.Append(purchasingPlanId);
+                try
+                {
+                    result = DBHelper.ExecuteTable(sb.ToString());
+                }
+                catch (Exception) { throw; }
+                finally { }
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="bizTypeId"></param>
+        /// <param name="startTime"></param>
+        /// <param name="endTime"></param>
+        /// <returns></returns>
+        public static DataTable GetGoodsClassQuoteCount(int bizTypeId, DateTime startTime, DateTime endTime)
+        {
+            DataTable result = null;
+            if (bizTypeId > 1)
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.Append("SELECT * FROM ");
+                sb.Append("view_purchasing_plan_detail_list");
+                sb.Append(" AND ppd.purchasing_plan_id=");
+                sb.Append(bizTypeId);
+                try
+                {
+                    result = DBHelper.ExecuteTable(sb.ToString());
+                }
+                catch (Exception) { throw; }
+                finally { }
+            }
+            return result;
+        }
+
+
 
     }
 }
