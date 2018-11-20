@@ -403,7 +403,7 @@ WHERE
         }
 
         /// <summary>
-        /// 
+        /// 采购需求部门获取按商品入库盘点数目
         /// </summary>
         /// <param name="bizTypeId"></param>
         /// <param name="startTime"></param>
@@ -417,23 +417,24 @@ WHERE
             StringBuilder sb = new StringBuilder();
             sb.Append(@"
 SELECT
-	po.id AS purchasing_order_id,
-	bt.biz_type_id,
-	bt.name AS biz_type_name,
-	po.department_id,
-	d.name AS department_name,
-	po.vendor_id,
-	v.name AS vendor_name,
-	po.create_time,
-    po.update_time,
-	po.purchasing_order_state_id,
-	pos.name AS purchasing_order_state_name,
-	pod.id AS purchasing_order_detail_id,
+	--po.id AS purchasing_order_id,
+	--bt.biz_type_id,
+	--bt.name AS biz_type_name,
+	--po.department_id,
+	--d.name AS department_name,
+	--po.vendor_id,
+	--v.name AS vendor_name,
+	--po.create_time,
+    --po.update_time,
+	--po.purchasing_order_state_id,
+	--pos.name AS purchasing_order_state_name,
+	--pod.id AS purchasing_order_detail_id,
 	pod.goods_class_id,
 	gc.name AS goods_class_name,
 	pod.goods_id,
 	g.name AS goods_name,
-	pod.actual_count AS actual_count 
+	SUM(pod.actual_count) AS actual_count_sum,
+    gu.name AS goods_unit_name
 FROM
 	purchasing_order AS po
 	LEFT JOIN purchasing_order_state AS pos ON po.purchasing_order_state_id = pos.id
@@ -469,8 +470,7 @@ WHERE
                 sb.Append(" AND pod.goods_id = ");
                 sb.Append(string.Join(',', listGoodsIds.ToArray()));
             }
-
-
+            sb.Append(" GROUP BY pod.goods_id");
             sb.Append(" ORDER BY g.id");
             try
             {
