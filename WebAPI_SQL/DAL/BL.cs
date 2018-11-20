@@ -167,20 +167,37 @@ namespace DAL
         }
 
         /// <summary>
-        /// 
+        /// 待复审采购计划列表
         /// </summary>
-        /// <param name="purchasingPlanId"></param>
         /// <returns></returns>
-        public static DataTable GetPurchasingPlanDetalGoodsCloassGroupCount(int purchasingPlanId)
+        public static DataTable GetPurchasingPlanCount4Audit2()
         {
             DataTable result = null;
-            if (purchasingPlanId > 0)
+            StringBuilder sb = new StringBuilder();
+            sb.Append("SELECT * FROM ");
+            sb.Append("view_purchasing_plan_list_4_audit2");
+            try
+            {
+                result = DBHelper.ExecuteTable(sb.ToString());
+            }
+            catch (Exception) { throw; }
+            finally { }
+            return result;
+        }
+
+        /// <summary>
+        /// 待复审采购计划列表外层分组结构
+        /// </summary>
+        /// <param name="purchasingPlanID">必须</param>
+        /// <returns></returns>
+        public static DataTable GetPurchasingPlanGoodsClassListWithVendor(int purchasingPlanID)
+        {
+            DataTable result = null;
+            if (purchasingPlanID > 0)
             {
                 StringBuilder sb = new StringBuilder();
                 sb.Append("SELECT * FROM ");
-                sb.Append("view_purchasing_plan_detail_goods_class_group_count");
-                sb.Append(" AND ppd.purchasing_plan_id = ");
-                sb.Append(purchasingPlanId);
+                sb.Append("view_purchasing_plan_goods_class_list_with_vendor");
                 try
                 {
                     result = DBHelper.ExecuteTable(sb.ToString());
@@ -191,10 +208,11 @@ namespace DAL
             return result;
         }
 
+
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="purchasingPlanId"></param>
+        /// <param name="purchasingPlanId">必须</param>
         /// <returns></returns>
         public static DataTable GetPurchasingPlanDetailList(int purchasingPlanId)
         {
@@ -206,6 +224,7 @@ namespace DAL
                 sb.Append("view_purchasing_plan_detail_list");
                 sb.Append(" AND ppd.purchasing_plan_id = ");
                 sb.Append(purchasingPlanId);
+                sb.Append(" ORDER BY ppd.goods_id");
                 try
                 {
                     result = DBHelper.ExecuteTable(sb.ToString());
@@ -217,11 +236,109 @@ namespace DAL
         }
 
         /// <summary>
+        /// 选中采购中的某一商品类目，计算出对应类目的供应商的小计价格列表
+        /// </summary>
+        /// <param name="purchasingPlanID">必须</param>
+        /// <param name="goodsClassID">必须</param>
+        /// <param name="listGoodsID">必须</param>
+        /// <returns></returns>
+        public static DataTable GetPurchasingPlanGoodsClassVendorQuetoSUM(int purchasingPlanID, int goodsClassID, List<int> listGoodsID)
+        {
+            DataTable result = null;
+            if (goodsClassID > 0  && listGoodsID !=null && listGoodsID.Count > 0)
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.Append(@"
+SELECT
+	v.id AS vendor_id,
+	v.name AS vendor_name,
+	SUM( ppd.count * qd.unit_price ) AS subtotal 
+FROM
+	purchasing_plan AS pp,
+	purchasing_plan_detail AS ppd,
+	quote AS q,
+	vendor AS v
+	LEFT JOIN quote_detail AS qd ON ppd.goods_class_id = qd.goods_class_id 
+WHERE
+	q.disable = 0 
+	AND qd.disable = 0
+                ");
+                sb.Append("	AND ppd.purchasing_plan_id = ");
+                sb.Append(purchasingPlanID);
+                sb.Append("	AND ppd.goods_class_id = ");
+                sb.Append(goodsClassID);
+                sb.Append(" AND rsv.biz_type_id in ( ");
+                sb.Append(string.Join(',', listGoodsID.ToArray()));
+                sb.Append(" )");
+                sb.Append(@"
+GROUP BY
+	v.id");
+                sb.Append(@"
+ORDER BY
+	subtotal");
+                try
+                {
+                    result = DBHelper.ExecuteTable(sb.ToString());
+                }
+                catch (Exception) { throw; }
+                finally { }
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 采购进度 - 取得所有订单
+        /// </summary>
+        /// <returns></returns>
+        public static DataTable GetPurchasingOrderList()
+        {
+            DataTable result = null;
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append("SELECT * FROM ");
+            sb.Append("view_purchasing_order_list");
+            try
+            {
+                result = DBHelper.ExecuteTable(sb.ToString());
+            }
+            catch (Exception) { throw; }
+            finally { }
+            return result;
+        }
+
+        /// <summary>
+        /// 采购进度 - 通过订单ID获取订单收货详情
+        /// </summary>
+        /// <param name="purchasingOrderID">必须</param>
+        /// <returns></returns>
+        public static DataTable GetPurchasingOrderDetailList(int purchasingOrderID)
+        {
+            DataTable result = null;
+            StringBuilder sb = new StringBuilder();
+            sb.Append("SELECT * FROM ");
+            sb.Append("view_pruchasing_order_detail_list");
+            if (purchasingOrderID > 0)
+            {
+                sb.Append(" AND po.id = ");
+                sb.Append(purchasingOrderID);
+            }
+            sb.Append(" ORDER BY po.goods_id");
+            try
+            {
+                result = DBHelper.ExecuteTable(sb.ToString());
+            }
+            catch (Exception) { throw; }
+            finally { }
+            return result;
+        }
+
+
+        /// <summary>
         /// 
         /// </summary>
-        /// <param name="bizTypeId"></param>
-        /// <param name="startTime"></param>
-        /// <param name="endTime"></param>
+        /// <param name="bizTypeId">0</param>
+        /// <param name="startTime">null</param>
+        /// <param name="endTime">null</param>
         /// <returns></returns>
         public static DataTable GetGoodsClassQuoteCount(int bizTypeId, DateTime startTime, DateTime endTime)
         {
@@ -266,6 +383,13 @@ WHERE
             return result;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="bizTypeId">0</param>
+        /// <param name="startTime">null</param>
+        /// <param name="endTime">null</param>
+        /// <returns></returns>
         public static DataTable GetGoodsQuoteDetailVendorPriceRange(int bizTypeId, DateTime startTime, DateTime endTime)
         {
             DataTable result = null;
@@ -316,6 +440,14 @@ WHERE
             return result;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="bizTypeId">0</param>
+        /// <param name="startTime">null</param>
+        /// <param name="endTime">null</param>
+        /// <param name="goodsId">0</param>
+        /// <returns></returns>
         public static DataTable GetGoodsQuoteDetailVendorList(int bizTypeId, DateTime startTime, DateTime endTime, int goodsId)
         {
             DataTable result = null;
@@ -376,6 +508,12 @@ WHERE
             return result;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="startTime">null:无该条件</param>
+        /// <param name="endTime">null:无该条件</param>
+        /// <returns></returns>
         public static DataTable GetQuoteListAll(DateTime startTime, DateTime endTime)
         {
             DataTable result = null;
@@ -402,14 +540,16 @@ WHERE
             return result;
         }
 
+
+
         /// <summary>
         /// 采购需求部门获取按商品入库盘点数目
         /// </summary>
-        /// <param name="bizTypeId"></param>
-        /// <param name="startTime"></param>
-        /// <param name="endTime"></param>
-        /// <param name="listGoodsIds">匹配条件 多个商品id</param>
-        /// <param name="deparmentId"></param>
+        /// <param name="bizTypeId">0:无该条件</param>
+        /// <param name="startTime">null:无该条件</param>
+        /// <param name="endTime">null:无该条件</param>
+        /// <param name="listGoodsIds">null:无该条件 多个商品id</param>
+        /// <param name="deparmentId">0:无该条件</param>
         /// <returns></returns>
         public static DataTable GetStockIn4Dept(int bizTypeId, DateTime startTime, DateTime endTime, List<int> listGoodsIds, int deparmentId)
         {
@@ -450,6 +590,11 @@ WHERE
 	AND po.purchasing_order_state_id = 4
                 ");
 
+            if (deparmentId > 0)
+            {
+                sb.Append(" AND po.biz_type_id = ");
+                sb.Append(deparmentId);
+            }
             if (bizTypeId > 0)
             {
                 sb.Append(" AND po.biz_type_id = ");
@@ -467,8 +612,9 @@ WHERE
             }
             if (listGoodsIds != null && listGoodsIds.Count > 0)
             {
-                sb.Append(" AND pod.goods_id = ");
+                sb.Append(" AND pod.goods_id in( ");
                 sb.Append(string.Join(',', listGoodsIds.ToArray()));
+                sb.Append(" )");
             }
             sb.Append(" GROUP BY pod.goods_id");
             sb.Append(" ORDER BY g.id");
@@ -481,9 +627,166 @@ WHERE
             return result;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="deparmentId">0:无该条件</param>
+        /// <param name="startTime">null:无该条件</param>
+        /// <param name="endTime">null:无该条件</param>
+        /// <returns></returns>
+        public static DataTable GetStock(int deparmentId, DateTime startTime, DateTime endTime)
+        {
+            DataTable result = null;
+            StringBuilder sb = new StringBuilder();
+            sb.Append(@"
+---------库存报表(用于盘存)--------
+SELECT
+	d.name AS department_name,
+	bt.name AS biz_type_name,
+	g.name AS goods_name,
+	pod.actual_count AS actual_count,
+	po.create_time 
+FROM
+	purchasing_order AS po
+	LEFT JOIN purchasing_order_state AS pos ON po.purchasing_order_state_id = pos.id
+	LEFT JOIN department AS d ON po.department_id = d.id
+	LEFT JOIN vendor AS v ON po.vendor_id = v.id
+	LEFT JOIN purchasing_order_detail AS pod ON pod.purchasing_order_id = po.id
+	LEFT JOIN goods_class AS gc ON pod.goods_class_id = gc.id
+	LEFT JOIN goods AS g ON pod.goods_id = g.id
+	LEFT JOIN goods_unit AS gu ON g.goods_unit_id = gc.id
+	LEFT JOIN biz_type AS bt ON po.biz_type_id = bt.id 
+WHERE
+	po.purchasing_order_state_id = 3 
+                ");
+            if (deparmentId > 0)
+            {
+                sb.Append(" AND q.deparmentId = ");
+                sb.Append(deparmentId);
+            }
 
+            if (startTime != null)
+            {
+                sb.Append(" AND q.create_time > ");
+                sb.Append(Convert.ToString(startTime));
+            }
+            if (endTime != null)
+            {
+                sb.Append(" AND q.create_time < ");
+                sb.Append(Convert.ToString(endTime));
+            }
+            try
+            {
+                result = DBHelper.ExecuteTable(sb.ToString());
+            }
+            catch (Exception) { throw; }
+            finally { }
 
+            return result;
+        }
 
+        /// <summary>
+        /// 获取供应商对应的报价单结构
+        /// </summary>
+        /// <param name="vendorID"></param>
+        /// <param name="bizTypeID">null</param>
+        /// <returns></returns>
+        public static DataTable GetQuoteDetailList4Vendor2Quote(int vendorID, List<int> listBizTypeID)
+        {
+            DataTable result = null;
+            StringBuilder sb = new StringBuilder();
+            sb.Append("SELECT * FROM ");
+            sb.Append("view_quote_detail_list_4_vendor_quote");
+            if (vendorID > 0)
+            {
+                sb.Append(" AND q.create_time > ");
+                sb.Append(vendorID);
+            }
+            if (listBizTypeID != null && listBizTypeID.Count > 0)
+            {
+                sb.Append(" AND rsv.biz_type_id in ( ");
+                sb.Append(string.Join(',', listBizTypeID.ToArray()));
+                sb.Append(" )");
+            }
+            try
+            {
+                result = DBHelper.ExecuteTable(sb.ToString());
+            }
+            catch (Exception) { throw; }
+            finally { }
+
+            return result;
+        }
+
+        /// <summary>
+        /// 获取供应商的订单列表(按状态排序)
+        /// </summary>
+        /// <param name="bizTypeID">0</param>
+        /// <param name="startTime">0</param>
+        /// <param name="endTime">0</param>
+        /// <param name="vendorID">0</param>
+        /// <returns></returns>
+        public static DataTable GetPurchasingOrderList4Vendor(int bizTypeID, DateTime startTime, DateTime endTime, int vendorID)
+        {
+            DataTable result = null;
+            StringBuilder sb = new StringBuilder();
+            sb.Append("SELECT * FROM ");
+            sb.Append("view_purchasing_order_list_4_vendor");
+            if (vendorID > 0)
+            {
+                sb.Append(" AND po.vendor_id = ");
+                sb.Append(vendorID);
+            }
+            if (bizTypeID > 0)
+            {
+                sb.Append(" AND po.biz_type_id = ");
+                sb.Append(bizTypeID);
+            }
+            if (startTime != null)
+            {
+                sb.Append(" AND q.startTime > ");
+                sb.Append(Convert.ToString(startTime));
+            }
+            if (endTime != null)
+            {
+                sb.Append(" AND q.endTime < ");
+                sb.Append(Convert.ToString(endTime));
+            }
+            sb.Append(" ORDER BY po.purchasing_order_state_id");
+            try
+            {
+                result = DBHelper.ExecuteTable(sb.ToString());
+            }
+            catch (Exception) { throw; }
+            finally { }
+            return result;
+        }
+
+        /// <summary>
+        /// 通过订单ID获取订单详情
+        /// </summary>
+        /// <param name="purchasingOrderID">0</param>
+        /// <returns></returns>
+        public static DataTable GetPurchasingOrderDetailList4Vendor(int purchasingOrderID)
+        {
+            DataTable result = null;
+            StringBuilder sb = new StringBuilder();
+            sb.Append("SELECT * FROM ");
+            sb.Append("view_pruchasing_order_detail_list_4_vendor");
+            if (purchasingOrderID > 0)
+            {
+                sb.Append(" AND po.id = ");
+                sb.Append(purchasingOrderID);
+            }
+            sb.Append(" ORDER BY po.goods_id");
+            try
+            {
+                result = DBHelper.ExecuteTable(sb.ToString());
+            }
+            catch (Exception) { throw; }
+            finally { }
+            return result;
+        }
 
     }
 }

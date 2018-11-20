@@ -169,7 +169,6 @@ namespace DAL
             return dt;
         }
 
-        public static string Get
     }
 
 }
