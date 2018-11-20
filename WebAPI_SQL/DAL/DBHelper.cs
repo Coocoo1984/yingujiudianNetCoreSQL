@@ -8,7 +8,7 @@ namespace DAL
     {
 
         //连接字符串
-        private static readonly string str = "Data Source=test.db";
+        private static readonly string str = @"Data Source=\DB\test.db";
         //string dd = ConfigurationManager.AppSettings["constr"].ToString();
 
         /// <summary>
@@ -168,6 +168,8 @@ namespace DAL
 
             return dt;
         }
+
+        public static string Get
     }
 
 }
