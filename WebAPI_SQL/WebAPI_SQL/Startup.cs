@@ -26,6 +26,11 @@ namespace WebAPI_SQL
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            //cors
+            services.AddCors(options => options.AddPolicy("CorsSample", p => p.WithOrigins("http://localhost:5000").AllowAnyMethod().AllowAnyHeader()));
+
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -41,6 +46,10 @@ namespace WebAPI_SQL
             }
 
             app.UseHttpsRedirection();
+
+            //cors
+            app.UseCors("CorsSample");
+
             app.UseMvc();
         }
     }

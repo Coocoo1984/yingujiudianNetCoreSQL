@@ -22,12 +22,18 @@ namespace DAL
             return result;
         }
 
+        #region 采购需求部门
+
+        /// <summary>
+        /// 采购需求部门 首页统计
+        /// </summary>
+        /// <returns></returns>
         public static DataTable GetPurchasingPlanCount4Dept()
         {
             DataTable result = null;
             StringBuilder sb = new StringBuilder();
             sb.Append("SELECT * FROM ");
-            sb.Append("view_purchasing_plan_count4dept");
+            sb.Append("view_purchasing_plan_count_4_dept");
             try
             {
                 result = DBHelper.ExecuteTable(sb.ToString());
@@ -36,6 +42,13 @@ namespace DAL
             finally { }
             return result;
         }
+
+
+
+
+        #endregion
+
+
 
         public static DataTable GetBizTypes()
         {
@@ -52,12 +65,42 @@ namespace DAL
             return result;
         }
 
+        public static DataTable GetDepartments()
+        {
+            DataTable result = null;
+            StringBuilder sb = new StringBuilder();
+            sb.Append("SELECT * FROM ");
+            sb.Append("view_department");
+            try
+            {
+                result = DBHelper.ExecuteTable(sb.ToString());
+            }
+            catch (Exception) { throw; }
+            finally { }
+            return result;
+        }
+
         public static DataTable GetGoods()
         {
             DataTable result = null;
             StringBuilder sb = new StringBuilder();
             sb.Append("SELECT * FROM ");
-            sb.Append("view_goods");
+            sb.Append(" view_goods");
+            try
+            {
+                result = DBHelper.ExecuteTable(sb.ToString());
+            }
+            catch (Exception) { throw; }
+            finally { }
+            return result;
+        }
+
+        public static DataTable GetGoodsClass()
+        {
+            DataTable result = null;
+            StringBuilder sb = new StringBuilder();
+            sb.Append("SELECT * FROM ");
+            sb.Append("view_goods_class");
             try
             {
                 result = DBHelper.ExecuteTable(sb.ToString());
@@ -104,8 +147,8 @@ namespace DAL
             if (departmentID > 1)
             {
                 StringBuilder sb = new StringBuilder();
-                sb.Append("SELECT * FROM ");
-                sb.Append("view_purchasing_order_list_4_dept");
+                sb.Append("SELECT * FROM");
+                sb.Append(" view_purchasing_order_list_4_dept");
                 sb.Append(" WHERE department_id = ");
                 sb.Append(departmentID);
                 try

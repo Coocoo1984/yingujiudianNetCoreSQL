@@ -8,7 +8,7 @@ namespace DAL
     {
 
         //连接字符串
-        private static readonly string str = @"Data Source=\DB\test.db";
+        private static readonly string str = "Data Source=F:\\GitHubBase\\Coocoo1984\\yingujiudianNetCoreSQL\\WebAPI_SQL\\DAL\\DB\\test.db";
         //string dd = ConfigurationManager.AppSettings["constr"].ToString();
 
         /// <summary>
@@ -62,23 +62,25 @@ namespace DAL
         /// <returns>ExecuteReader</returns>
         public static SqliteDataReader ExecueDataReader(string sql, params SqliteParameter[] param)
         {
-            SqliteConnection conn = new SqliteConnection(str);
-            using (SqliteCommand cmd = new SqliteCommand(sql, conn))
-            {
-                if (param != null)
+            using (SqliteConnection conn = new SqliteConnection(str))
+            { 
+                using (SqliteCommand cmd = new SqliteCommand(sql, conn))
                 {
-                    cmd.Parameters.AddRange(param);
-                }
-                try
-                {
-                    conn.Open();
-                    return cmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
-                }
-                catch (Exception ex)
-                {
-                    cmd.Dispose();
-                    conn.Close();
-                    throw ex;
+                    if (param != null)
+                    {
+                        cmd.Parameters.AddRange(param);
+                    }
+                    try
+                    {
+                        conn.Open();
+                        return cmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
+                    }
+                    catch (Exception ex)
+                    {
+                        cmd.Dispose();
+                        conn.Close();
+                        throw ex;
+                    }
                 }
             }
         }
@@ -156,7 +158,7 @@ namespace DAL
                         DataRow itemDataRow = dt.NewRow();
                         for (int i = 0; i < dr.FieldCount; i++)
                         {
-                            itemDataRow[i] = dr[i].ToString();
+                            itemDataRow[i] = dr.GetValue(i);
                         }
                         dt.Rows.Add(itemDataRow);
                         itemDataRow = null;
