@@ -35,6 +35,20 @@ namespace WebAPI_SQL
             return result;
         }
 
+        public static DateTime? GetDateTime(DateTime dateTime, string stringDateFormatString)
+        {
+            DateTime? result = null;
+            if (dateTime == null || dateTime == DateTime.MinValue || dateTime == DateTime.MaxValue)
+            {
+                result = null;
+            }
+            else
+            {
+                result = Convert.ToDateTime(dateTime.ToString(stringDateFormatString));
+            }
+            return result;
+        }
+
         public static List<int> GetListInt(string listIntString)
         {
             List<int> result = null;

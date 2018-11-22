@@ -163,12 +163,12 @@ namespace DAL
         public static DataTable GetPODetailLists4Dept(int POid)
         {
             DataTable result = null;
-            if (POid > 1)
+            if (POid > 0)
             {
                 StringBuilder sb = new StringBuilder();
                 sb.Append("SELECT * FROM ");
                 sb.Append(" view_purchasing_order_detail_list_4_dept");
-                sb.Append(" WHERE pod.purchasing_order_id = ");
+                sb.Append(" WHERE purchasing_order_id = ");
                 sb.Append(POid);
                 try
                 {
@@ -265,8 +265,8 @@ namespace DAL
                 StringBuilder sb = new StringBuilder();
                 sb.Append("SELECT * FROM ");
                 sb.Append(" view_purchasing_plan_detail_list WHERE ");
-                sb.Append($" ppd.purchasing_plan_id = {purchasingPlanId}");
-                sb.Append(" ORDER BY ppd.goods_id");
+                sb.Append($" purchasing_plan_id = {purchasingPlanId}");
+                sb.Append(" ORDER BY goods_id");
                 try
                 {
                     result = DBHelper.ExecuteTable(sb.ToString());
@@ -307,7 +307,7 @@ WHERE
                 ");
                 sb.Append($"	AND ppd.purchasing_plan_id = {purchasingPlanID}");
                 sb.Append($"	AND ppd.goods_class_id = {goodsClassID}");
-                sb.Append($" AND rsv.biz_type_id in ( {string.Join(',', listGoodsID.ToArray())} )");
+                sb.Append($"    AND qd.goods_id in ( {string.Join(',', listGoodsID.ToArray())} )");
                 sb.Append(@"
 GROUP BY
 	v.id");
@@ -354,12 +354,12 @@ ORDER BY
             DataTable result = null;
             StringBuilder sb = new StringBuilder();
             sb.Append("SELECT * FROM ");
-            sb.Append(" view_pruchasing_order_detail_list WHERE 1=1 ");
+            sb.Append(" view_purchasing_order_detail_list WHERE 1=1 ");
             if (purchasingOrderID > 0)
             {
                 sb.Append($" AND po.id = {purchasingOrderID}");
             }
-            sb.Append(" ORDER BY po.goods_id");
+            sb.Append(" ORDER BY goods_id");
             try
             {
                 result = DBHelper.ExecuteTable(sb.ToString());
@@ -551,11 +551,11 @@ WHERE
             sb.Append(" view_quote_list_all WHERE 1=1 ");
             if (startTime != null)
             {
-                sb.Append($" AND q.create_time > '{ Convert.ToString(startTime) }' ");
+                sb.Append($" AND quote_create_time > '{ Convert.ToString(startTime) }' ");
             }
             if (endTime != null)
             {
-                sb.Append($" AND q.create_time < '{ Convert.ToString(endTime) }' ");
+                sb.Append($" AND quote_create_time < '{ Convert.ToString(endTime) }' ");
             }
             try
             {
@@ -778,11 +778,11 @@ WHERE
             }
             if (startTime != null)
             {
-                sb.Append($" AND q.startTime > '{Convert.ToString(startTime)}'");
+                sb.Append($" AND po.create_time > '{Convert.ToString(startTime)}'");
             }
             if (endTime != null)
             {
-                sb.Append($" AND q.endTime < '{ Convert.ToString(endTime) }' ");
+                sb.Append($" AND po.create_time < '{ Convert.ToString(endTime) }' ");
             }
             sb.Append(" ORDER BY po.purchasing_order_state_id");
             try
@@ -804,12 +804,12 @@ WHERE
             DataTable result = null;
             StringBuilder sb = new StringBuilder();
             sb.Append("SELECT * FROM");
-            sb.Append(" view_pruchasing_order_detail_list_4_vendor WHERE 1=1 ");
+            sb.Append(" view_purchasing_order_detail_list_4_vendor WHERE 1=1 ");
             if (purchasingOrderID > 0)
             {
-                sb.Append($" AND po.id = {purchasingOrderID} ");
+                sb.Append($" AND purchasing_order_id = {purchasingOrderID} ");
             }
-            sb.Append(" ORDER BY po.goods_id");
+            sb.Append(" ORDER BY goods_id");
             try
             {
                 result = DBHelper.ExecuteTable(sb.ToString());
