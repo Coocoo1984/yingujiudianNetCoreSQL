@@ -14,9 +14,10 @@ namespace WebAPI_SQL.Controllers
     {
         // GET: api/BizTypes
         [HttpGet]
-        public string Get(int PageIndex, int PageSize)
+        public string Get()
         {
-            return JSONHelper.ToJSONString(PagingHelper.GetPagedTable(BL.GetBizTypes(), PageIndex, PageSize));
+            return JSONHelper.ToJSONString(PagingHelper.GetPagedTable(BL.GetBizTypes(), 
+                0, 0));
         }
     }
 }
