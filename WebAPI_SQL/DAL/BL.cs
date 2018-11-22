@@ -142,7 +142,7 @@ namespace DAL
             return result;
         }
 
-        public static DataTable GetPOLists4Dept(int departmentID)
+        public static DataTable GetPurchasingOrderList4Dept(int departmentID)
         {
             DataTable result = null;
             if (departmentID > 0)
@@ -160,16 +160,16 @@ namespace DAL
             return result;
         }
 
-        public static DataTable GetPODetailLists4Dept(int POid)
+        public static DataTable GetPurchasingOrderDetailList4Dept(int purchasingOrderID)
         {
             DataTable result = null;
-            if (POid > 0)
+            if (purchasingOrderID > 0)
             {
                 StringBuilder sb = new StringBuilder();
                 sb.Append("SELECT * FROM ");
                 sb.Append(" view_purchasing_order_detail_list_4_dept");
                 sb.Append(" WHERE purchasing_order_id = ");
-                sb.Append(POid);
+                sb.Append(purchasingOrderID);
                 try
                 {
                     result = DBHelper.ExecuteTable(sb.ToString());
@@ -255,17 +255,17 @@ namespace DAL
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="purchasingPlanId">必须</param>
+        /// <param name="purchasingPlanID">必须</param>
         /// <returns></returns>
-        public static DataTable GetPurchasingPlanDetailList(int purchasingPlanId)
+        public static DataTable GetPurchasingPlanDetailList(int purchasingPlanID)
         {
             DataTable result = null;
-            if (purchasingPlanId > 0)
+            if (purchasingPlanID > 0)
             {
                 StringBuilder sb = new StringBuilder();
                 sb.Append("SELECT * FROM ");
                 sb.Append(" view_purchasing_plan_detail_list WHERE ");
-                sb.Append($" purchasing_plan_id = {purchasingPlanId}");
+                sb.Append($" purchasing_plan_id = {purchasingPlanID}");
                 sb.Append(" ORDER BY goods_id");
                 try
                 {
@@ -357,7 +357,7 @@ ORDER BY
             sb.Append(" view_purchasing_order_detail_list WHERE 1=1 ");
             if (purchasingOrderID > 0)
             {
-                sb.Append($" AND po.id = {purchasingOrderID}");
+                sb.Append($" AND purchasing_order_id = {purchasingOrderID}");
             }
             sb.Append(" ORDER BY goods_id");
             try
@@ -373,11 +373,11 @@ ORDER BY
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="bizTypeId">0</param>
+        /// <param name="bizTypeID">0</param>
         /// <param name="startTime">null</param>
         /// <param name="endTime">null</param>
         /// <returns></returns>
-        public static DataTable GetGoodsClassQuoteCount(int bizTypeId, DateTime? startTime, DateTime? endTime)
+        public static DataTable GetGoodsClassQuoteCount(int bizTypeID, DateTime? startTime, DateTime? endTime)
         {
             DataTable result = null;
             StringBuilder sb = new StringBuilder();
@@ -394,9 +394,9 @@ WHERE
     q.disable = 0
     AND qd.disable = 0
                 ");
-            if (bizTypeId > 0)
+            if (bizTypeID > 0)
             {
-                sb.Append($" AND q.biz_type_id = {bizTypeId}");
+                sb.Append($" AND q.biz_type_id = {bizTypeID}");
             }
 
             if (startTime != null)
@@ -420,11 +420,11 @@ WHERE
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="bizTypeId">0</param>
+        /// <param name="bizTypeID">0</param>
         /// <param name="startTime">null</param>
         /// <param name="endTime">null</param>
         /// <returns></returns>
-        public static DataTable GetGoodsQuoteDetailVendorPriceRange(int bizTypeId, DateTime? startTime, DateTime? endTime)
+        public static DataTable GetGoodsQuoteDetailVendorPriceRange(int bizTypeID, DateTime? startTime, DateTime? endTime)
         {
             DataTable result = null;
             StringBuilder sb = new StringBuilder();
@@ -448,10 +448,10 @@ WHERE
 	q.disable = 0 
 	AND qd.disable = 0 
                 ");
-            if (bizTypeId > 0)
+            if (bizTypeID > 0)
             {
                 sb.Append($" AND q.biz_type_id = ");
-                sb.Append(bizTypeId);
+                sb.Append(bizTypeID);
             }
             if (startTime != null)
             {
@@ -475,12 +475,12 @@ WHERE
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="bizTypeId">0</param>
+        /// <param name="bizTypeID">0</param>
         /// <param name="startTime">null</param>
         /// <param name="endTime">null</param>
-        /// <param name="goodsId">0</param>
+        /// <param name="goodsID">0</param>
         /// <returns></returns>
-        public static DataTable GetGoodsQuoteDetailVendorList(int bizTypeId, DateTime? startTime, DateTime? endTime, int goodsId)
+        public static DataTable GetGoodsQuoteDetailVendorList(int bizTypeID, DateTime? startTime, DateTime? endTime, int goodsID)
         {
             DataTable result = null;
             StringBuilder sb = new StringBuilder();
@@ -509,10 +509,10 @@ WHERE
 	AND qd.disable = 0 
                 ");
 
-            if (bizTypeId > 0)
+            if (bizTypeID > 0)
             {
                 sb.Append(" AND q.biz_type_id = ");
-                sb.Append(bizTypeId);
+                sb.Append(bizTypeID);
             }
             if (startTime != null)
             {
@@ -522,9 +522,9 @@ WHERE
             {
                 sb.Append($" AND q.create_time < '{ Convert.ToString(endTime) }' ");
             }
-            if (goodsId > 0)
+            if (goodsID > 0)
             {
-                sb.Append($" AND qd.goods_id = {goodsId} ");
+                sb.Append($" AND qd.goods_id = {goodsID} ");
             }
             sb.Append(" ORDER BY unit_price");
             try
@@ -572,13 +572,13 @@ WHERE
         /// <summary>
         /// 采购需求部门获取按商品入库盘点数目
         /// </summary>
-        /// <param name="bizTypeId">0:无该条件</param>
+        /// <param name="bizTypeID">0:无该条件</param>
         /// <param name="startTime">null:无该条件</param>
         /// <param name="endTime">null:无该条件</param>
-        /// <param name="listGoodsIds">null:无该条件 多个商品id</param>
-        /// <param name="deparmentId">0:无该条件</param>
+        /// <param name="listGoodsIDs">null:无该条件 多个商品id</param>
+        /// <param name="deparmentID">0:无该条件</param>
         /// <returns></returns>
-        public static DataTable GetStockIn4Dept(int bizTypeId, DateTime? startTime, DateTime? endTime, List<int> listGoodsIds, int deparmentId)
+        public static DataTable GetStockIn4Dept(int bizTypeID, DateTime? startTime, DateTime? endTime, List<int> listGoodsIDs, int deparmentID)
         {
             DataTable result = null;
             StringBuilder sb = new StringBuilder();
@@ -617,13 +617,13 @@ WHERE
 	AND po.purchasing_order_state_id = 4
                 ");
 
-            if (deparmentId > 0)
+            if (deparmentID > 0)
             {
-                sb.Append($" AND po.biz_type_id = { deparmentId } ");
+                sb.Append($" AND po.biz_type_id = { deparmentID } ");
             }
-            if (bizTypeId > 0)
+            if (bizTypeID > 0)
             {
-                sb.Append($" AND po.biz_type_id = {bizTypeId} ");
+                sb.Append($" AND po.biz_type_id = {bizTypeID} ");
             }
             if (startTime != null)
             {
@@ -633,9 +633,9 @@ WHERE
             {
                 sb.Append($" AND po.update_time < '{Convert.ToString(endTime)}' ");
             }
-            if (listGoodsIds != null && listGoodsIds.Count > 0)
+            if (listGoodsIDs != null && listGoodsIDs.Count > 0)
             {
-                sb.Append($" AND pod.goods_id in ({ string.Join(',', listGoodsIds.ToArray()) }) ");
+                sb.Append($" AND pod.goods_id in ({ string.Join(',', listGoodsIDs.ToArray()) }) ");
             }
             sb.Append(" GROUP BY pod.goods_id");
             sb.Append(" ORDER BY g.id");
@@ -651,11 +651,11 @@ WHERE
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="deparmentId">0:无该条件</param>
+        /// <param name="deparmentID">0:无该条件</param>
         /// <param name="startTime">null:无该条件</param>
         /// <param name="endTime">null:无该条件</param>
         /// <returns></returns>
-        public static DataTable GetStock(int deparmentId, DateTime? startTime, DateTime? endTime)
+        public static DataTable GetStock(int deparmentID, DateTime? startTime, DateTime? endTime)
         {
             DataTable result = null;
             StringBuilder sb = new StringBuilder();
@@ -679,9 +679,9 @@ FROM
 	LEFT JOIN biz_type AS bt ON po.biz_type_id = bt.id 
 WHERE
 	po.purchasing_order_state_id = 3");
-            if (deparmentId > 0)
+            if (deparmentID > 0)
             {
-                sb.Append($" AND po.department_id = {deparmentId}");
+                sb.Append($" AND po.department_id = {deparmentID}");
             }
             if (startTime != null)
             {

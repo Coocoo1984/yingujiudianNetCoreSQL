@@ -10,15 +10,13 @@ namespace WebAPI_SQL.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PurchasingPlanCount4DeptController : ControllerBase
+    public class PurchasingOrderDetailList4DeptController : ControllerBase
     {
-        // GET: api/PurchasingPlanCount4Dept
-        [HttpGet]
-        public string Get()
+        // GET: api/PurchasingOrderDetailList4Dept
+        public string Get(int orderID)
         {
-            return JSONHelper.ToJSONString(PagingHelper.GetPagedTable(BL.GetPurchasingPlanCount4Dept(),
+            return JSONHelper.ToJSONString(PagingHelper.GetPagedTable(BL.GetPurchasingOrderDetailList4Dept(orderID),
                 0, 0));
         }
-
     }
 }

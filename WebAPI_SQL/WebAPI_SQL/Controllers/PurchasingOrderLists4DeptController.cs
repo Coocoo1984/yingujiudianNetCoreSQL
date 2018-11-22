@@ -2,23 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DAL;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using DAL;
 
 namespace WebAPI_SQL.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class GoodsController : ControllerBase
+    public class PurchasingOrderLists4DeptController : ControllerBase
     {
-        // GET: api/Goods
-        [HttpGet]
-        public string Get(int PageIndex, int PageSize)
+        // GET: api/PurchasingOrderLists4Dept
+        public string Get(int departmentID,int PageIndex, int PageSize)
         {
-            return JSONHelper.ToJSONString(PagingHelper.GetPagedTable(BL.GetGoods(), 
+            return JSONHelper.ToJSONString(PagingHelper.GetPagedTable(BL.GetPurchasingOrderList4Dept(departmentID),
                 PageIndex, PageSize));
         }
-
     }
 }
