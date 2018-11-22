@@ -1,14 +1,37 @@
 ﻿using System;
 using System.Data;
+using System.IO;
 using Microsoft.Data.Sqlite;
+using Microsoft.Extensions.Configuration;
 
 namespace DAL
 {
     public class DBHelper
     {
+        //private static string connectionString = "Data Source=F:\\GitHubBase\\Coocoo1984\\yingujiudianNetCoreSQL\\WebAPI_SQL\\DAL\\DB\\test.db";
+
+        public static string ConnectionString { get =>
+                GetConnectionString();
+        }
+
+        private static string GetConnectionString()
+        {
+            string result;// = "Data Source=F:\\MyGitHub\\yingujiudianNetCoreSQL\\WebAPI_SQL\\WebAPI_SQL\\DB\\test.db";
+            //添加 json 文件路径
+            var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json");
+            //创建配置根对象
+            var configurationRoot = builder.Build();
+            var nameSection = configurationRoot.GetSection("DataBaseConnectionString");
+            result = nameSection.Value;
+
+            return result;
+
+        }
+
 
         //连接字符串
-        private static readonly string str = "Data Source=F:\\GitHubBase\\Coocoo1984\\yingujiudianNetCoreSQL\\WebAPI_SQL\\DAL\\DB\\test.db";
+        //private static readonly string str = ConfigurationManager.
+        //private static readonly string ConnectionString = 
         //string dd = ConfigurationManager.AppSettings["constr"].ToString();
 
         /// <summary>
@@ -19,7 +42,7 @@ namespace DAL
         /// <returns>返回受影响的行数</returns>
         public static int ExecuteNonQuery(string sql, params SqliteParameter[] param)
         {
-            using (SqliteConnection conn = new SqliteConnection(str))
+            using (SqliteConnection conn = new SqliteConnection(ConnectionString))
             {
                 using (SqliteCommand cmd = new SqliteCommand(sql, conn))
                 {
@@ -40,7 +63,7 @@ namespace DAL
         /// <returns>返回 首行首列</returns>
         public static object ExecuteScale(string sql, params SqliteParameter[] param)
         {
-            using (SqliteConnection conn = new SqliteConnection(str))
+            using (SqliteConnection conn = new SqliteConnection(ConnectionString))
             {
                 using (SqliteCommand cmd = new SqliteCommand(sql, conn))
                 {
@@ -62,7 +85,7 @@ namespace DAL
         /// <returns>ExecuteReader</returns>
         public static SqliteDataReader ExecueDataReader(string sql, params SqliteParameter[] param)
         {
-            using (SqliteConnection conn = new SqliteConnection(str))
+            using (SqliteConnection conn = new SqliteConnection(ConnectionString))
             { 
                 using (SqliteCommand cmd = new SqliteCommand(sql, conn))
                 {
@@ -94,7 +117,7 @@ namespace DAL
         {
             DataTable dt = new DataTable();
 
-            using (SqliteConnection conn = new SqliteConnection(str))
+            using (SqliteConnection conn = new SqliteConnection(ConnectionString))
             {
                 using (SqliteCommand cmd = new SqliteCommand(sql, conn))
                 {
@@ -137,7 +160,7 @@ namespace DAL
         {
             DataTable dt = new DataTable();
 
-            using (SqliteConnection conn = new SqliteConnection(str))
+            using (SqliteConnection conn = new SqliteConnection(ConnectionString))
             {
                 using (SqliteCommand cmd = new SqliteCommand(sql, conn))
                 {

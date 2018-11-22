@@ -27,7 +27,13 @@ namespace WebAPI_SQL
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            //cors
+            // DB
+            //services.Configure<string>(this.Configuration.GetSection("DataBase"));
+
+            // DateTime StringFormat
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1).AddJsonOptions(Options => Options.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss");
+
+            // cors
             services.AddCors(options => options.AddPolicy("CorsSample", p => p.WithOrigins("http://localhost:5000").AllowAnyMethod().AllowAnyHeader()));
 
             
@@ -47,7 +53,7 @@ namespace WebAPI_SQL
 
             app.UseHttpsRedirection();
 
-            //cors
+            // cors
             app.UseCors("CorsSample");
 
             app.UseMvc();

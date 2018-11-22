@@ -33,7 +33,7 @@ namespace DAL
             DataTable result = null;
             StringBuilder sb = new StringBuilder();
             sb.Append("SELECT * FROM ");
-            sb.Append("view_purchasing_plan_count_4_dept");
+            sb.Append(" view_purchasing_plan_count_4_dept");
             try
             {
                 result = DBHelper.ExecuteTable(sb.ToString());
@@ -55,7 +55,7 @@ namespace DAL
             DataTable result = null;
             StringBuilder sb = new StringBuilder();
             sb.Append("SELECT * FROM ");
-            sb.Append("view_biz_type");
+            sb.Append(" view_biz_type");
             try
             {
                 result = DBHelper.ExecuteTable(sb.ToString());
@@ -70,7 +70,7 @@ namespace DAL
             DataTable result = null;
             StringBuilder sb = new StringBuilder();
             sb.Append("SELECT * FROM ");
-            sb.Append("view_department");
+            sb.Append(" view_department");
             try
             {
                 result = DBHelper.ExecuteTable(sb.ToString());
@@ -84,7 +84,7 @@ namespace DAL
         {
             DataTable result = null;
             StringBuilder sb = new StringBuilder();
-            sb.Append("SELECT * FROM ");
+            sb.Append("SELECT * FROM");
             sb.Append(" view_goods");
             try
             {
@@ -99,8 +99,8 @@ namespace DAL
         {
             DataTable result = null;
             StringBuilder sb = new StringBuilder();
-            sb.Append("SELECT * FROM ");
-            sb.Append("view_goods_class");
+            sb.Append("SELECT * FROM");
+            sb.Append(" view_goods_class");
             try
             {
                 result = DBHelper.ExecuteTable(sb.ToString());
@@ -122,16 +122,17 @@ namespace DAL
             if (state == 1 || state == 2 || state == 3)
             {
                 StringBuilder sb = new StringBuilder();
-                sb.Append("SELECT * FROM ");
+                sb.Append("SELECT * FROM    ");
                 switch (state)
                 {
-                    case 1: sb.Append("view_purchasing_plan_list_4_dept_unconfirm"); break;
-                    case 2: sb.Append("view_purchasing_plan_list_4_dept_confirm"); break;
-                    case 3: sb.Append("view_purchasing_plan_list_4_dept_need_modify"); break;
+                    case 1: sb.Append(" view_purchasing_plan_list_4_dept_unconfirm"); break;
+                    case 2: sb.Append(" view_purchasing_plan_list_4_dept_confirm"); break;
+                    case 3: sb.Append(" view_purchasing_plan_list_4_dept_need_modify"); break;
                 }
-
-                sb.Append(" WHERE department_id = ");
-                sb.Append(departmentID);
+                if(departmentID > 0)
+                {
+                    sb.Append(string.Format(" WHERE department_id = {0}", departmentID));
+                }
                 try
                 {
                     result = DBHelper.ExecuteTable(sb.ToString());
@@ -144,13 +145,12 @@ namespace DAL
         public static DataTable GetPOLists4Dept(int departmentID)
         {
             DataTable result = null;
-            if (departmentID > 1)
+            if (departmentID > 0)
             {
                 StringBuilder sb = new StringBuilder();
                 sb.Append("SELECT * FROM");
                 sb.Append(" view_purchasing_order_list_4_dept");
-                sb.Append(" WHERE department_id = ");
-                sb.Append(departmentID);
+                sb.Append($" WHERE department_id = {departmentID}");
                 try
                 {
                     result = DBHelper.ExecuteTable(sb.ToString());
@@ -167,8 +167,8 @@ namespace DAL
             {
                 StringBuilder sb = new StringBuilder();
                 sb.Append("SELECT * FROM ");
-                sb.Append("view_purchasing_order_detail_list_4_dept");
-                sb.Append(" AND pod.purchasing_order_id = ");
+                sb.Append(" view_purchasing_order_detail_list_4_dept");
+                sb.Append(" WHERE pod.purchasing_order_id = ");
                 sb.Append(POid);
                 try
                 {
@@ -184,7 +184,7 @@ namespace DAL
             DataTable result = null;
             StringBuilder sb = new StringBuilder();
             sb.Append("SELECT * FROM ");
-            sb.Append("view_purchasing_plan_count_4_all");
+            sb.Append(" view_purchasing_plan_count_4_all");
             try
             {
                 result = DBHelper.ExecuteTable(sb.ToString());
@@ -199,7 +199,7 @@ namespace DAL
             DataTable result = null;
             StringBuilder sb = new StringBuilder();
             sb.Append("SELECT * FROM ");
-            sb.Append("view_purchasing_plan_list_4_audit");
+            sb.Append(" view_purchasing_plan_list_4_audit");
             try
             {
                 result = DBHelper.ExecuteTable(sb.ToString());
@@ -218,7 +218,7 @@ namespace DAL
             DataTable result = null;
             StringBuilder sb = new StringBuilder();
             sb.Append("SELECT * FROM ");
-            sb.Append("view_purchasing_plan_list_4_audit2");
+            sb.Append(" view_purchasing_plan_list_4_audit2");
             try
             {
                 result = DBHelper.ExecuteTable(sb.ToString());
@@ -240,7 +240,7 @@ namespace DAL
             {
                 StringBuilder sb = new StringBuilder();
                 sb.Append("SELECT * FROM ");
-                sb.Append("view_purchasing_plan_goods_class_list_with_vendor");
+                sb.Append(" view_purchasing_plan_goods_class_list_with_vendor");
                 try
                 {
                     result = DBHelper.ExecuteTable(sb.ToString());
@@ -264,9 +264,8 @@ namespace DAL
             {
                 StringBuilder sb = new StringBuilder();
                 sb.Append("SELECT * FROM ");
-                sb.Append("view_purchasing_plan_detail_list");
-                sb.Append(" AND ppd.purchasing_plan_id = ");
-                sb.Append(purchasingPlanId);
+                sb.Append(" view_purchasing_plan_detail_list WHERE ");
+                sb.Append($" ppd.purchasing_plan_id = {purchasingPlanId}");
                 sb.Append(" ORDER BY ppd.goods_id");
                 try
                 {
@@ -306,13 +305,9 @@ WHERE
 	q.disable = 0 
 	AND qd.disable = 0
                 ");
-                sb.Append("	AND ppd.purchasing_plan_id = ");
-                sb.Append(purchasingPlanID);
-                sb.Append("	AND ppd.goods_class_id = ");
-                sb.Append(goodsClassID);
-                sb.Append(" AND rsv.biz_type_id in ( ");
-                sb.Append(string.Join(',', listGoodsID.ToArray()));
-                sb.Append(" )");
+                sb.Append($"	AND ppd.purchasing_plan_id = {purchasingPlanID}");
+                sb.Append($"	AND ppd.goods_class_id = {goodsClassID}");
+                sb.Append($" AND rsv.biz_type_id in ( {string.Join(',', listGoodsID.ToArray())} )");
                 sb.Append(@"
 GROUP BY
 	v.id");
@@ -339,7 +334,7 @@ ORDER BY
 
             StringBuilder sb = new StringBuilder();
             sb.Append("SELECT * FROM ");
-            sb.Append("view_purchasing_order_list");
+            sb.Append(" view_purchasing_order_list");
             try
             {
                 result = DBHelper.ExecuteTable(sb.ToString());
@@ -359,11 +354,10 @@ ORDER BY
             DataTable result = null;
             StringBuilder sb = new StringBuilder();
             sb.Append("SELECT * FROM ");
-            sb.Append("view_pruchasing_order_detail_list");
+            sb.Append(" view_pruchasing_order_detail_list WHERE 1=1 ");
             if (purchasingOrderID > 0)
             {
-                sb.Append(" AND po.id = ");
-                sb.Append(purchasingOrderID);
+                sb.Append($" AND po.id = {purchasingOrderID}");
             }
             sb.Append(" ORDER BY po.goods_id");
             try
@@ -383,7 +377,7 @@ ORDER BY
         /// <param name="startTime">null</param>
         /// <param name="endTime">null</param>
         /// <returns></returns>
-        public static DataTable GetGoodsClassQuoteCount(int bizTypeId, DateTime startTime, DateTime endTime)
+        public static DataTable GetGoodsClassQuoteCount(int bizTypeId, DateTime? startTime, DateTime? endTime)
         {
             DataTable result = null;
             StringBuilder sb = new StringBuilder();
@@ -402,19 +396,16 @@ WHERE
                 ");
             if (bizTypeId > 0)
             {
-                sb.Append(" AND q.biz_type_id = ");
-                sb.Append(bizTypeId);
+                sb.Append($" AND q.biz_type_id = {bizTypeId}");
             }
 
             if (startTime != null)
             {
-                sb.Append(" AND q.create_time > ");
-                sb.Append(Convert.ToString(startTime));
+                sb.Append($" AND q.create_time > '{ Convert.ToString(startTime) }' \r\n");
             }
             if (endTime != null)
             {
-                sb.Append(" AND q.create_time < ");
-                sb.Append(Convert.ToString(endTime));
+                sb.Append($" AND q.create_time < '{ Convert.ToString(endTime) }' ");
             }
             try
             {
@@ -433,7 +424,7 @@ WHERE
         /// <param name="startTime">null</param>
         /// <param name="endTime">null</param>
         /// <returns></returns>
-        public static DataTable GetGoodsQuoteDetailVendorPriceRange(int bizTypeId, DateTime startTime, DateTime endTime)
+        public static DataTable GetGoodsQuoteDetailVendorPriceRange(int bizTypeId, DateTime? startTime, DateTime? endTime)
         {
             DataTable result = null;
             StringBuilder sb = new StringBuilder();
@@ -459,18 +450,16 @@ WHERE
                 ");
             if (bizTypeId > 0)
             {
-                sb.Append(" AND q.biz_type_id = ");
+                sb.Append($" AND q.biz_type_id = ");
                 sb.Append(bizTypeId);
             }
             if (startTime != null)
             {
-                sb.Append(" AND q.create_time > ");
-                sb.Append(Convert.ToString(startTime));
+                sb.Append($" AND q.create_time > '{ Convert.ToString(startTime) }' ");
             }
             if (endTime != null)
             {
-                sb.Append(" AND q.create_time < ");
-                sb.Append(Convert.ToString(endTime));
+                sb.Append($"    AND q.create_time < '{ Convert.ToString(endTime) }' ");
             }
             sb.Append(" GROUP BY goods_id");
             try
@@ -491,7 +480,7 @@ WHERE
         /// <param name="endTime">null</param>
         /// <param name="goodsId">0</param>
         /// <returns></returns>
-        public static DataTable GetGoodsQuoteDetailVendorList(int bizTypeId, DateTime startTime, DateTime endTime, int goodsId)
+        public static DataTable GetGoodsQuoteDetailVendorList(int bizTypeId, DateTime? startTime, DateTime? endTime, int goodsId)
         {
             DataTable result = null;
             StringBuilder sb = new StringBuilder();
@@ -527,18 +516,15 @@ WHERE
             }
             if (startTime != null)
             {
-                sb.Append(" AND q.create_time > ");
-                sb.Append(Convert.ToString(startTime));
+                sb.Append($" AND q.create_time > '{ Convert.ToString(startTime) }' ");
             }
             if (endTime != null)
             {
-                sb.Append(" AND q.create_time < ");
-                sb.Append(Convert.ToString(endTime));
+                sb.Append($" AND q.create_time < '{ Convert.ToString(endTime) }' ");
             }
             if (goodsId > 0)
             {
-                sb.Append(" AND qd.goods_id = ");
-                sb.Append(goodsId);
+                sb.Append($" AND qd.goods_id = {goodsId} ");
             }
             sb.Append(" ORDER BY unit_price");
             try
@@ -557,21 +543,19 @@ WHERE
         /// <param name="startTime">null:无该条件</param>
         /// <param name="endTime">null:无该条件</param>
         /// <returns></returns>
-        public static DataTable GetQuoteListAll(DateTime startTime, DateTime endTime)
+        public static DataTable GetQuoteListAll(DateTime? startTime, DateTime? endTime)
         {
             DataTable result = null;
             StringBuilder sb = new StringBuilder();
             sb.Append("SELECT * FROM ");
-            sb.Append("view_quote_list_all");
+            sb.Append(" view_quote_list_all WHERE 1=1 ");
             if (startTime != null)
             {
-                sb.Append(" AND q.create_time > ");
-                sb.Append(Convert.ToString(startTime));
+                sb.Append($" AND q.create_time > '{ Convert.ToString(startTime) }' ");
             }
             if (endTime != null)
             {
-                sb.Append(" AND q.create_time < ");
-                sb.Append(Convert.ToString(endTime));
+                sb.Append($" AND q.create_time < '{ Convert.ToString(endTime) }' ");
             }
             try
             {
@@ -594,7 +578,7 @@ WHERE
         /// <param name="listGoodsIds">null:无该条件 多个商品id</param>
         /// <param name="deparmentId">0:无该条件</param>
         /// <returns></returns>
-        public static DataTable GetStockIn4Dept(int bizTypeId, DateTime startTime, DateTime endTime, List<int> listGoodsIds, int deparmentId)
+        public static DataTable GetStockIn4Dept(int bizTypeId, DateTime? startTime, DateTime? endTime, List<int> listGoodsIds, int deparmentId)
         {
             DataTable result = null;
             StringBuilder sb = new StringBuilder();
@@ -635,29 +619,23 @@ WHERE
 
             if (deparmentId > 0)
             {
-                sb.Append(" AND po.biz_type_id = ");
-                sb.Append(deparmentId);
+                sb.Append($" AND po.biz_type_id = { deparmentId } ");
             }
             if (bizTypeId > 0)
             {
-                sb.Append(" AND po.biz_type_id = ");
-                sb.Append(bizTypeId);
+                sb.Append($" AND po.biz_type_id = {bizTypeId} ");
             }
             if (startTime != null)
             {
-                sb.Append(" AND po.update_time > ");
-                sb.Append(Convert.ToString(startTime));
+                sb.Append($" AND po.update_time > '{Convert.ToString(startTime)}' ");
             }
             if (endTime != null)
             {
-                sb.Append(" AND po.update_time < ");
-                sb.Append(Convert.ToString(endTime));
+                sb.Append($" AND po.update_time < '{Convert.ToString(endTime)}' ");
             }
             if (listGoodsIds != null && listGoodsIds.Count > 0)
             {
-                sb.Append(" AND pod.goods_id in( ");
-                sb.Append(string.Join(',', listGoodsIds.ToArray()));
-                sb.Append(" )");
+                sb.Append($" AND pod.goods_id in ({ string.Join(',', listGoodsIds.ToArray()) }) ");
             }
             sb.Append(" GROUP BY pod.goods_id");
             sb.Append(" ORDER BY g.id");
@@ -677,7 +655,7 @@ WHERE
         /// <param name="startTime">null:无该条件</param>
         /// <param name="endTime">null:无该条件</param>
         /// <returns></returns>
-        public static DataTable GetStock(int deparmentId, DateTime startTime, DateTime endTime)
+        public static DataTable GetStock(int deparmentId, DateTime? startTime, DateTime? endTime)
         {
             DataTable result = null;
             StringBuilder sb = new StringBuilder();
@@ -688,7 +666,7 @@ SELECT
 	bt.name AS biz_type_name,
 	g.name AS goods_name,
 	pod.actual_count AS actual_count,
-	po.create_time 
+	pod.create_time AS stockin_time
 FROM
 	purchasing_order AS po
 	LEFT JOIN purchasing_order_state AS pos ON po.purchasing_order_state_id = pos.id
@@ -700,23 +678,18 @@ FROM
 	LEFT JOIN goods_unit AS gu ON g.goods_unit_id = gc.id
 	LEFT JOIN biz_type AS bt ON po.biz_type_id = bt.id 
 WHERE
-	po.purchasing_order_state_id = 3 
-                ");
+	po.purchasing_order_state_id = 3");
             if (deparmentId > 0)
             {
-                sb.Append(" AND q.deparmentId = ");
-                sb.Append(deparmentId);
+                sb.Append($" AND po.department_id = {deparmentId}");
             }
-
             if (startTime != null)
             {
-                sb.Append(" AND q.create_time > ");
-                sb.Append(Convert.ToString(startTime));
+                sb.Append($" AND pod.create_time > '{Convert.ToString(startTime)}' ");
             }
             if (endTime != null)
             {
-                sb.Append(" AND q.create_time < ");
-                sb.Append(Convert.ToString(endTime));
+                sb.Append($" AND pod.create_time < '{Convert.ToString(endTime)}' ");
             }
             try
             {
@@ -738,18 +711,15 @@ WHERE
         {
             DataTable result = null;
             StringBuilder sb = new StringBuilder();
-            sb.Append("SELECT * FROM ");
-            sb.Append("view_quote_detail_list_4_vendor_quote");
+            sb.Append("SELECT * FROM");
+            sb.Append(" view_quote_detail_list_4_vendor_quote WHERE 1=1 ");
             if (vendorID > 0)
             {
-                sb.Append(" AND q.create_time > ");
-                sb.Append(vendorID);
+                sb.Append($" AND vendor_id = {vendorID}");
             }
             if (listBizTypeID != null && listBizTypeID.Count > 0)
             {
-                sb.Append(" AND rsv.biz_type_id in ( ");
-                sb.Append(string.Join(',', listBizTypeID.ToArray()));
-                sb.Append(" )");
+                sb.Append($" AND biz_type_id in ({ string.Join(',', listBizTypeID.ToArray()) }) ");
             }
             try
             {
@@ -769,31 +739,50 @@ WHERE
         /// <param name="endTime">0</param>
         /// <param name="vendorID">0</param>
         /// <returns></returns>
-        public static DataTable GetPurchasingOrderList4Vendor(int bizTypeID, DateTime startTime, DateTime endTime, int vendorID)
+        public static DataTable GetPurchasingOrderList4Vendor(int bizTypeID, DateTime? startTime, DateTime? endTime, int vendorID)
         {
             DataTable result = null;
             StringBuilder sb = new StringBuilder();
-            sb.Append("SELECT * FROM ");
-            sb.Append("view_purchasing_order_list_4_vendor");
+            ////sb.Append("SELECT * FROM");
+            ////sb.Append(" view_purchasing_order_list_4_vendor");
+
+            sb.Append(@"
+SELECT
+	po.id AS po_id,
+	po.code AS po_code,
+	po.item_count AS po_item_count,
+	po.department_id,
+	d.name AS department_name,
+	po.create_time AS purchasing_order_create_time,
+	d.id,
+	d.mobile,
+	d.tel,
+	d.addr,
+	po.purchasing_order_state_id,
+	pos.name AS purchasing_order_state_name 
+FROM
+	purchasing_order AS po
+	LEFT JOIN purchasing_order_state AS pos ON po.purchasing_order_state_id = pos.id
+	LEFT JOIN department AS d ON po.department_id = d.id
+	LEFT JOIN vendor AS v ON po.vendor_id = v.id 
+WHERE
+    1=1
+");
             if (vendorID > 0)
             {
-                sb.Append(" AND po.vendor_id = ");
-                sb.Append(vendorID);
+                sb.Append($" AND po.vendor_id = {vendorID} ");
             }
             if (bizTypeID > 0)
             {
-                sb.Append(" AND po.biz_type_id = ");
-                sb.Append(bizTypeID);
+                sb.Append($" AND po.biz_type_id = {bizTypeID} ");
             }
             if (startTime != null)
             {
-                sb.Append(" AND q.startTime > ");
-                sb.Append(Convert.ToString(startTime));
+                sb.Append($" AND q.startTime > '{Convert.ToString(startTime)}'");
             }
             if (endTime != null)
             {
-                sb.Append(" AND q.endTime < ");
-                sb.Append(Convert.ToString(endTime));
+                sb.Append($" AND q.endTime < '{ Convert.ToString(endTime) }' ");
             }
             sb.Append(" ORDER BY po.purchasing_order_state_id");
             try
@@ -814,12 +803,11 @@ WHERE
         {
             DataTable result = null;
             StringBuilder sb = new StringBuilder();
-            sb.Append("SELECT * FROM ");
-            sb.Append("view_pruchasing_order_detail_list_4_vendor");
+            sb.Append("SELECT * FROM");
+            sb.Append(" view_pruchasing_order_detail_list_4_vendor WHERE 1=1 ");
             if (purchasingOrderID > 0)
             {
-                sb.Append(" AND po.id = ");
-                sb.Append(purchasingOrderID);
+                sb.Append($" AND po.id = {purchasingOrderID} ");
             }
             sb.Append(" ORDER BY po.goods_id");
             try
