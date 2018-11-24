@@ -25,6 +25,9 @@ namespace WebAPI_SQL
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // cors
+            services.AddCors(options => options.AddPolicy("CorsSample", p => p.WithOrigins("http://localhost:5000").AllowAnyMethod().AllowAnyHeader()));
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             // DB
@@ -33,8 +36,7 @@ namespace WebAPI_SQL
             // DateTime StringFormat
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1).AddJsonOptions(Options => Options.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss");
 
-            // cors
-            services.AddCors(options => options.AddPolicy("CorsSample", p => p.WithOrigins("http://localhost:5000").AllowAnyMethod().AllowAnyHeader()));
+            
 
             
         }
