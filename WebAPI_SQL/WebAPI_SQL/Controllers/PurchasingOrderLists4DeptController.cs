@@ -13,6 +13,7 @@ namespace WebAPI_SQL.Controllers
     public class PurchasingOrderLists4DeptController : ControllerBase
     {
         // GET: api/PurchasingOrderLists4Dept
+        [HttpGet]
         public string Get(int departmentID,int PageIndex, int PageSize)
         {
             return JSONHelper.ToJSONString(PagingHelper.GetPagedTable(BL.GetPurchasingOrderList4Dept(departmentID),

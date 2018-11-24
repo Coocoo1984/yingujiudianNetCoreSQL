@@ -13,6 +13,7 @@ namespace WebAPI_SQL.Controllers
     public class PurchasingPlanCount4AuditController : ControllerBase
     {
         // GET: api/PurchasingPlanCount4Audit
+        [HttpGet]
         public string Get(int PageIndex, int PageSize)
         {
             return JSONHelper.ToJSONString(PagingHelper.GetPagedTable(BL.GetPurchasingPlanCount4Audit(),

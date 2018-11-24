@@ -32,7 +32,7 @@ namespace WebAPI_SQL
         public static void Export(Dictionary<string, DataTable> keyValuePairs, string sWebRootFolder, out Tuple<string, string> tuple, string fileNamePostfix)
         {
             if (string.IsNullOrWhiteSpace(sWebRootFolder))
-                tuple = Tuple.Create(""||, Excel);
+                tuple = Tuple.Create("", Excel);
 
             string sFileName = string.Empty;
             if (fileNamePostfix == null || string.IsNullOrWhiteSpace(fileNamePostfix))
