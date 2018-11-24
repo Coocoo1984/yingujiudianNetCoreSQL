@@ -198,6 +198,25 @@ namespace DAL
             return result;
         }
 
+        public static DataTable GetPurchasingOrderVendorSubtotal(int vendorID)
+        {
+            DataTable result = null;
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append("SELECT * FROM");
+            sb.Append(" view_statics_dept_goods_subtotal");
+            if (vendorID > 0)
+            {
+                sb.Append($" WHERE department_id = {vendorID}");
+            }
+            try
+            {
+                result = DBHelper.ExecuteTable(sb.ToString());
+            }
+            catch (Exception) { throw; }
+            return result;
+        }
+
 
 
         public static DataTable GetPurchasingOrderDetailList4Dept(int purchasingOrderID)
