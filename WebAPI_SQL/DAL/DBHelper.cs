@@ -126,9 +126,11 @@ namespace DAL
                     //动态添加表的数据列
                     for (int i = 0; i < dr.FieldCount; i++)
                     {
-                        DataColumn myDataColumn = new DataColumn();
-                        myDataColumn.DataType = dr.GetFieldType(i);
-                        myDataColumn.ColumnName = dr.GetName(i);
+                        DataColumn myDataColumn = new DataColumn
+                        {
+                            DataType = dr.GetFieldType(i),
+                            ColumnName = dr.GetName(i)
+                        };
                         dt.Columns.Add(myDataColumn);
                     }
 
@@ -169,9 +171,11 @@ namespace DAL
                     //动态添加表的数据列
                     for (int i = 0; i < dr.FieldCount; i++)
                     {
-                        DataColumn myDataColumn = new DataColumn();
-                        myDataColumn.DataType = dr.GetFieldType(i);
-                        myDataColumn.ColumnName = dr.GetName(i);
+                        DataColumn myDataColumn = new DataColumn
+                        {
+                            DataType = dr.GetFieldType(i),
+                            ColumnName = dr.GetName(i)
+                        };
                         dt.Columns.Add(myDataColumn);
                     }
 

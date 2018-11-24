@@ -241,6 +241,7 @@ namespace DAL
                 StringBuilder sb = new StringBuilder();
                 sb.Append("SELECT * FROM ");
                 sb.Append(" view_purchasing_plan_goods_class_list_with_vendor");
+                sb.Append($" WHERE purchasing_plan_id = { purchasingPlanID }");
                 try
                 {
                     result = DBHelper.ExecuteTable(sb.ToString());
@@ -707,7 +708,7 @@ WHERE
         /// <param name="vendorID"></param>
         /// <param name="bizTypeID">null</param>
         /// <returns></returns>
-        public static DataTable GetQuoteDetailList4Vendor2Quote(int vendorID, List<int> listBizTypeID)
+        public static DataTable GetQuoteDetailList4Vendor2Quote(int vendorID, List<int> listBizTypeIDs)
         {
             DataTable result = null;
             StringBuilder sb = new StringBuilder();
@@ -717,9 +718,46 @@ WHERE
             {
                 sb.Append($" AND vendor_id = {vendorID}");
             }
-            if (listBizTypeID != null && listBizTypeID.Count > 0)
+            if (listBizTypeIDs != null && listBizTypeIDs.Count > 0)
             {
-                sb.Append($" AND biz_type_id in ({ string.Join(',', listBizTypeID.ToArray()) }) ");
+                sb.Append($" AND biz_type_id in ({ string.Join(',', listBizTypeIDs.ToArray()) }) ");
+            }
+            try
+            {
+                result = DBHelper.ExecuteTable(sb.ToString());
+            }
+            catch (Exception) { throw; }
+            finally { }
+
+            return result;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public static DataTable GetPurchasingOrderGoodsCountStatics(List<int> listBizTypeIDs, List<int> listDepartmentIDs, List<int> listGoodsClassIDs, List<int> listGoodsIDs)
+        {
+            DataTable result = null;
+            StringBuilder sb = new StringBuilder();
+            sb.Append("SELECT * FROM");
+            sb.Append(" view_statics_po_goods_count ");
+            sb.Append(" WHERE 1=1 ");
+            if (listBizTypeIDs != null && listBizTypeIDs.Count > 0)
+            {
+                sb.Append($" AND biz_type_id in ({ string.Join(',', listBizTypeIDs.ToArray()) }) ");
+            }
+            if (listDepartmentIDs != null && listDepartmentIDs.Count > 0)
+            {
+                sb.Append($" AND department_id in ({ string.Join(',', listDepartmentIDs.ToArray()) }) ");
+            }
+            if (listGoodsClassIDs != null && listGoodsClassIDs.Count > 0)
+            {
+                sb.Append($" AND goods_class_id in ({ string.Join(',', listGoodsClassIDs.ToArray()) }) ");
+            }
+            if (listGoodsIDs != null && listGoodsIDs.Count > 0)
+            {
+                sb.Append($" AND goods_id in ({ string.Join(',', listGoodsIDs.ToArray()) }) ");
             }
             try
             {
