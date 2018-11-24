@@ -160,6 +160,46 @@ namespace DAL
             return result;
         }
 
+        public static DataTable GetPurchasingOrderTotal(int departmentID)
+        {
+            DataTable result = null;
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append("SELECT * FROM");
+            sb.Append(" view_statics_po_dept_total");
+            if (departmentID > 0)
+            {
+                sb.Append($" WHERE department_id = {departmentID}");
+            }
+            try
+            {
+                result = DBHelper.ExecuteTable(sb.ToString());
+            }
+            catch (Exception) { throw; }
+            return result;
+        }
+
+        public static DataTable GetPurchasingOrderGoodsSubtotal(int departmentID)
+        {
+            DataTable result = null;
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append("SELECT * FROM");
+            sb.Append(" view_statics_dept_goods_subtotal");
+            if (departmentID > 0)
+            {
+                sb.Append($" WHERE department_id = {departmentID}");
+            }
+            try
+            {
+                result = DBHelper.ExecuteTable(sb.ToString());
+            }
+            catch (Exception) { throw; }
+            return result;
+        }
+
+
+
         public static DataTable GetPurchasingOrderDetailList4Dept(int purchasingOrderID)
         {
             DataTable result = null;
@@ -402,11 +442,11 @@ WHERE
 
             if (startTime != null)
             {
-                sb.Append($" AND q.create_time > '{ Convert.ToString(startTime) }' \r\n");
+                sb.Append($" AND q.create_time > '{ startTime.Value.ToString("yyyy-MM-dd HH:mm:ss") }' \r\n");
             }
             if (endTime != null)
             {
-                sb.Append($" AND q.create_time < '{ Convert.ToString(endTime) }' ");
+                sb.Append($" AND q.create_time < '{ endTime.Value.ToString("yyyy-MM-dd HH:mm:ss") }' ");
             }
             try
             {
@@ -456,11 +496,11 @@ WHERE
             }
             if (startTime != null)
             {
-                sb.Append($" AND q.create_time > '{ Convert.ToString(startTime) }' ");
+                sb.Append($" AND q.create_time > '{ startTime.Value.ToString("yyyy-MM-dd HH:mm:ss") }' ");
             }
             if (endTime != null)
             {
-                sb.Append($"    AND q.create_time < '{ Convert.ToString(endTime) }' ");
+                sb.Append($"    AND q.create_time < '{ endTime.Value.ToString("yyyy-MM-dd HH:mm:ss") }' ");
             }
             sb.Append(" GROUP BY goods_id");
             try
@@ -517,11 +557,11 @@ WHERE
             }
             if (startTime != null)
             {
-                sb.Append($" AND q.create_time > '{ Convert.ToString(startTime) }' ");
+                sb.Append($" AND q.create_time > '{ startTime.Value.ToString("yyyy-MM-dd HH:mm:ss") }' ");
             }
             if (endTime != null)
             {
-                sb.Append($" AND q.create_time < '{ Convert.ToString(endTime) }' ");
+                sb.Append($" AND q.create_time < '{ endTime.Value.ToString("yyyy-MM-dd HH:mm:ss") }' ");
             }
             if (goodsID > 0)
             {
@@ -552,11 +592,11 @@ WHERE
             sb.Append(" view_quote_list_all WHERE 1=1 ");
             if (startTime != null)
             {
-                sb.Append($" AND quote_create_time > '{ Convert.ToString(startTime) }' ");
+                sb.Append($" AND quote_create_time > '{ startTime.Value.ToString("yyyy-MM-dd HH:mm:ss") }' ");
             }
             if (endTime != null)
             {
-                sb.Append($" AND quote_create_time < '{ Convert.ToString(endTime) }' ");
+                sb.Append($" AND quote_create_time < '{ endTime.Value.ToString("yyyy-MM-dd HH:mm:ss") }' ");
             }
             try
             {
@@ -628,11 +668,11 @@ WHERE
             }
             if (startTime != null)
             {
-                sb.Append($" AND po.update_time > '{Convert.ToString(startTime)}' ");
+                sb.Append($" AND po.update_time > '{ startTime.Value.ToString("yyyy-MM-dd HH:mm:ss") }' ");
             }
             if (endTime != null)
             {
-                sb.Append($" AND po.update_time < '{Convert.ToString(endTime)}' ");
+                sb.Append($" AND po.update_time < '{endTime.Value.ToString("yyyy-MM-dd HH:mm:ss")}' ");
             }
             if (listGoodsIDs != null && listGoodsIDs.Count > 0)
             {
@@ -686,11 +726,11 @@ WHERE
             }
             if (startTime != null)
             {
-                sb.Append($" AND pod.create_time > '{Convert.ToString(startTime)}' ");
+                sb.Append($" AND pod.create_time > '{startTime.Value.ToString("yyyy-MM-dd HH:mm:ss")}' ");
             }
             if (endTime != null)
             {
-                sb.Append($" AND pod.create_time < '{Convert.ToString(endTime)}' ");
+                sb.Append($" AND pod.create_time < '{endTime.Value.ToString("yyyy-MM-dd HH:mm:ss")}' ");
             }
             try
             {
@@ -816,11 +856,11 @@ WHERE
             }
             if (startTime != null)
             {
-                sb.Append($" AND po.create_time > '{Convert.ToString(startTime)}'");
+                sb.Append($" AND po.create_time > '{startTime.Value.ToString("yyyy-MM-dd HH:mm:ss")}'");
             }
             if (endTime != null)
             {
-                sb.Append($" AND po.create_time < '{ Convert.ToString(endTime) }' ");
+                sb.Append($" AND po.create_time < '{ endTime.Value.ToString("yyyy-MM-dd HH:mm:ss") }' ");
             }
             sb.Append(" ORDER BY po.purchasing_order_state_id");
             try
