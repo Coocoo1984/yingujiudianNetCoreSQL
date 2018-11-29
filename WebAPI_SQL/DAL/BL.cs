@@ -160,43 +160,88 @@ namespace DAL
             return result;
         }
 
-        public static DataTable GetPurchasingOrderTotal(int departmentID, DateTime? startTime, DateTime? endTime)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public static DataTable GetPurchasingOrderGoodsCountStatics(List<int> listBizTypeIDs, List<int> listDepartmentIDs, List<int> listGoodsClassIDs, List<int> listGoodsIDs, DateTime? startTime, DateTime? endTime)
         {
             DataTable result = null;
-
             StringBuilder sb = new StringBuilder();
-            sb.Append("SELECT * FROM");
-            sb.Append(" view_statics_po_dept_total");
-            if (departmentID > 0)
+            sb.Append(@"
+SELECT 
+    *
+FROM
+    view_statics_po_goods_count 
+WHERE
+    1=1
+");
+            if (listBizTypeIDs != null && listBizTypeIDs.Count > 0)
             {
-                sb.Append($" WHERE department_id = {departmentID}");
+                sb.Append($"    AND biz_type_id in ({ string.Join(',', listBizTypeIDs.ToArray()) }) ");
+            }
+            if (listDepartmentIDs != null && listDepartmentIDs.Count > 0)
+            {
+                sb.Append($"    AND department_id in ({ string.Join(',', listDepartmentIDs.ToArray()) }) ");
+            }
+            if (listGoodsClassIDs != null && listGoodsClassIDs.Count > 0)
+            {
+                sb.Append($"    AND goods_class_id in ({ string.Join(',', listGoodsClassIDs.ToArray()) }) ");
+            }
+            if (listGoodsIDs != null && listGoodsIDs.Count > 0)
+            {
+                sb.Append($"    AND goods_id in ({ string.Join(',', listGoodsIDs.ToArray()) }) ");
             }
             if (startTime != null)
             {
-                sb.Append($" AND create_time > '{ startTime.Value.ToString("yyyy-MM-dd HH:mm:ss") }' \r\n");
+                sb.Append($"    AND create_time > '{ startTime.Value.ToString("yyyy-MM-dd HH:mm:ss") }' \r\n");
             }
             if (endTime != null)
             {
-                sb.Append($" AND create_time < '{ endTime.Value.ToString("yyyy-MM-dd HH:mm:ss") }' ");
+                sb.Append($"    AND create_time < '{ endTime.Value.ToString("yyyy-MM-dd HH:mm:ss") }' ");
             }
+
             try
             {
                 result = DBHelper.ExecuteTable(sb.ToString());
             }
             catch (Exception) { throw; }
+            finally { }
+
             return result;
         }
 
-        public static DataTable GetPurchasingOrderGoodsSubtotal(int departmentID)
+        public static DataTable GetPurchasingOrderTotal(int departmentID, List<int> listBizTypeIDs, DateTime? startTime, DateTime? endTime)
         {
             DataTable result = null;
 
             StringBuilder sb = new StringBuilder();
-            sb.Append("SELECT * FROM");
-            sb.Append(" view_statics_dept_goods_subtotal");
+            sb.Append(@"
+SELECT
+    department_name,
+    biz_type_name,total,
+    create_time,
+    vendor_name
+FROM
+    view_statics_po_dept_total
+WHERE
+    1=1
+");
             if (departmentID > 0)
             {
-                sb.Append($" WHERE department_id = {departmentID}");
+                sb.Append($"    AND department_id = {departmentID} ");
+            }
+            if (listBizTypeIDs != null && listBizTypeIDs.Count > 0)
+            {
+                sb.Append($"    AND biz_type_id in ({ string.Join(',', listBizTypeIDs.ToArray()) }) ");
+            }
+            if (startTime != null)
+            {
+                sb.Append($"    AND create_time > '{ startTime.Value.ToString("yyyy-MM-dd HH:mm:ss") }' ");
+            }
+            if (endTime != null)
+            {
+                sb.Append($"    AND create_time < '{ endTime.Value.ToString("yyyy-MM-dd HH:mm:ss") }' ");
             }
             try
             {
@@ -206,16 +251,99 @@ namespace DAL
             return result;
         }
 
-        public static DataTable GetPurchasingOrderVendorSubtotal(int vendorID)
+        public static DataTable GetPurchasingOrderGoodsSubtotal(int departmentID, List<int> listBizTypeIDs, List<int> listGoodsClassIDs, List<int> listGoodsIDs, DateTime? startTime, DateTime? endTime)
         {
             DataTable result = null;
 
             StringBuilder sb = new StringBuilder();
-            sb.Append("SELECT * FROM");
-            sb.Append(" view_statics_dept_goods_subtotal");
+            sb.Append(@"
+SELECT
+    department_name,
+    biz_type_name,total,
+    goods_class_name,
+    goods_name,
+    subtotal,
+    create_time,
+    vendor_name
+FROM
+    view_statics_dept_goods_subtotal
+WHERE
+    1=1
+");
+            if (departmentID > 0)
+            {
+                sb.Append($"    AND department_id = {departmentID}");
+            }
+            if (listBizTypeIDs != null && listBizTypeIDs.Count > 0)
+            {
+                sb.Append($"    AND biz_type_id in ({ string.Join(',', listBizTypeIDs.ToArray()) }) ");
+            }
+            if (listGoodsClassIDs != null && listGoodsClassIDs.Count > 0)
+            {
+                sb.Append($"    AND goods_class_id in ({ string.Join(',', listGoodsClassIDs.ToArray()) }) ");
+            }
+            if (listGoodsIDs != null && listGoodsIDs.Count > 0)
+            {
+                sb.Append($"    AND goods_id in ({ string.Join(',', listGoodsIDs.ToArray()) }) ");
+            }
+            if (startTime != null)
+            {
+                sb.Append($"    AND create_time > '{ startTime.Value.ToString("yyyy-MM-dd HH:mm:ss") }' ");
+            }
+            if (endTime != null)
+            {
+                sb.Append($"    AND create_time < '{ endTime.Value.ToString("yyyy-MM-dd HH:mm:ss") }' ");
+            }
+            try
+            {
+                result = DBHelper.ExecuteTable(sb.ToString());
+            }
+            catch (Exception) { throw; }
+            return result;
+        }
+
+        public static DataTable GetPurchasingOrderVendorSubtotal(int vendorID, List<int> listBizTypeIDs, List<int> listGoodsClassIDs, List<int> listGoodsIDs, DateTime? startTime, DateTime? endTime)
+        {
+            DataTable result = null;
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append(@"
+SELECT
+    vendor_name,
+    biz_type_name,
+    goods_class_name,
+    goods_name,
+    unit_price,
+    count_for_show,
+    actual_subtotal
+FROM
+    view_statics_vendor_goods_subtotal
+WHERE
+    1=1
+");
             if (vendorID > 0)
             {
-                sb.Append($" WHERE department_id = {vendorID}");
+                sb.Append($" AND vendor_id = {vendorID}");
+            }
+            if (listBizTypeIDs != null && listBizTypeIDs.Count > 0)
+            {
+                sb.Append($"    AND biz_type_id in ({ string.Join(',', listBizTypeIDs.ToArray()) }) ");
+            }
+            if (listGoodsClassIDs != null && listGoodsClassIDs.Count > 0)
+            {
+                sb.Append($"    AND goods_class_id in ({ string.Join(',', listGoodsClassIDs.ToArray()) }) ");
+            }
+            if (listGoodsIDs != null && listGoodsIDs.Count > 0)
+            {
+                sb.Append($"    AND goods_id in ({ string.Join(',', listGoodsIDs.ToArray()) }) ");
+            }
+            if (startTime != null)
+            {
+                sb.Append($"    AND create_time > '{ startTime.Value.ToString("yyyy-MM-dd HH:mm:ss") }' \r\n");
+            }
+            if (endTime != null)
+            {
+                sb.Append($"    AND create_time < '{ endTime.Value.ToString("yyyy-MM-dd HH:mm:ss") }' ");
             }
             try
             {
@@ -799,51 +927,6 @@ WHERE
             return result;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public static DataTable GetPurchasingOrderGoodsCountStatics(List<int> listBizTypeIDs, List<int> listDepartmentIDs, List<int> listGoodsClassIDs, List<int> listGoodsIDs, DateTime? startTime, DateTime? endTime)
-        {
-            DataTable result = null;
-            StringBuilder sb = new StringBuilder();
-            sb.Append("SELECT * FROM");
-            sb.Append(" view_statics_po_goods_count ");
-            sb.Append(" WHERE 1=1 ");
-            if (listBizTypeIDs != null && listBizTypeIDs.Count > 0)
-            {
-                sb.Append($" AND biz_type_id in ({ string.Join(',', listBizTypeIDs.ToArray()) }) ");
-            }
-            if (listDepartmentIDs != null && listDepartmentIDs.Count > 0)
-            {
-                sb.Append($" AND department_id in ({ string.Join(',', listDepartmentIDs.ToArray()) }) ");
-            }
-            if (listGoodsClassIDs != null && listGoodsClassIDs.Count > 0)
-            {
-                sb.Append($" AND goods_class_id in ({ string.Join(',', listGoodsClassIDs.ToArray()) }) ");
-            }
-            if (listGoodsIDs != null && listGoodsIDs.Count > 0)
-            {
-                sb.Append($" AND goods_id in ({ string.Join(',', listGoodsIDs.ToArray()) }) ");
-            }
-            if (startTime != null)
-            {
-                sb.Append($" AND create_time > '{ startTime.Value.ToString("yyyy-MM-dd HH:mm:ss") }' \r\n");
-            }
-            if (endTime != null)
-            {
-                sb.Append($" AND create_time < '{ endTime.Value.ToString("yyyy-MM-dd HH:mm:ss") }' ");
-            }
-
-            try
-            {
-                result = DBHelper.ExecuteTable(sb.ToString());
-            }
-            catch (Exception) { throw; }
-            finally { }
-
-            return result;
-        }
 
         /// <summary>
         /// 获取供应商的订单列表(按状态排序)
