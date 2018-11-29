@@ -27,7 +27,7 @@ namespace WebAPI_SQL.Controllers
         /// <summary>
         /// /api/DepartmentExport
         /// </summary>
-        public IActionResult DataTableReport(string listBizTypeIDs, string listDepartmentIDs, string listGoodsClassIDs, string listGoodsIDs, int PageIndex, int PageSize)
+        public IActionResult DataTableReport(string listBizTypeIDs, string listDepartmentIDs, string listGoodsClassIDs, string listGoodsIDs, DateTime? startTime, DateTime? endTime, int PageIndex, int PageSize)
         {
             var result = new DataTable("Export");
 
@@ -43,7 +43,9 @@ namespace WebAPI_SQL.Controllers
                     DataHelper.GetListInt(listBizTypeIDs),
                     DataHelper.GetListInt(listDepartmentIDs),
                     DataHelper.GetListInt(listGoodsClassIDs),
-                    DataHelper.GetListInt(listGoodsIDs));
+                    DataHelper.GetListInt(listGoodsIDs),
+                    DataHelper.GetDateTime(startTime),
+                    DataHelper.GetDateTime(endTime));
 
             if (dt == null || dt.Columns.Count == 0)
             {

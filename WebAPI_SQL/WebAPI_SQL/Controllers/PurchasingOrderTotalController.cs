@@ -14,9 +14,9 @@ namespace WebAPI_SQL.Controllers
     {
         // GET: api/PurchasingOrderTotal
         [HttpGet]
-        public string Get(int departmentID)
+        public string Get(int departmentID, DateTime? startTime, DateTime? endTime)
         {
-            return JSONHelper.ToJSONString(PagingHelper.GetPagedTable(BL.GetPurchasingOrderTotal(departmentID),
+            return JSONHelper.ToJSONString(PagingHelper.GetPagedTable(BL.GetPurchasingOrderTotal(departmentID, startTime, endTime),
                 0, 0));
         }
     }

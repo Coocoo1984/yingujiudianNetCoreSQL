@@ -160,7 +160,7 @@ namespace DAL
             return result;
         }
 
-        public static DataTable GetPurchasingOrderTotal(int departmentID)
+        public static DataTable GetPurchasingOrderTotal(int departmentID, DateTime? startTime, DateTime? endTime)
         {
             DataTable result = null;
 
@@ -170,6 +170,14 @@ namespace DAL
             if (departmentID > 0)
             {
                 sb.Append($" WHERE department_id = {departmentID}");
+            }
+            if (startTime != null)
+            {
+                sb.Append($" AND create_time > '{ startTime.Value.ToString("yyyy-MM-dd HH:mm:ss") }' \r\n");
+            }
+            if (endTime != null)
+            {
+                sb.Append($" AND create_time < '{ endTime.Value.ToString("yyyy-MM-dd HH:mm:ss") }' ");
             }
             try
             {
@@ -795,7 +803,7 @@ WHERE
         /// 
         /// </summary>
         /// <returns></returns>
-        public static DataTable GetPurchasingOrderGoodsCountStatics(List<int> listBizTypeIDs, List<int> listDepartmentIDs, List<int> listGoodsClassIDs, List<int> listGoodsIDs)
+        public static DataTable GetPurchasingOrderGoodsCountStatics(List<int> listBizTypeIDs, List<int> listDepartmentIDs, List<int> listGoodsClassIDs, List<int> listGoodsIDs, DateTime? startTime, DateTime? endTime)
         {
             DataTable result = null;
             StringBuilder sb = new StringBuilder();
@@ -818,6 +826,15 @@ WHERE
             {
                 sb.Append($" AND goods_id in ({ string.Join(',', listGoodsIDs.ToArray()) }) ");
             }
+            if (startTime != null)
+            {
+                sb.Append($" AND create_time > '{ startTime.Value.ToString("yyyy-MM-dd HH:mm:ss") }' \r\n");
+            }
+            if (endTime != null)
+            {
+                sb.Append($" AND create_time < '{ endTime.Value.ToString("yyyy-MM-dd HH:mm:ss") }' ");
+            }
+
             try
             {
                 result = DBHelper.ExecuteTable(sb.ToString());
