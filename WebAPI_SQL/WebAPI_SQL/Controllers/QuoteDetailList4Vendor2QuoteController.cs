@@ -20,12 +20,5 @@ namespace WebAPI_SQL.Controllers
                 PageIndex, PageSize));
         }
 
-        [HttpGet]
-        [Route("GetDetailByQuoteID")]
-        public string GetDetailByQuoteID(int quoteID, int PageIndex, int PageSize)
-        {
-            return JSONHelper.ToJSONString(PagingHelper.GetPagedTable(BL.GetQuoteDetailListByQuoteID(quoteID),
-                PageIndex, PageSize));
-        }
     }
 }

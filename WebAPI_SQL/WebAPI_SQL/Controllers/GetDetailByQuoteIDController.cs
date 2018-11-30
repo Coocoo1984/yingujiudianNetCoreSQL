@@ -3,22 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DAL;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI_SQL.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PurchasingOrderListController : ControllerBase
+    public class GetDetailByQuoteIDController : Controller
     {
-        // GET: api/PurchasingOrderList
+
         [HttpGet]
-        public string Get(int PageIndex, int PageSize)
+        public string GetDetailByQuoteID(int quoteID, int PageIndex, int PageSize)
         {
-            return JSONHelper.ToJSONString(PagingHelper.GetPagedTable(BL.GetPurchasingOrderList(),
+            return JSONHelper.ToJSONString(PagingHelper.GetPagedTable(BL.GetQuoteDetailListByQuoteID(quoteID),
                 PageIndex, PageSize));
         }
-
     }
 }
