@@ -169,10 +169,19 @@ namespace DAL
             DataTable result = null;
             StringBuilder sb = new StringBuilder();
             sb.Append(@"
-SELECT 
-    *
+SELECT
+	goods_class_name,
+	goods_name,
+	SUM( count ),
+	SUM( actual_count ),
+	goods_unit_name 
 FROM
-    view_statics_po_goods_count 
+(
+    SELECT
+        *
+    FROM
+        view_statics_po_goods_count
+)
 WHERE
     1=1
 ");
@@ -200,6 +209,10 @@ WHERE
             {
                 sb.Append($"    AND create_time < '{ endTime.Value.ToString("yyyy-MM-dd HH:mm:ss") }' ");
             }
+            sb.Append(@"
+GROUP BY
+	goods_id
+");
 
             try
             {
@@ -219,7 +232,8 @@ WHERE
             sb.Append(@"
 SELECT
     department_name,
-    biz_type_name,total,
+    biz_type_name,
+    total,
     create_time,
     vendor_name
 FROM
@@ -259,7 +273,7 @@ WHERE
             sb.Append(@"
 SELECT
     department_name,
-    biz_type_name,total,
+    biz_type_name,
     goods_class_name,
     goods_name,
     subtotal,
