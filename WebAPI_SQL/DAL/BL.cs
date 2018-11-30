@@ -129,7 +129,7 @@ namespace DAL
                     case 2: sb.Append(" view_purchasing_plan_list_4_dept_confirm"); break;
                     case 3: sb.Append(" view_purchasing_plan_list_4_dept_need_modify"); break;
                 }
-                if(departmentID > 0)
+                if (departmentID > 0)
                 {
                     sb.Append(string.Format(" WHERE department_id = {0}", departmentID));
                 }
@@ -483,7 +483,7 @@ WHERE
         public static DataTable GetPurchasingPlanGoodsClassVendorQuetoSUM(int purchasingPlanID, int goodsClassID, List<int> listGoodsID)
         {
             DataTable result = null;
-            if (goodsClassID > 0  && listGoodsID !=null && listGoodsID.Count > 0)
+            if (goodsClassID > 0 && listGoodsID != null && listGoodsID.Count > 0)
             {
                 StringBuilder sb = new StringBuilder();
                 sb.Append(@"
@@ -927,6 +927,32 @@ WHERE
             return result;
         }
 
+
+        /// <summary>
+        /// 获取报价明细
+        /// </summary>
+        /// <param name="quoteID"></param>
+        /// <returns></returns>
+        public static DataTable GetQuoteDetailListByQuoteID(int quoteID)
+        {
+            DataTable result = null;
+            StringBuilder sb = new StringBuilder();
+            sb.Append("SELECT * FROM");
+            sb.Append(" view_goods_quote_list WHERE 1=1 ");
+            if (quoteID > 0)
+            {
+                sb.Append($" AND quote_id = {quoteID}");
+            }
+
+            try
+            {
+                result = DBHelper.ExecuteTable(sb.ToString());
+            }
+            catch (Exception) { throw; }
+            finally { }
+
+            return result;
+        }
 
         /// <summary>
         /// 获取供应商的订单列表(按状态排序)

@@ -1,0 +1,15 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/WebAPI_SQL/WebAPI_SQL.csproj"
+            ],
+            "problemMatcher": "$msCompile"
+        }
+    ]
+}

@@ -19,5 +19,13 @@ namespace WebAPI_SQL.Controllers
             return JSONHelper.ToJSONString(PagingHelper.GetPagedTable(BL.GetQuoteDetailList4Vendor2Quote(vendorID, DataHelper.GetListInt(listIntBizTypeID)),
                 PageIndex, PageSize));
         }
+
+        [HttpGet]
+        [Route("GetDetailByQuoteID")]
+        public string GetDetailByQuoteID(int quoteID, int PageIndex, int PageSize)
+        {
+            return JSONHelper.ToJSONString(PagingHelper.GetPagedTable(BL.GetQuoteDetailListByQuoteID(quoteID),
+                PageIndex, PageSize));
+        }
     }
 }

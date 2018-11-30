@@ -26,7 +26,7 @@ namespace WebAPI_SQL
         public void ConfigureServices(IServiceCollection services)
         {
             // cors
-            services.AddCors(options => options.AddPolicy("CorsSample", p => p.WithOrigins("http://localhost:5000").AllowAnyMethod().AllowAnyHeader()));
+            services.AddCors(options => options.AddPolicy("CorsSample", p => p.WithOrigins("*").AllowAnyMethod().AllowAnyHeader()));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
@@ -53,7 +53,7 @@ namespace WebAPI_SQL
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             // cors
             app.UseCors("CorsSample");

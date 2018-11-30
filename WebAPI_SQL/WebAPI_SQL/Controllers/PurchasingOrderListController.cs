@@ -19,5 +19,13 @@ namespace WebAPI_SQL.Controllers
             return JSONHelper.ToJSONString(PagingHelper.GetPagedTable(BL.GetPurchasingOrderList(),
                 PageIndex, PageSize));
         }
+
+
+        [HttpGet]
+        [Route("GetPurchasingOrderList4Vendor")]
+        public string GetPurchasingOrderList4Vendor(int bizTypeID, DateTime? startTime, DateTime? endTime, int vendorID, int PageIndex, int PageSize)
+        {
+            return JSONHelper.ToJSONString(PagingHelper.GetPagedTable(BL.GetPurchasingOrderList4Vendor(bizTypeID, startTime, endTime, vendorID), PageIndex, PageSize));
+        }
     }
 }

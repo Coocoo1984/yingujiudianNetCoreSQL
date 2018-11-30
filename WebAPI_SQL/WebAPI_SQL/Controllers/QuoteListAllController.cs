@@ -22,5 +22,7 @@ namespace WebAPI_SQL.Controllers
             return JSONHelper.ToJSONString(PagingHelper.GetPagedTable(BL.GetQuoteListAll(startTime, endTime),
                 PageIndex, PageSize));
         }
+
+        
     }
 }
