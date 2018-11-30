@@ -488,15 +488,25 @@ WHERE
                 StringBuilder sb = new StringBuilder();
                 sb.Append(@"
 SELECT
-	v.id AS vendor_id,
+-- 	pp.id AS purchasing_plan_id,
+-- 	ppd.id AS purchasing_plan_detail_id,
+-- 	ppd.goods_class_id,
+-- 	ppd.goods_id,
+-- 	ppd.quote_detail_id,
+-- 	ppd.count,
+-- 	qd.id,
+-- 	qd.goods_class_id,
+-- 	qd.goods_id,
+-- 	qd.unit_price,
+	q.vendor_id AS vendor_id,
 	v.name AS vendor_name,
-	SUM( ppd.count * qd.unit_price ) AS subtotal 
+ 	SUM( ppd.count * qd.unit_price ) AS subtotal
 FROM
-	purchasing_plan AS pp,
-	purchasing_plan_detail AS ppd,
-	quote AS q,
-	vendor AS v
-	LEFT JOIN quote_detail AS qd ON ppd.goods_class_id = qd.goods_class_id 
+	purchasing_plan AS pp
+	LEFT JOIN purchasing_plan_detail AS ppd ON ppd.purchasing_plan_id = pp.id
+	LEFT JOIN quote_detail AS qd ON ppd.goods_id = qd.goods_id
+	LEFT JOIN quote AS q ON qd.quote_id = q.id
+	LEFT JOIN vendor AS v ON q.vendor_id = v.id 
 WHERE
 	q.disable = 0 
 	AND qd.disable = 0

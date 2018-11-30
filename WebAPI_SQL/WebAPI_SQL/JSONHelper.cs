@@ -74,12 +74,18 @@ namespace WebAPI_SQL
         }
 
 
+        public static JsonSerializerSettings DateFormatSettings = new JsonSerializerSettings
+        {
+            DateFormatString = "yyyy-MM-dd HH:mm:ss"
+        };
+
         public static string ToJSONString(DataTable dt)
         {
             string reslut = string.Empty;
             try
             {
                 reslut = JsonConvert.SerializeObject(dt);
+                reslut = JsonConvert.SerializeObject(dt, DateFormatSettings);
             }
             catch (Exception)
             {

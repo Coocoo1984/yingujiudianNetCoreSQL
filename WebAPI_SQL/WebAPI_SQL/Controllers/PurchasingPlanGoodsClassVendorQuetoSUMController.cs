@@ -16,7 +16,10 @@ namespace WebAPI_SQL.Controllers
         [HttpGet]
         public string Get(int purchasingPlanID, int goodsClassID, string listIntGoodsIds, int PageIndex, int PageSize)
         {
-            return JSONHelper.ToJSONString(PagingHelper.GetPagedTable(BL.GetPurchasingPlanGoodsClassVendorQuetoSUM(purchasingPlanID, goodsClassID, DataHelper.GetListInt(listIntGoodsIds)),
+            return JSONHelper.ToJSONString(PagingHelper.GetPagedTable(BL.GetPurchasingPlanGoodsClassVendorQuetoSUM(
+                purchasingPlanID, 
+                goodsClassID, 
+                DataHelper.GetListInt(listIntGoodsIds)),
                 PageIndex, PageSize));
         }
     }

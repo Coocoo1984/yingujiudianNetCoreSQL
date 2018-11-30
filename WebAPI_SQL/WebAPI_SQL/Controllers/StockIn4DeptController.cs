@@ -16,7 +16,12 @@ namespace WebAPI_SQL.Controllers
         [HttpGet]
         public string Get(int bizTypeId, DateTime? startTime, DateTime? endTime, string listIntGoodsIds, int deparmentId, int PageIndex, int PageSize)
         {
-            return JSONHelper.ToJSONString(PagingHelper.GetPagedTable(BL.GetStockIn4Dept(bizTypeId, startTime, endTime, DataHelper.GetListInt(listIntGoodsIds), deparmentId),
+            return JSONHelper.ToJSONString(PagingHelper.GetPagedTable(BL.GetStockIn4Dept(
+                bizTypeId,
+                DataHelper.GetDateTime(startTime),
+                DataHelper.GetDateTime(endTime), 
+                DataHelper.GetListInt(listIntGoodsIds), 
+                deparmentId),
                 PageIndex, PageSize));
         }
     }

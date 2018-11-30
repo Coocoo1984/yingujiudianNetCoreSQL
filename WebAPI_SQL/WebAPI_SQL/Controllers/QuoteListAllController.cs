@@ -19,7 +19,9 @@ namespace WebAPI_SQL.Controllers
             DateTime endTime = DateTime.Now;
             DateTime startTime = endTime.AddMonths(-3);
 
-            return JSONHelper.ToJSONString(PagingHelper.GetPagedTable(BL.GetQuoteListAll(startTime, endTime),
+            return JSONHelper.ToJSONString(PagingHelper.GetPagedTable(BL.GetQuoteListAll(
+                DataHelper.GetDateTime(startTime),
+                DataHelper.GetDateTime(endTime)),
                 PageIndex, PageSize));
         }
 

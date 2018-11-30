@@ -15,7 +15,12 @@ namespace WebAPI_SQL.Controllers
        
         public string GetPurchasingOrderList4Vendor(int bizTypeID, DateTime? startTime, DateTime? endTime, int vendorID, int PageIndex, int PageSize)
         {
-            return JSONHelper.ToJSONString(PagingHelper.GetPagedTable(BL.GetPurchasingOrderList4Vendor(bizTypeID, startTime, endTime, vendorID), PageIndex, PageSize));
+            return JSONHelper.ToJSONString(PagingHelper.GetPagedTable(BL.GetPurchasingOrderList4Vendor(
+                bizTypeID,
+                DataHelper.GetDateTime(startTime),
+                DataHelper.GetDateTime(endTime), 
+                vendorID), 
+                PageIndex, PageSize));
         }
     }
 }

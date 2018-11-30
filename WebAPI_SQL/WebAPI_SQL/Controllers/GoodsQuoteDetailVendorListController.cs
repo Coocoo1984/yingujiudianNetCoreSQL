@@ -15,7 +15,11 @@ namespace WebAPI_SQL.Controllers
         // GET: api/GoodsQuoteDetailVendorList
         public string Get(int bizTypeID, DateTime? startTime, DateTime? endTime,int goodsId, int PageIndex, int PageSize)
         {
-            return JSONHelper.ToJSONString(PagingHelper.GetPagedTable(BL.GetGoodsQuoteDetailVendorList(bizTypeID, startTime, endTime, goodsId),
+            return JSONHelper.ToJSONString(PagingHelper.GetPagedTable(BL.GetGoodsQuoteDetailVendorList(
+                bizTypeID,
+                DataHelper.GetDateTime(startTime),
+                DataHelper.GetDateTime(endTime),
+                goodsId),
                 PageIndex, PageSize));
         }
     }

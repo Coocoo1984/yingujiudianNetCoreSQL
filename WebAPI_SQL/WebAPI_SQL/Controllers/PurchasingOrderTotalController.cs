@@ -14,13 +14,13 @@ namespace WebAPI_SQL.Controllers
     {
         // GET: api/PurchasingOrderTotal
         [HttpGet]
-        public string Get(int departmentID, List<int> listBizTypeIDs, DateTime? startTime, DateTime? endTime)
+        public string Get(int departmentID, string listBizTypeIDs, DateTime? startTime, DateTime? endTime)
         {
             return JSONHelper.ToJSONString(PagingHelper.GetPagedTable(BL.GetPurchasingOrderTotal(
-                departmentID, 
-                listBizTypeIDs, 
-                startTime, 
-                endTime),
+                departmentID,
+                DataHelper.GetListInt(listBizTypeIDs),
+                DataHelper.GetDateTime(startTime),
+                DataHelper.GetDateTime(endTime)),
                 0, 0));
         }
     }
