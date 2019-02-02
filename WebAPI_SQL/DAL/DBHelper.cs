@@ -16,12 +16,12 @@ namespace DAL
 
         private static string GetConnectionString()
         {
-            string result;// = "Data Source=F:\\MyGitHub\\yingujiudianNetCoreSQL\\WebAPI_SQL\\WebAPI_SQL\\DB\\test.db";
+            string result;//= "Data Source=C:\\Users\\Juan\\Desktop\\test-online.db";
             //添加 json 文件路径
             var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json");
             //创建配置根对象
             var configurationRoot = builder.Build();
-            var nameSection = configurationRoot.GetSection("DataBaseConnectionString");
+            var nameSection = configurationRoot.GetSection("DataBaseConnectionStringWork");
             result = nameSection.Value;
 
             return result;

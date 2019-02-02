@@ -488,6 +488,60 @@ WHERE
         }
 
         /// <summary>
+        /// 采购计划复审时 1对1指定供应商 获取对应供应商列表
+        /// </summary>
+        /// <param name="purchasingPlanID"></param>
+        /// <returns></returns>
+        public static DataTable GetPurchasingPlanVendorQuetoSUM(int purchasingPlanID)
+        {
+            DataTable result = null;
+
+            if (purchasingPlanID > 0)
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.Append(@"
+SELECT
+-- 	pp.id AS purchasing_plan_id,
+-- 	ppd.id AS purchasing_plan_detail_id,
+-- 	ppd.goods_class_id,
+-- 	ppd.goods_id,
+-- 	ppd.quote_detail_id,
+-- 	ppd.count,
+-- 	qd.id,
+-- 	qd.goods_class_id,
+-- 	qd.goods_id,
+-- 	qd.unit_price,
+	q.vendor_id AS vendor_id,
+	v.name AS vendor_name,
+ 	SUM( ppd.count * qd.unit_price ) AS subtotal
+FROM
+	purchasing_plan AS pp
+	LEFT JOIN purchasing_plan_detail AS ppd ON ppd.purchasing_plan_id = pp.id
+	LEFT JOIN quote_detail AS qd ON ppd.goods_id = qd.goods_id
+	LEFT JOIN quote AS q ON qd.quote_id = q.id
+	LEFT JOIN vendor AS v ON q.vendor_id = v.id 
+WHERE
+	q.disable = 0 
+	AND qd.disable = 0
+                ");
+                sb.Append($"	AND ppd.purchasing_plan_id = {purchasingPlanID}");
+                sb.Append(@"
+GROUP BY
+	v.id");
+                sb.Append(@"
+ORDER BY
+	subtotal");
+                try
+                {
+                    result = DBHelper.ExecuteTable(sb.ToString());
+                }
+                catch (Exception) { throw; }
+                finally { }
+            }
+            return result;
+        }
+
+        /// <summary>
         /// 选中采购中的某一商品类目，计算出对应类目的供应商的小计价格列表
         /// </summary>
         /// <param name="purchasingPlanID">必须</param>
@@ -497,6 +551,7 @@ WHERE
         public static DataTable GetPurchasingPlanGoodsClassVendorQuetoSUM(int purchasingPlanID, int goodsClassID, List<int> listGoodsID)
         {
             DataTable result = null;
+
             if (goodsClassID > 0 && listGoodsID != null && listGoodsID.Count > 0)
             {
                 StringBuilder sb = new StringBuilder();
@@ -544,6 +599,7 @@ ORDER BY
             return result;
         }
 
+ 
         /// <summary>
         /// 采购进度 - 取得所有订单
         /// </summary>
@@ -747,6 +803,58 @@ WHERE
                 sb.Append($" AND qd.goods_id = {goodsID} ");
             }
             sb.Append(" ORDER BY unit_price");
+            try
+            {
+                result = DBHelper.ExecuteTable(sb.ToString());
+            }
+            catch (Exception) { throw; }
+            finally { }
+
+            return result;
+        }
+
+        /// <summary>
+        /// 采购计划复审中 查看供应商报价明细（对应采购计划的商品）
+        /// </summary>
+        /// <param name="purchasiongPlanID">采购计划ID</param>
+        /// <param name="vendorID">供应商ID</param>
+        /// <returns></returns>
+        public static DataTable GetPurchasingPlanVendorQuoteDetail(int purchasiongPlanID, int vendorID)
+        {
+            DataTable result = null;
+            StringBuilder sb = new StringBuilder();
+            sb.Append(@"
+SELECT
+ 	pp.id AS purchasing_plan_id,
+ 	ppd.id AS purchasing_plan_detail_id,
+ 	ppd.quote_detail_id,
+ 	ppd.count AS purchasing_plan_detail_count,
+ 	qd.id AS quote_id,
+ 	qd.goods_class_id,
+ 	qd.goods_id,
+ 	qd.unit_price,
+	q.vendor_id AS vendor_id,
+    q.create_time,
+	v.name AS vendor_name
+FROM
+	purchasing_plan AS pp
+	LEFT JOIN purchasing_plan_detail AS ppd ON ppd.purchasing_plan_id = pp.id
+	LEFT JOIN quote_detail AS qd ON ppd.goods_id = qd.goods_id
+	LEFT JOIN quote AS q ON qd.quote_id = q.id
+	LEFT JOIN vendor AS v ON q.vendor_id = v.id 
+WHERE
+	q.disable = 0 
+	AND qd.disable = 0
+");
+            if (purchasiongPlanID > 0)
+            {
+                sb.Append(" AND pp.id = '{ purchasiongPlanID }'");
+            }
+            if(vendorID > 0)
+            {
+                sb.Append(" AND v.id = '{ vendorID }'");
+            }
+            sb.Append(" ORDER BY q.create_time DESC");
             try
             {
                 result = DBHelper.ExecuteTable(sb.ToString());

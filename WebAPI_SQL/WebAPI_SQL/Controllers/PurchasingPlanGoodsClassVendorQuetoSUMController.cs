@@ -16,11 +16,24 @@ namespace WebAPI_SQL.Controllers
         [HttpGet]
         public string Get(int purchasingPlanID, int goodsClassID, string listIntGoodsIds, int PageIndex, int PageSize)
         {
-            return JSONHelper.ToJSONString(PagingHelper.GetPagedTable(BL.GetPurchasingPlanGoodsClassVendorQuetoSUM(
-                purchasingPlanID, 
-                goodsClassID, 
-                DataHelper.GetListInt(listIntGoodsIds)),
-                PageIndex, PageSize));
+            string result = null;
+            if (goodsClassID == 0)
+            {
+                //按采购计划1对1选中 供应商列表
+                result = JSONHelper.ToJSONString(PagingHelper.GetPagedTable(BL.GetPurchasingPlanVendorQuetoSUM(
+                    purchasingPlanID),
+                    PageIndex, PageSize));
+            }
+            else
+            {
+                //按商品分类选中 供应商列表
+                result = JSONHelper.ToJSONString(PagingHelper.GetPagedTable(BL.GetPurchasingPlanGoodsClassVendorQuetoSUM(
+                    purchasingPlanID,
+                    goodsClassID,
+                    DataHelper.GetListInt(listIntGoodsIds)),
+                    PageIndex, PageSize));
+            }
+            return result;
         }
     }
 }
