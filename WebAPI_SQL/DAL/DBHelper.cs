@@ -185,7 +185,19 @@ namespace DAL
                         DataRow itemDataRow = dt.NewRow();
                         for (int i = 0; i < dr.FieldCount; i++)
                         {
-                            itemDataRow[i] = dr.GetValue(i);
+                            Type t = dr.GetFieldType(i);
+                            if (Type.Equals(Type.GetType("System.Double"), t))
+                            {
+                                itemDataRow[i] = dr.GetDecimal(i);
+                            }
+                            else if (Type.Equals(Type.GetType("System.String"), t) && dr.GetName(i).Contains("time"))
+                            {
+                                itemDataRow[i] = string.Format("{0:yyyy-MM-dd HH:mm:ss}", dr.GetDateTime(i).ToUniversalTime());
+                            }
+                            else
+                            {
+                                itemDataRow[i] = dr.GetValue(i);
+                            }
                         }
                         dt.Rows.Add(itemDataRow);
                         itemDataRow = null;
