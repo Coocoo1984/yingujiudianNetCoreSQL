@@ -16,7 +16,7 @@ namespace WebAPI_SQL.Controllers
         [HttpGet]
         public string Get(int departmentID)
         {
-            return JSONHelper.ToJSONString(PagingHelper.GetPagedTable(BL.GetPurchasingPlanCount4Dept(),
+            return JSONHelper.ToJSONString(PagingHelper.GetPagedTable(BL.GetPurchasingPlanCount4Dept(departmentID),
                 0, 0));
         }
     }
