@@ -43,6 +43,65 @@ namespace DAL
             return result;
         }
 
+        /// <summary>
+        /// 采购需求部门 首页统计
+        /// </summary>
+        /// <returns></returns>
+        public static DataTable GetPurchasingPlanCount4Dept(int departmentID)
+        {
+            DataTable result = null;
+            StringBuilder sb = new StringBuilder();
+            if (departmentID == 0)
+            {
+                sb.Append("SELECT * FROM ");
+                sb.Append(" view_purchasing_plan_count_4_dept");
+            }
+            else
+            {
+                sb.Append(@"
+SELECT
+    '待初审' AS[desciption], 
+    COUNT([pp1].[id]) AS[count], 
+    [pp1].[purchasing_state_id] AS[state]
+FROM
+    [purchasing_plan] AS [pp1],
+    [department] AS [d1]
+WHERE
+    [pp1].[department_id] = " + departmentID + @"
+    AND [pp1].[purchasing_state_id] IN(2)
+UNION
+SELECT 
+    '待复审' AS[desciption], 
+    COUNT([pp2].[id]) AS[count], 
+    [pp2].[purchasing_state_id] AS[state]
+FROM
+    [purchasing_plan] AS [pp2],
+    [department] AS [d2]
+WHERE
+    [pp2].[department_id] = " + departmentID + @"
+    AND [pp2].[purchasing_state_id] IN(4)
+UNION
+SELECT 
+    '已完成' AS [desciption], 
+    COUNT([pp3].[id]) AS [count], 
+    [pp3].[purchasing_state_id] AS [state]
+FROM
+    [purchasing_plan] AS [pp3],
+    [department] AS [d3]
+WHERE
+    [pp3].[department_id] = " + departmentID + @"
+     AND [pp3].[purchasing_state_id] = 6
+");
+            }
+                try
+            {
+                result = DBHelper.ExecuteTable(sb.ToString());
+            }
+            catch (Exception) { throw; }
+            finally { }
+            return result;
+        }
+
 
 
 

@@ -21,7 +21,9 @@ namespace DAL
             var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json");
             //创建配置根对象
             var configurationRoot = builder.Build();
-            var nameSection = configurationRoot.GetSection("DataBaseConnectionStringWork");
+            var nameSection = configurationRoot.GetSection("DataBaseConnectionString");
+            //nameSection = configurationRoot.GetSection("DataBaseConnectionStringWork");
+
             result = nameSection.Value;
 
             return result;
