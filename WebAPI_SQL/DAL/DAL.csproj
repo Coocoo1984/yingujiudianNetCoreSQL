@@ -13,8 +13,4 @@
     <PackageReference Include="SQLitePCLRaw.bundle_green" Version="1.1.13" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="DB\" />
-  </ItemGroup>
-
 </Project>

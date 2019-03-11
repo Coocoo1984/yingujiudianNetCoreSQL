@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="DB\" />
     <Folder Include="File\Export\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
