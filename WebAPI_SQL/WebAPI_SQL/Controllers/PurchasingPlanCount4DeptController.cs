@@ -14,10 +14,11 @@ namespace WebAPI_SQL.Controllers
     {
         // GET: api/PurchasingPlanCount4Dept
         [HttpGet]
-        public string Get(int departmentID)
+        public string Get()
         {
             return JSONHelper.ToJSONString(PagingHelper.GetPagedTable(BL.GetPurchasingPlanCount4Dept(departmentID),
                 0, 0));
         }
+
     }
 }

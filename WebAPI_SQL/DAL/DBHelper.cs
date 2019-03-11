@@ -21,9 +21,7 @@ namespace DAL
             var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json");
             //创建配置根对象
             var configurationRoot = builder.Build();
-            var nameSection = configurationRoot.GetSection("DataBaseConnectionString");
-            //nameSection = configurationRoot.GetSection("DataBaseConnectionStringWork");
-
+            var nameSection = configurationRoot.GetSection("DataBaseConnectionStringWork");
             result = nameSection.Value;
 
             return result;
@@ -169,18 +167,7 @@ namespace DAL
                 using (SqliteCommand cmd = new SqliteCommand(sql, conn))
                 {
                     conn.Open();
-
                     SqliteDataReader dr = cmd.ExecuteReader();
-                    ////while (dr.Read())
-                    ////{
-                    ////    dt.LoadDataRow((IDataRecord)dr.);
-                    ////}
-
-                    ////dt.BeginLoadData();
-                    ////dt.Load((IDataReader)dr);
-                    ////dt.Constraints.Clear();
-                    ////dt.EndLoadData();
-
                     //动态添加表的数据列
                     for (int i = 0; i < dr.FieldCount; i++)
                     {
@@ -191,24 +178,7 @@ namespace DAL
                         };
                         dt.Columns.Add(myDataColumn);
                     }
-                    ////DataTable schemaTable = dr.GetSchemaTable();
-                    //////For each field in the table...
-                    ////foreach (DataRow myField in schemaTable.Rows)
-                    ////{
 
-                    ////    //DataTable dtt = myField.Table;
-
-                    ////    //For each property of the field...
-                    ////    //foreach (DataColumn myProperty in schemaTable.Columns)
-                    ////    //{
-                    ////    //    //Display the field name and value.
-                    ////    //    Console.WriteLine(myProperty.ColumnName + " = " + myField[myProperty].ToString());
-                    ////    //}
-
-                    ////    Console.WriteLine(myField["ColumnName"] + " | " + myField["DataTypeName"] + " | " + myField["DataType"]);
-
-
-                    ////}
                     //添加表的数据
                     while (dr.Read())
                     {
@@ -226,15 +196,7 @@ namespace DAL
                             }
                             else
                             {
-                                if(dr.IsDBNull(i))
-                                {
-                                    itemDataRow[i] = DBNull.Value;
-                                }
-                                else
-                                {
-                                    itemDataRow[i] = dr.GetValue(i);
-                                }
-                                
+                                itemDataRow[i] = dr.GetValue(i);
                             }
                         }
                         dt.Rows.Add(itemDataRow);
