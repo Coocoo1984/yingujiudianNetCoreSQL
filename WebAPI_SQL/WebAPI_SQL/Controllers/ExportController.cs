@@ -14,7 +14,8 @@ namespace WebAPI_SQL.Controllers
         private const string XlsxContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
         [Route("export/PurchasingOrderTotal")]
-        public IActionResult PurchasingOrderTotal(int departmentID, DateTime? startTime, DateTime? endTime)
+        [HttpGet]
+        public IActionResult PurchasingOrderTotal(string listDepartmentIDs, DateTime? startTime, DateTime? endTime)
         {
             var result = new DataTable("Export");
 
@@ -26,7 +27,7 @@ namespace WebAPI_SQL.Controllers
 
 
             DataTable dt = BL.GetPurchasingOrderTotal(
-                departmentID,
+                DataHelper.GetListInt(listDepartmentIDs),
                 null,
                 DataHelper.GetDateTime(startTime),
                 DataHelper.GetDateTime(endTime));
@@ -80,7 +81,8 @@ namespace WebAPI_SQL.Controllers
 
 
         [Route("export/PurchasingOrderGoodsSubtotal")]
-        public IActionResult PurchasingOrderGoodsSubtotal(int departmentID, string listBizTypeIDs, string listGoodsClassIDs, string listGoodsIDs, DateTime? startTime, DateTime? endTime)
+        [HttpGet]
+        public IActionResult PurchasingOrderGoodsSubtotal(string listDepartmentIDs, string listBizTypeIDs, string listGoodsClassIDs, string listGoodsIDs, DateTime? startTime, DateTime? endTime)
         {
             var result = new DataTable("Export");
 
@@ -93,7 +95,7 @@ namespace WebAPI_SQL.Controllers
 
 
             DataTable dt = BL.GetPurchasingOrderGoodsSubtotal(
-                departmentID,
+                DataHelper.GetListInt(listDepartmentIDs),
                 DataHelper.GetListInt(listBizTypeIDs),
                 DataHelper.GetListInt(listGoodsClassIDs),
                 DataHelper.GetListInt(listGoodsIDs),
@@ -153,7 +155,8 @@ namespace WebAPI_SQL.Controllers
         }
 
         [Route("export/PurchasingOrderVendorSubtotal")]
-        public IActionResult PurchasingOrderVendorSubtotal(int departmentID, string listBizTypeIDs, string listGoodsClassIDs, string listGoodsIDs, DateTime? startTime, DateTime? endTime)
+        [HttpGet]
+        public IActionResult PurchasingOrderVendorSubtotal(string listVendorIDs, string listBizTypeIDs, string listGoodsClassIDs, string listGoodsIDs, DateTime? startTime, DateTime? endTime)
         {
             var result = new DataTable("Export");
 
@@ -167,7 +170,7 @@ namespace WebAPI_SQL.Controllers
 
 
             DataTable dt = BL.GetPurchasingOrderVendorSubtotal(
-                departmentID,
+                DataHelper.GetListInt(listVendorIDs),
                 DataHelper.GetListInt(listBizTypeIDs),
                 DataHelper.GetListInt(listGoodsClassIDs),
                 DataHelper.GetListInt(listGoodsIDs),

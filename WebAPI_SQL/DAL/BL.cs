@@ -272,7 +272,7 @@ GROUP BY
             return result;
         }
 
-        public static DataTable GetPurchasingOrderTotal(int departmentID, List<int> listBizTypeIDs, DateTime? startTime, DateTime? endTime)
+        public static DataTable GetPurchasingOrderTotal(List<int> listDepartmentIDs, List<int> listBizTypeIDs, DateTime? startTime, DateTime? endTime)
         {
             DataTable result = null;
 
@@ -289,9 +289,9 @@ FROM
 WHERE
     1=1
 ");
-            if (departmentID > 0)
+            if (listDepartmentIDs != null && listDepartmentIDs.Count > 0)
             {
-                sb.Append($"    AND department_id = {departmentID} ");
+                sb.Append($"    AND department_id in ({ string.Join(',', listDepartmentIDs.ToArray()) }) ");
             }
             if (listBizTypeIDs != null && listBizTypeIDs.Count > 0)
             {
@@ -313,7 +313,7 @@ WHERE
             return result;
         }
 
-        public static DataTable GetPurchasingOrderGoodsSubtotal(int departmentID, List<int> listBizTypeIDs, List<int> listGoodsClassIDs, List<int> listGoodsIDs, DateTime? startTime, DateTime? endTime)
+        public static DataTable GetPurchasingOrderGoodsSubtotal(List<int> listDepartmentIDs, List<int> listBizTypeIDs, List<int> listGoodsClassIDs, List<int> listGoodsIDs, DateTime? startTime, DateTime? endTime)
         {
             DataTable result = null;
 
@@ -332,9 +332,9 @@ FROM
 WHERE
     1=1
 ");
-            if (departmentID > 0)
+            if (listDepartmentIDs != null && listDepartmentIDs.Count > 0)
             {
-                sb.Append($"    AND department_id = {departmentID}");
+                sb.Append($"    AND department_id in ({ string.Join(',', listDepartmentIDs.ToArray()) }) ");
             }
             if (listBizTypeIDs != null && listBizTypeIDs.Count > 0)
             {
@@ -364,7 +364,7 @@ WHERE
             return result;
         }
 
-        public static DataTable GetPurchasingOrderVendorSubtotal(int vendorID, List<int> listBizTypeIDs, List<int> listGoodsClassIDs, List<int> listGoodsIDs, DateTime? startTime, DateTime? endTime)
+        public static DataTable GetPurchasingOrderVendorSubtotal(List<int> listVendorIDs, List<int> listBizTypeIDs, List<int> listGoodsClassIDs, List<int> listGoodsIDs, DateTime? startTime, DateTime? endTime)
         {
             DataTable result = null;
 
@@ -383,10 +383,16 @@ FROM
 WHERE
     1=1
 ");
-            if (vendorID > 0)
+            ////if (vendorID > 0)
+            ////{
+            ////    sb.Append($" AND vendor_id = {vendorID}");
+            ////}
+
+            if (listVendorIDs != null && listVendorIDs.Count > 0)
             {
-                sb.Append($" AND vendor_id = {vendorID}");
+                sb.Append($"    AND vendor_id in ({ string.Join(',', listVendorIDs.ToArray()) }) ");
             }
+
             if (listBizTypeIDs != null && listBizTypeIDs.Count > 0)
             {
                 sb.Append($"    AND biz_type_id in ({ string.Join(',', listBizTypeIDs.ToArray()) }) ");
