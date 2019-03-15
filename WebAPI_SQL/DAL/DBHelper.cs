@@ -196,6 +196,10 @@ namespace DAL
                             }
                             else
                             {
+                                if(dr.IsDBNull(i))
+                                {
+                                    itemDataRow[i] = DBNull.Value;
+                                }
                                 itemDataRow[i] = dr.GetValue(i);
                             }
                         }
