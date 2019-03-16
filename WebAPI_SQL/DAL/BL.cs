@@ -1281,7 +1281,7 @@ FROM   quote AS q,
        goods AS g,
        goods_class AS gc
 WHERE
-       g.id = {quoteID}
+       q.id = {quoteID}
 GROUP BY
        qd.goods_class_id
 ");
