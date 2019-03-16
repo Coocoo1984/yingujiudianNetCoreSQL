@@ -634,6 +634,61 @@ ORDER BY
         }
 
         /// <summary>
+        /// 采购计划复审时 1对1指定供应商 获取对应供应商列表
+        /// </summary>
+        /// <param name="purchasingPlanID"></param>
+        /// <returns></returns>
+        public static DataTable GetPurchasingPlanVendorQuetoSUM(int purchasingPlanID, List<int> listGoodsID)
+        {
+            DataTable result = null;
+
+            if (purchasingPlanID > 0)
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.Append(@"
+SELECT
+-- 	pp.id AS purchasing_plan_id,
+-- 	ppd.id AS purchasing_plan_detail_id,
+-- 	ppd.goods_class_id,
+-- 	ppd.goods_id,
+-- 	ppd.quote_detail_id,
+-- 	ppd.count,
+-- 	qd.id,
+-- 	qd.goods_class_id,
+-- 	qd.goods_id,
+-- 	qd.unit_price,
+	q.vendor_id AS vendor_id,
+	v.name AS vendor_name,
+ 	SUM( ppd.count * qd.unit_price ) AS subtotal
+FROM
+	purchasing_plan AS pp
+	LEFT JOIN purchasing_plan_detail AS ppd ON ppd.purchasing_plan_id = pp.id
+	LEFT JOIN quote_detail AS qd ON ppd.goods_id = qd.goods_id
+	LEFT JOIN quote AS q ON qd.quote_id = q.id
+	LEFT JOIN vendor AS v ON q.vendor_id = v.id 
+WHERE
+	q.disable = 0 
+	AND qd.disable = 0
+                ");
+                sb.Append($"	AND ppd.purchasing_plan_id = {purchasingPlanID}");
+                sb.Append($"    AND qd.goods_id in ( {string.Join(',', listGoodsID.ToArray())} )");
+                sb.Append(@"
+GROUP BY
+	v.id");
+                sb.Append(@"
+ORDER BY
+	subtotal");
+                try
+                {
+                    result = DBHelper.ExecuteTable(sb.ToString());
+                }
+                catch (Exception) { throw; }
+                finally { }
+            }
+            return result;
+        }
+
+        /// <summary>
         /// 选中采购中的某一商品类目，计算出对应类目的供应商的小计价格列表
         /// </summary>
         /// <param name="purchasingPlanID">必须</param>

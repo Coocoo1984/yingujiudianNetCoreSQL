@@ -21,7 +21,8 @@ namespace WebAPI_SQL.Controllers
             {
                 //按采购计划1对1选中 供应商列表
                 result = JSONHelper.ToJSONString(PagingHelper.GetPagedTable(BL.GetPurchasingPlanVendorQuetoSUM(
-                    purchasingPlanID),
+                    purchasingPlanID,
+                     DataHelper.GetListInt(listIntGoodsIds)),
                     PageIndex, PageSize));
             }
             else
