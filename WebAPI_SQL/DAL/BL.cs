@@ -128,6 +128,44 @@ WHERE
             return result;
         }
 
+        public static DataTable GetUsrs(bool? disable)
+        {
+            DataTable result = null;
+            StringBuilder sb = new StringBuilder();
+            sb.Append("SELECT * FROM");
+            sb.Append(" usr ");
+            if (disable.GetValueOrDefault())
+            {
+                sb.Append($" WHERE disable = { disable.Value }");
+            }
+            try
+            {
+                result = DBHelper.ExecuteTable(sb.ToString());
+            }
+            catch (Exception) { throw; }
+            finally { }
+            return result;
+        }
+
+        public static DataTable GetVendors(bool? disable)
+        {
+            DataTable result = null;
+            StringBuilder sb = new StringBuilder();
+            sb.Append("SELECT * FROM");
+            sb.Append(" vendor ");
+            if (disable.GetValueOrDefault())
+            {
+                sb.Append($" WHERE disable = { disable.Value }");
+            }
+            try
+            {
+                result = DBHelper.ExecuteTable(sb.ToString());
+            }
+            catch (Exception) { throw; }
+            finally { }
+            return result;
+        }
+
         public static DataTable GetGoods()
         {
             DataTable result = null;
