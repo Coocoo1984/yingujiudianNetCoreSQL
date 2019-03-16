@@ -14,10 +14,13 @@ namespace WebAPI_SQL.Controllers
     {
         // GET: api/QuoteListAll
         [HttpGet]
-        public string Get(bool? disable, int PageIndex, int PageSize)
+        public string Get(bool? disable, DateTime? startTime, DateTime? endTime, int PageIndex, int PageSize)
         {
-            DateTime endTime = DateTime.Now;
-            DateTime startTime = endTime.AddMonths(-3);
+            ////DateTime endTime = DateTime.Now;
+            ////DateTime startTime = endTime.AddMonths(-3);
+            ////disable = BaseSettines.IsGlobalSelectTableRecordDisableClosed ?
+            ////    disable : //关闭 全局查询状态
+            ////    (disable == null) ? BaseSettines.DefualtDisableValue : disable;//开启 检查请求是否有该参数 （有则不干预,无则设置为默认值)
 
             return JSONHelper.ToJSONString(PagingHelper.GetPagedTable(BL.GetQuoteListAll(
                 disable,

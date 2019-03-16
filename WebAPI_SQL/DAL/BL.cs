@@ -937,7 +937,7 @@ SELECT
 	qd.unit_price,
 	qd.pre_unit_price,
 	g.name AS goods_name,
-	qd.unit_price - qd.pre_unit_price AS up_down 
+	qd.unit_price - 0 AS up_down 
 FROM
 	quote AS q
 	LEFT JOIN quote_detail AS qd ON qd.quote_id = q.id
@@ -946,8 +946,7 @@ FROM
 	LEFT JOIN biz_type AS bt ON q.biz_type_id = bt.id
 	LEFT JOIN goods AS g ON qd.goods_id = g.id 
 WHERE
-	q.disable = 0 
-	AND qd.disable = 0 
+	q.disable = 0
     AND v.disable = 0
                 ");
 
