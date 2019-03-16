@@ -14,9 +14,9 @@ namespace WebAPI_SQL.Controllers
     {
         // GET: api/BizTypes
         [HttpGet]
-        public string Get()
+        public string Get(bool? disable)
         {
-            return JSONHelper.ToJSONString(PagingHelper.GetPagedTable(BL.GetBizTypes(), 
+            return JSONHelper.ToJSONString(PagingHelper.GetPagedTable(BL.GetBizTypes(disable), 
                 0, 0));
         }
     }

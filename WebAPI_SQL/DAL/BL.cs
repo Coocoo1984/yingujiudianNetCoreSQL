@@ -98,12 +98,16 @@ WHERE
 
 
 
-        public static DataTable GetBizTypes()
+        public static DataTable GetBizTypes(bool? disable)
         {
             DataTable result = null;
             StringBuilder sb = new StringBuilder();
             sb.Append("SELECT * FROM ");
             sb.Append(" view_biz_type");
+            if (disable.GetValueOrDefault())
+            {
+                sb.Append($" WHERE disable = { disable.Value }");
+            }
             try
             {
                 result = DBHelper.ExecuteTable(sb.ToString());
@@ -113,12 +117,16 @@ WHERE
             return result;
         }
 
-        public static DataTable GetDepartments()
+        public static DataTable GetDepartments(bool? disable)
         {
             DataTable result = null;
             StringBuilder sb = new StringBuilder();
             sb.Append("SELECT * FROM ");
             sb.Append(" view_department");
+            if (disable.GetValueOrDefault())
+            {
+                sb.Append($" WHERE disable = { disable.Value }");
+            }
             try
             {
                 result = DBHelper.ExecuteTable(sb.ToString());
@@ -132,7 +140,7 @@ WHERE
         {
             DataTable result = null;
             StringBuilder sb = new StringBuilder();
-            sb.Append("SELECT * FROM");
+            sb.Append("SELECT * FROM ");
             sb.Append(" usr ");
             if (disable.GetValueOrDefault())
             {
@@ -166,12 +174,16 @@ WHERE
             return result;
         }
 
-        public static DataTable GetGoods()
+        public static DataTable GetGoods(bool? disable)
         {
             DataTable result = null;
             StringBuilder sb = new StringBuilder();
             sb.Append("SELECT * FROM");
-            sb.Append(" view_goods");
+            sb.Append(" view_goods ");
+            if (disable.GetValueOrDefault())
+            {
+                sb.Append($" WHERE disable = { disable.Value }");
+            }
             try
             {
                 result = DBHelper.ExecuteTable(sb.ToString());
@@ -181,12 +193,16 @@ WHERE
             return result;
         }
 
-        public static DataTable GetGoodsClass()
+        public static DataTable GetGoodsClass(bool? disable)
         {
             DataTable result = null;
             StringBuilder sb = new StringBuilder();
             sb.Append("SELECT * FROM");
-            sb.Append(" view_goods_class");
+            sb.Append(" view_goods_class ");
+            if (disable.GetValueOrDefault())
+            {
+                sb.Append($" WHERE disable = { disable.Value }");
+            }
             try
             {
                 result = DBHelper.ExecuteTable(sb.ToString());
@@ -1015,15 +1031,41 @@ WHERE
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="disable">null:无该条件 默认为0:启用</param>
         /// <param name="startTime">null:无该条件</param>
         /// <param name="endTime">null:无该条件</param>
         /// <returns></returns>
-        public static DataTable GetQuoteListAll(DateTime? startTime, DateTime? endTime)
+        public static DataTable GetQuoteListAll(bool? disable, DateTime? startTime, DateTime? endTime)
         {
             DataTable result = null;
             StringBuilder sb = new StringBuilder();
-            sb.Append("SELECT * FROM ");
-            sb.Append(" view_quote_list_all WHERE 1=1 ");
+
+            sb.Append(
+@"
+SELECT 
+       [q].[id] AS [quote_id], 
+       [q].[vendor_id] AS [vendor_id], 
+       [v].[name] AS [vendor_name], 
+       [q].[create_time] AS [quote_create_time], 
+       [q].[biz_type_id] AS [quote_biz_type_id], 
+       [bt].[name] AS [biz_type_name], 
+       [q].[disable] AS [disable]
+FROM   [quote] AS [q]
+       LEFT JOIN [vendor] AS [v] ON [q].[vendor_id] = [v].[id]
+       LEFT JOIN [biz_type] AS [bt] ON [q].[biz_type_id] = [bt].[id]
+WHERE
+       1=1
+"
+);
+
+
+
+
+
+            if (disable.GetValueOrDefault())
+            {
+                sb.Append($" AND disable = { disable.Value }");
+            }
             if (startTime != null)
             {
                 sb.Append($" AND quote_create_time > '{ startTime.Value.ToString("yyyy-MM-dd HH:mm:ss") }' ");
@@ -1216,11 +1258,30 @@ WHERE
         {
             DataTable result = null;
             StringBuilder sb = new StringBuilder();
-            sb.Append("SELECT * FROM");
-            sb.Append(" view_goods_quote_list WHERE 1=1 ");
+            ////sb.Append("SELECT * FROM");
+            ////sb.Append(" view_goods_quote_list WHERE 1=1 ");
             if (quoteID > 0)
             {
-                sb.Append($" AND quote_id = {quoteID}");
+                sb.Append(
+$@"
+SELECT 
+       g.name AS goods_name, 
+       qd.unit_price AS unit_price, 
+       qd.id, 
+       qd.goods_class_id, 
+       qd.goods_id, 
+       q.id AS quote_id, 
+       q.vendor_id AS vendor_id, 
+       gc.name AS goods_class_name
+FROM   quote AS q,
+       quote_detail AS qd,
+       goods AS g,
+       goods_class AS gc
+WHERE
+       g.od = {quoteID}
+GROUP BY
+       qd.goods_class_id
+");
             }
 
             try

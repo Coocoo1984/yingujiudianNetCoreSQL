@@ -14,9 +14,9 @@ namespace WebAPI_SQL.Controllers
     {
         // GET: api/GetGoodsClasses
         [HttpGet]
-        public string Get(int PageIndex, int PageSize)
+        public string Get(bool? disable, int PageIndex, int PageSize)
         {
-            return JSONHelper.ToJSONString(PagingHelper.GetPagedTable(BL.GetGoodsClass(), PageIndex, PageSize));
+            return JSONHelper.ToJSONString(PagingHelper.GetPagedTable(BL.GetGoodsClass(disable), PageIndex, PageSize));
         }
     }
 }

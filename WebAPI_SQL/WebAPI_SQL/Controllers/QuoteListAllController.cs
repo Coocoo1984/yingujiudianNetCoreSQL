@@ -14,12 +14,13 @@ namespace WebAPI_SQL.Controllers
     {
         // GET: api/QuoteListAll
         [HttpGet]
-        public string Get(int PageIndex, int PageSize)
+        public string Get(bool? disable, int PageIndex, int PageSize)
         {
             DateTime endTime = DateTime.Now;
             DateTime startTime = endTime.AddMonths(-3);
 
             return JSONHelper.ToJSONString(PagingHelper.GetPagedTable(BL.GetQuoteListAll(
+                disable,
                 DataHelper.GetDateTime(startTime),
                 DataHelper.GetDateTime(endTime)),
                 PageIndex, PageSize));

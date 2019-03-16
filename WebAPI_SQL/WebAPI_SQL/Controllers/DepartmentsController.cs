@@ -14,9 +14,9 @@ namespace WebAPI_SQL.Controllers
     {
         // GET: api/Departments
         [HttpGet]
-        public string Get()
+        public string Get(bool? disable)
         {
-            return JSONHelper.ToJSONString(PagingHelper.GetPagedTable(BL.GetDepartments(), 
+            return JSONHelper.ToJSONString(PagingHelper.GetPagedTable(BL.GetDepartments(disable), 
                 0, 0));
         }
     }
