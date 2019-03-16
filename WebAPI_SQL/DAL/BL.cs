@@ -886,7 +886,7 @@ FROM
 WHERE
 	q.disable = 0 
     AND qd.disable = 0
-	AND qd.disable = 0
+	AND gc.disable = 0
     AND v.disable = 0
                 ");
             if (bizTypeID > 0)
