@@ -885,7 +885,10 @@ FROM
 	LEFT JOIN goods AS g ON qd.goods_id = g.id 
 WHERE
 	q.disable = 0 
-	AND qd.disable = 0 
+    AND qd.disable = 0,
+	AND qd.disable = 0,
+    AND q.vendor_id = 0,
+    AND 
                 ");
             if (bizTypeID > 0)
             {
