@@ -104,7 +104,7 @@ WHERE
             StringBuilder sb = new StringBuilder();
             sb.Append("SELECT * FROM ");
             sb.Append(" view_biz_type");
-            if (disable.GetValueOrDefault())
+            if (disable != null)
             {
                 sb.Append($" WHERE disable = { disable.Value }");
             }
@@ -123,7 +123,7 @@ WHERE
             StringBuilder sb = new StringBuilder();
             sb.Append("SELECT * FROM ");
             sb.Append(" view_department");
-            if (disable.GetValueOrDefault())
+            if (disable != null)
             {
                 sb.Append($" WHERE disable = { disable.Value }");
             }
@@ -142,7 +142,7 @@ WHERE
             StringBuilder sb = new StringBuilder();
             sb.Append("SELECT * FROM ");
             sb.Append(" usr ");
-            if (disable.GetValueOrDefault())
+            if (disable != null)
             {
                 sb.Append($" WHERE disable = { disable.Value }");
             }
@@ -161,7 +161,7 @@ WHERE
             StringBuilder sb = new StringBuilder();
             sb.Append("SELECT * FROM");
             sb.Append(" vendor ");
-            if (disable.GetValueOrDefault())
+            if (disable != null)
             {
                 sb.Append($" WHERE disable = { disable.Value }");
             }
@@ -180,7 +180,7 @@ WHERE
             StringBuilder sb = new StringBuilder();
             sb.Append("SELECT * FROM");
             sb.Append(" view_goods ");
-            if (disable.GetValueOrDefault())
+            if (disable != null)
             {
                 sb.Append($" WHERE disable = { disable.Value }");
             }
@@ -199,7 +199,7 @@ WHERE
             StringBuilder sb = new StringBuilder();
             sb.Append("SELECT * FROM");
             sb.Append(" view_goods_class ");
-            if (disable.GetValueOrDefault())
+            if (disable != null)
             {
                 sb.Append($" WHERE disable = { disable.Value }");
             }
@@ -948,6 +948,7 @@ FROM
 WHERE
 	q.disable = 0 
 	AND qd.disable = 0 
+    AND v.disable = 0
                 ");
 
             if (bizTypeID > 0)
@@ -1064,9 +1065,9 @@ WHERE
 
 
 
-            if (disable.GetValueOrDefault())
+            if (disable != null)
             {
-                sb.Append($" AND disable = { disable.Value }");
+                sb.Append($" AND q.disable = { disable.Value }");
             }
             if (startTime != null)
             {

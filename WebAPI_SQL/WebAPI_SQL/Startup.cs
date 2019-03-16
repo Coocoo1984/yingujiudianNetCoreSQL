@@ -28,13 +28,13 @@ namespace WebAPI_SQL
             // cors
             services.AddCors(options => options.AddPolicy("CorsSample", p => p.WithOrigins("*").AllowAnyMethod().AllowAnyHeader()));
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             // DB
             //services.Configure<string>(this.Configuration.GetSection("DataBase"));
 
             // DateTime StringFormat
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1).AddJsonOptions(Options => Options.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss");
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2).AddJsonOptions(Options => Options.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss");
 
             
 
