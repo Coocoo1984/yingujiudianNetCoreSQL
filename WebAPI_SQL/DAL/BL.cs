@@ -1076,6 +1076,7 @@ WHERE
             {
                 sb.Append($" AND quote_create_time < '{ endTime.Value.ToString("yyyy-MM-dd HH:mm:ss") }' ");
             }
+            sb.Append(" ORDER BY  quote_create_time DESC");
             try
             {
                 result = DBHelper.ExecuteTable(sb.ToString());
@@ -1308,9 +1309,6 @@ GROUP BY
         {
             DataTable result = null;
             StringBuilder sb = new StringBuilder();
-            ////sb.Append("SELECT * FROM");
-            ////sb.Append(" view_purchasing_order_list_4_vendor");
-
             sb.Append(@"
 SELECT
 	po.id AS po_id,
