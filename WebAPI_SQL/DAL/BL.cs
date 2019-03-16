@@ -937,7 +937,7 @@ SELECT
 	qd.unit_price,
 	qd.pre_unit_price,
 	g.name AS goods_name,
-	qd.unit_price - 0 AS up_down 
+	qd.unit_price - 0.00 AS up_down 
 FROM
 	quote AS q
 	LEFT JOIN quote_detail AS qd ON qd.quote_id = q.id
@@ -1280,7 +1280,7 @@ FROM   quote AS q,
        goods AS g,
        goods_class AS gc
 WHERE
-       g.od = {quoteID}
+       g.id = {quoteID}
 GROUP BY
        qd.goods_class_id
 ");
