@@ -887,7 +887,7 @@ WHERE
 	q.disable = 0 
     AND qd.disable = 0
 	AND qd.disable = 0
-    AND q.vendor_id = 0
+    AND v.disable = 0
                 ");
             if (bizTypeID > 0)
             {
