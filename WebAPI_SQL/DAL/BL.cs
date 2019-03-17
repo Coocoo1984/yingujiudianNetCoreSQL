@@ -59,14 +59,13 @@ SELECT
     '未确认' AS [description], 
     COUNT ([pp1].[id]) AS [count], 
     [pp1].[purchasing_state_id] AS [state],
-    [d1].[id] AS [department_id] 
+    [pp1].[department_id] AS [department_id] 
 FROM
     [purchasing_plan] AS [pp1] 
-    ,[department] AS [d1] 
 WHERE 
     [pp1].[purchasing_state_id] = 1 ");
 
-                sb.Append($"    AND [d1].[id] = {departmentID}");
+                sb.Append($"    AND [pp1].[department_id] = {departmentID}");
                 sb.Append(
 @"
 UNION
@@ -74,13 +73,12 @@ SELECT
     '采购成功' AS [description],  
     COUNT ([pp2].[id]) AS [count], 
     [pp2].[purchasing_state_id] AS [state], 
-    [d2].[id] AS [department_id] 
+    [pp2].[department_id] AS [department_id] 
 FROM
     [purchasing_plan] AS [pp2] 
-    ,[department] AS [d2] 
 WHERE
     [pp2].[purchasing_state_id] = 6 ");
-                sb.Append($"    AND [d2].[id] = {departmentID}");
+                sb.Append($"    AND [pp2].[department_id] = {departmentID}");
             }
             try
             {
