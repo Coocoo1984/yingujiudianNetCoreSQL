@@ -1276,14 +1276,12 @@ SELECT
        q.id AS quote_id, 
        q.vendor_id AS vendor_id, 
        gc.name AS goods_class_name
-FROM   quote AS q,
-       quote_detail AS qd,
-       goods AS g,
-       goods_class AS gc
+FROM   quote AS q
+       left join quote_detail AS qd on q.id = qd.quote_id
+       left join goods AS g on qd.goods_id = g.id
+       left join goods_class AS gc on qd.goods_class_id = gc.id
 WHERE
        q.id = {quoteID}
-GROUP BY
-       qd.goods_class_id
 ");
             }
 
