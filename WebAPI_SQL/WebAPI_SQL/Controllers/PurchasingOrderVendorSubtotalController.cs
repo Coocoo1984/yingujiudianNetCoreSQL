@@ -16,6 +16,10 @@ namespace WebAPI_SQL.Controllers
         [HttpGet]
         public string Get(string listVendorIDs, string listBizTypeIDs, string listGoodsClassIDs, string listGoodsIDs, string listPOStateIDs, DateTime? startTime, DateTime? endTime)
         {
+            if (string.IsNullOrWhiteSpace(listPOStateIDs))
+            {
+                listPOStateIDs = BaseSettines.listDefualtPOStateIDs;
+            }
             return JSONHelper.ToJSONString(PagingHelper.GetPagedTable(BL.GetPurchasingOrderVendorSubtotal(
                 DataHelper.GetListInt(listVendorIDs),
                 DataHelper.GetListInt(listBizTypeIDs),

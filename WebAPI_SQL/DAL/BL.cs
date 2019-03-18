@@ -285,13 +285,6 @@ FROM
 WHERE
     1=1
 ");
-            if (listPOStateIDs == null || listPOStateIDs.Count == 0)
-            {
-                listPOStateIDs = new List<int>
-                {
-                    1
-                };
-            }
             if (listPOStateIDs != null && listPOStateIDs.Count > 0)
             {
                 sb.Append($"    AND po_purchasing_order_state_id in ({ string.Join(',', listPOStateIDs.ToArray()) }) ");
@@ -354,13 +347,7 @@ FROM
 WHERE
     1=1
 ");
-            if (listPOStateIDs == null || listPOStateIDs.Count == 0)
-            {
-                listPOStateIDs = new List<int>
-                {
-                    1
-                };
-            }
+
             if (listPOStateIDs != null && listPOStateIDs.Count > 0)
             {
                 sb.Append($"    AND po_purchasing_order_state_id in ({ string.Join(',', listPOStateIDs.ToArray()) }) ");
@@ -408,18 +395,10 @@ FROM
 WHERE
     1=1
 ");
-            if (listPOStateIDs == null || listPOStateIDs.Count == 0)
-            {
-                listPOStateIDs = new List<int>
-                {
-                    1
-                };
-            }
             if (listPOStateIDs != null && listPOStateIDs.Count > 0)
             {
                 sb.Append($"    AND po_purchasing_order_state_id in ({ string.Join(',', listPOStateIDs.ToArray()) }) ");
             }
-
             if (listDepartmentIDs != null && listDepartmentIDs.Count > 0)
             {
                 sb.Append($"    AND department_id in ({ string.Join(',', listDepartmentIDs.ToArray()) }) ");
@@ -474,13 +453,6 @@ FROM
 WHERE
     1=1
 ");
-            if (listPOStateIDs == null || listPOStateIDs.Count == 0)
-            {
-                listPOStateIDs = new List<int>
-                {
-                    1
-                };
-            }
             if (listPOStateIDs != null && listPOStateIDs.Count > 0)
             {
                 sb.Append($"    AND po_purchasing_order_state_id in ({ string.Join(',', listPOStateIDs.ToArray()) }) ");
