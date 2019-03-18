@@ -1106,62 +1106,44 @@ WHERE
 
 
 
-        /// <summary>
-        /// 采购需求部门获取按商品入库盘点数目
-        /// </summary>
-        /// <param name="bizTypeID">0:无该条件</param>
-        /// <param name="startTime">null:无该条件</param>
-        /// <param name="endTime">null:无该条件</param>
-        /// <param name="listGoodsIDs">null:无该条件 多个商品id</param>
-        /// <param name="deparmentID">0:无该条件</param>
-        /// <returns></returns>
-        public static DataTable GetStockIn4Dept(int bizTypeID, DateTime? startTime, DateTime? endTime, List<int> listGoodsIDs, int deparmentID)
+       /// <summary>
+       /// 库存综合查询
+       /// </summary>
+       /// <param name="listBizTypeIDs"></param>
+       /// <param name="listGoodsClassIDs"></param>
+       /// <param name="listGoodsIDs"></param>
+       /// <param name="listDeparmentIDs"></param>
+       /// <param name="listVendorIDs"></param>
+       /// <param name="listPOStateIDs"></param>
+       /// <param name="startTime"></param>
+       /// <param name="endTime"></param>
+       /// <returns></returns>
+        public static DataTable GetStock(List<int> listBizTypeIDs, List<int> listGoodsClassIDs, List<int> listGoodsIDs, List<int> listDeparmentIDs, List<int> listVendorIDs, List<int> listPOStateIDs, DateTime? startTime, DateTime? endTime)
         {
             DataTable result = null;
             StringBuilder sb = new StringBuilder();
             sb.Append(@"
 SELECT
-	--po.id AS purchasing_order_id,
-	--bt.biz_type_id,
-	--bt.name AS biz_type_name,
-	--po.department_id,
-	--d.name AS department_name,
-	--po.vendor_id,
-	--v.name AS vendor_name,
-	--po.create_time,
-    --po.update_time,
-	--po.purchasing_order_state_id,
-	--pos.name AS purchasing_order_state_name,
-	--pod.id AS purchasing_order_detail_id,
-	pod.goods_class_id,
+	pod.goods_class_id AS goods_class_id,
 	gc.name AS goods_class_name,
-	pod.goods_id,
+	pod.goods_id AS goods_id,
 	g.name AS goods_name,
 	SUM(pod.actual_count) AS actual_count_sum,
     gu.name AS goods_unit_name
 FROM
-	purchasing_order AS po
-	LEFT JOIN purchasing_order_state AS pos ON po.purchasing_order_state_id = pos.id
-	LEFT JOIN department AS d ON po.department_id = d.id
-	LEFT JOIN vendor AS v ON po.vendor_id = v.id
-	LEFT JOIN purchasing_order_detail AS pod ON pod.purchasing_order_id = po.id
+	purchasing_order_detail AS pod
 	LEFT JOIN goods_class AS gc ON pod.goods_class_id = gc.id
 	LEFT JOIN goods AS g ON pod.goods_id = g.id
-	LEFT JOIN goods_unit AS gu ON g.goods_unit_id = gc.id
+	LEFT JOIN goods_unit AS gu ON g.goods_unit_id = gu.id
+	LEFT JOIN purchasing_order AS po ON pod.purchasing_order_id = po.id
+    LEFT JOIN purchasing_order_state AS pos ON po.purchasing_order_state_id = pos.id
+	LEFT JOIN department AS d ON po.department_id = d.id
+	LEFT JOIN vendor AS v ON po.vendor_id = v.id
 	LEFT JOIN biz_type AS bt ON po.biz_type_id = bt.id 
 WHERE
-	po.purchasing_order_state_id = 3 
-	AND po.purchasing_order_state_id = 4
-                ");
+	1=1
+");
 
-            if (deparmentID > 0)
-            {
-                sb.Append($" AND po.department_id = { deparmentID } ");
-            }
-            if (bizTypeID > 0)
-            {
-                sb.Append($" AND po.biz_type_id = {bizTypeID} ");
-            }
             if (startTime != null)
             {
                 sb.Append($" AND po.update_time > '{ startTime.Value.ToString("yyyy-MM-dd HH:mm:ss") }' ");
@@ -1170,12 +1152,32 @@ WHERE
             {
                 sb.Append($" AND po.update_time < '{endTime.Value.ToString("yyyy-MM-dd HH:mm:ss")}' ");
             }
+            if (listPOStateIDs != null && listPOStateIDs.Count > 0)
+            {
+                sb.Append($" AND pos.id in ({ string.Join(',', listPOStateIDs.ToArray()) }) ");
+            }
+            if (listDeparmentIDs != null && listDeparmentIDs.Count > 0)
+            {
+                sb.Append($" AND po.department_id in ({ string.Join(',', listDeparmentIDs.ToArray()) }) ");
+            }
+            if (listVendorIDs != null && listVendorIDs.Count > 0)
+            {
+                sb.Append($" AND po.vendor_id in ({ string.Join(',', listVendorIDs.ToArray()) }) ");
+            }
+            if (listBizTypeIDs != null && listBizTypeIDs.Count > 0)
+            {
+                sb.Append($" AND po.biz_type_id in ({ string.Join(',', listBizTypeIDs.ToArray()) }) ");
+            }
+            if (listGoodsClassIDs != null && listGoodsClassIDs.Count > 0)
+            {
+                sb.Append($" AND pod.goods_class_id in ({ string.Join(',', listGoodsClassIDs.ToArray()) }) ");
+            }
             if (listGoodsIDs != null && listGoodsIDs.Count > 0)
             {
                 sb.Append($" AND pod.goods_id in ({ string.Join(',', listGoodsIDs.ToArray()) }) ");
             }
-            sb.Append(" GROUP BY pod.goods_id");
-            sb.Append(" ORDER BY g.id");
+
+            sb.Append(" GROUP BY pod.goods_class_id,pod.goods_id");
             try
             {
                 result = DBHelper.ExecuteTable(sb.ToString());
@@ -1186,48 +1188,76 @@ WHERE
         }
 
         /// <summary>
-        /// 
+        /// 按部门盘存
         /// </summary>
-        /// <param name="deparmentID">0:无该条件</param>
-        /// <param name="startTime">null:无该条件</param>
-        /// <param name="endTime">null:无该条件</param>
+        /// <param name="listBizTypeIDs"></param>
+        /// <param name="listGoodsClassIDs"></param>
+        /// <param name="listGoodsIDs"></param>
+        /// <param name="listDeparmentIDs"></param>
+        /// <param name="listVendorIDs"></param>
+        /// <param name="listPOStateIDs"></param>
+        /// <param name="startTime"></param>
+        /// <param name="endTime"></param>
         /// <returns></returns>
-        public static DataTable GetStock(int deparmentID, DateTime? startTime, DateTime? endTime)
+        public static DataTable GetStockByDept(List<int> listBizTypeIDs, List<int> listGoodsClassIDs, List<int> listGoodsIDs, List<int> listDeparmentIDs, List<int> listVendorIDs, List<int> listPOStateIDs, DateTime? startTime, DateTime? endTime)
         {
             DataTable result = null;
             StringBuilder sb = new StringBuilder();
             sb.Append(@"
----------库存报表(用于盘存)--------
+---------库存报表(用于按部门盘存)--------
 SELECT
 	d.name AS department_name,
 	bt.name AS biz_type_name,
 	g.name AS goods_name,
-	pod.actual_count AS actual_count,
-	pod.create_time AS stockin_time
+    SUM(pod.actual_count) AS actual_count_sum,
+    gu.name AS goods_unit_name,
+	pod.update_time AS stockin_time
 FROM
-	purchasing_order AS po
-	LEFT JOIN purchasing_order_state AS pos ON po.purchasing_order_state_id = pos.id
-	LEFT JOIN department AS d ON po.department_id = d.id
-	LEFT JOIN vendor AS v ON po.vendor_id = v.id
-	LEFT JOIN purchasing_order_detail AS pod ON pod.purchasing_order_id = po.id
+	purchasing_order_detail AS pod
 	LEFT JOIN goods_class AS gc ON pod.goods_class_id = gc.id
 	LEFT JOIN goods AS g ON pod.goods_id = g.id
-	LEFT JOIN goods_unit AS gu ON g.goods_unit_id = gc.id
+	LEFT JOIN goods_unit AS gu ON g.goods_unit_id = gu.id
+	LEFT JOIN purchasing_order AS po ON pod.purchasing_order_id = po.id
+    LEFT JOIN purchasing_order_state AS pos ON po.purchasing_order_state_id = pos.id
+	LEFT JOIN department AS d ON po.department_id = d.id
+	LEFT JOIN vendor AS v ON po.vendor_id = v.id
 	LEFT JOIN biz_type AS bt ON po.biz_type_id = bt.id 
-WHERE
-	po.purchasing_order_state_id = 3");
-            if (deparmentID > 0)
-            {
-                sb.Append($" AND po.department_id = {deparmentID}");
-            }
+WHERE 1=1
+                ");
+
             if (startTime != null)
             {
-                sb.Append($" AND pod.create_time > '{startTime.Value.ToString("yyyy-MM-dd HH:mm:ss")}' ");
+                sb.Append($" AND po.update_time > '{ startTime.Value.ToString("yyyy-MM-dd HH:mm:ss") }' ");
             }
             if (endTime != null)
             {
-                sb.Append($" AND pod.create_time < '{endTime.Value.ToString("yyyy-MM-dd HH:mm:ss")}' ");
+                sb.Append($" AND po.update_time < '{endTime.Value.ToString("yyyy-MM-dd HH:mm:ss")}' ");
             }
+            if (listPOStateIDs != null && listPOStateIDs.Count > 0)
+            {
+                sb.Append($" AND pos.id in ({ string.Join(',', listPOStateIDs.ToArray()) }) ");
+            }
+            if (listDeparmentIDs != null && listDeparmentIDs.Count > 0)
+            {
+                sb.Append($" AND po.department_id in ({ string.Join(',', listDeparmentIDs.ToArray()) }) ");
+            }
+            if (listVendorIDs != null && listVendorIDs.Count > 0)
+            {
+                sb.Append($" AND po.vendor_id in ({ string.Join(',', listVendorIDs.ToArray()) }) ");
+            }
+            if (listBizTypeIDs != null && listBizTypeIDs.Count > 0)
+            {
+                sb.Append($" AND po.biz_type_id in ({ string.Join(',', listBizTypeIDs.ToArray()) }) ");
+            }
+            if (listGoodsClassIDs != null && listGoodsClassIDs.Count > 0)
+            {
+                sb.Append($" AND pod.goods_class_id in ({ string.Join(',', listGoodsClassIDs.ToArray()) }) ");
+            }
+            if (listGoodsIDs != null && listGoodsIDs.Count > 0)
+            {
+                sb.Append($" AND pod.goods_id in ({ string.Join(',', listGoodsIDs.ToArray()) }) ");
+            }
+            sb.Append(" GROUP BY po.department_id, pod.goods_id");
             try
             {
                 result = DBHelper.ExecuteTable(sb.ToString());
