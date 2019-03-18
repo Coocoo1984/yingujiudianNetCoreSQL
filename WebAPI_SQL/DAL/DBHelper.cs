@@ -192,7 +192,8 @@ namespace DAL
                             }
                             else if (Type.Equals(Type.GetType("System.String"), t) && dr.GetName(i).Contains("time"))
                             {
-                                itemDataRow[i] = string.Format("{0:yyyy-MM-dd HH:mm:ss}", dr.GetDateTime(i));
+                                //itemDataRow[i] = string.Format("{0:yyyy-MM-dd HH:mm:ss}", dr.GetDateTime(i));
+                                itemDataRow[i] = dr.GetDateTime(i).ToString("yyyy-MM-dd HH:mm:ss");
                             }
                             else
                             {
