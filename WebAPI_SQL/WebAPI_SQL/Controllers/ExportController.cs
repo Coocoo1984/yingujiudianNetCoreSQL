@@ -13,9 +13,17 @@ namespace WebAPI_SQL.Controllers
     {
         private const string XlsxContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
+        /// <summary>
+        /// 统表
+        /// </summary>
+        /// <param name="listDepartmentIDs"></param>
+        /// <param name="startTime"></param>
+        /// <param name="endTime"></param>
+        /// <param name="listPOStateIDs"></param>
+        /// <returns></returns>
         [Route("export/PurchasingOrderTotal")]
         [HttpGet]
-        public IActionResult PurchasingOrderTotal(string listDepartmentIDs, DateTime? startTime, DateTime? endTime)
+        public IActionResult PurchasingOrderTotal(string listDepartmentIDs, string listPOStateIDs, DateTime? startTime, DateTime? endTime)
         {
             var result = new DataTable("Export");
 
@@ -26,11 +34,18 @@ namespace WebAPI_SQL.Controllers
             result.Columns.Add("供应商", typeof(string));
 
 
+            if(string.IsNullOrWhiteSpace(listPOStateIDs))
+            {
+                listPOStateIDs = BaseSettines.listDefualtPOStateIDs;
+            }
+
             DataTable dt = BL.GetPurchasingOrderTotal(
                 DataHelper.GetListInt(listDepartmentIDs),
                 null,
+                DataHelper.GetListInt(listPOStateIDs),
                 DataHelper.GetDateTime(startTime),
-                DataHelper.GetDateTime(endTime));
+                DataHelper.GetDateTime(endTime)
+            );
 
             if (dt == null || dt.Columns.Count == 0)
             {
@@ -79,10 +94,19 @@ namespace WebAPI_SQL.Controllers
             }
         }
 
-
+        /// <summary>
+        /// 明细报表
+        /// </summary>
+        /// <param name="listDepartmentIDs"></param>
+        /// <param name="listBizTypeIDs"></param>
+        /// <param name="listGoodsClassIDs"></param>
+        /// <param name="listGoodsIDs"></param>
+        /// <param name="startTime"></param>
+        /// <param name="endTime"></param>
+        /// <returns></returns>
         [Route("export/PurchasingOrderGoodsSubtotal")]
         [HttpGet]
-        public IActionResult PurchasingOrderGoodsSubtotal(string listDepartmentIDs, string listBizTypeIDs, string listGoodsClassIDs, string listGoodsIDs, DateTime? startTime, DateTime? endTime)
+        public IActionResult PurchasingOrderGoodsSubtotal(string listDepartmentIDs, string listBizTypeIDs, string listGoodsClassIDs, string listGoodsIDs, string listPOStateIDs, DateTime? startTime, DateTime? endTime)
         {
             var result = new DataTable("Export");
 
@@ -93,12 +117,17 @@ namespace WebAPI_SQL.Controllers
             result.Columns.Add("采购时间", typeof(string));//实际数量
             result.Columns.Add("供应商", typeof(string));
 
+            if(string.IsNullOrWhiteSpace(listPOStateIDs))
+            {
+                listPOStateIDs = BaseSettines.listDefualtPOStateIDs;
+            }
 
             DataTable dt = BL.GetPurchasingOrderGoodsSubtotal(
                 DataHelper.GetListInt(listDepartmentIDs),
                 DataHelper.GetListInt(listBizTypeIDs),
                 DataHelper.GetListInt(listGoodsClassIDs),
                 DataHelper.GetListInt(listGoodsIDs),
+                DataHelper.GetListInt(listPOStateIDs),
                 DataHelper.GetDateTime(startTime),
                 DataHelper.GetDateTime(endTime));
 
@@ -154,9 +183,19 @@ namespace WebAPI_SQL.Controllers
 
         }
 
+        /// <summary>
+        /// 供应商报表
+        /// </summary>
+        /// <param name="listVendorIDs"></param>
+        /// <param name="listBizTypeIDs"></param>
+        /// <param name="listGoodsClassIDs"></param>
+        /// <param name="listGoodsIDs"></param>
+        /// <param name="startTime"></param>
+        /// <param name="endTime"></param>
+        /// <returns></returns>
         [Route("export/PurchasingOrderVendorSubtotal")]
         [HttpGet]
-        public IActionResult PurchasingOrderVendorSubtotal(string listVendorIDs, string listBizTypeIDs, string listGoodsClassIDs, string listGoodsIDs, DateTime? startTime, DateTime? endTime)
+        public IActionResult PurchasingOrderVendorSubtotal(string listVendorIDs, string listBizTypeIDs, string listGoodsClassIDs, string listGoodsIDs, string listPOStateIDs, DateTime? startTime, DateTime? endTime)
         {
             var result = new DataTable("Export");
 
@@ -168,12 +207,17 @@ namespace WebAPI_SQL.Controllers
             result.Columns.Add("小计金额", typeof(string));
             result.Columns.Add("采购时间", typeof(string));
 
+            if (string.IsNullOrWhiteSpace(listPOStateIDs))
+            {
+                listPOStateIDs = BaseSettines.listDefualtPOStateIDs;
+            }
 
             DataTable dt = BL.GetPurchasingOrderVendorSubtotal(
                 DataHelper.GetListInt(listVendorIDs),
                 DataHelper.GetListInt(listBizTypeIDs),
                 DataHelper.GetListInt(listGoodsClassIDs),
                 DataHelper.GetListInt(listGoodsIDs),
+                DataHelper.GetListInt(listPOStateIDs),
                 DataHelper.GetDateTime(startTime),
                 DataHelper.GetDateTime(endTime));
 

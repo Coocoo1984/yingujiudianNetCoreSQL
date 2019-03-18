@@ -14,13 +14,14 @@ namespace WebAPI_SQL.Controllers
     {
         // GET: api/PurchasingOrderVendorSubtotal
         [HttpGet]
-        public string Get(string listVendorIDs, string listBizTypeIDs, string listGoodsClassIDs, string listGoodsIDs, DateTime? startTime, DateTime? endTime)
+        public string Get(string listVendorIDs, string listBizTypeIDs, string listGoodsClassIDs, string listGoodsIDs, string listPOStateIDs, DateTime? startTime, DateTime? endTime)
         {
             return JSONHelper.ToJSONString(PagingHelper.GetPagedTable(BL.GetPurchasingOrderVendorSubtotal(
                 DataHelper.GetListInt(listVendorIDs),
                 DataHelper.GetListInt(listBizTypeIDs),
                 DataHelper.GetListInt(listGoodsClassIDs),
                 DataHelper.GetListInt(listGoodsIDs),
+                DataHelper.GetListInt(listPOStateIDs),
                 DataHelper.GetDateTime(startTime),
                 DataHelper.GetDateTime(endTime)),
                 0, 0));

@@ -11,6 +11,9 @@ namespace WebAPI_SQL
         public static bool IsGlobalSelectTableRecordDisableClosed = false;
         //value 默认值
         public static bool DefualtDisableValue = false;
+        //导出订单的默认值状态值
+        public static string listDefualtPOStateIDs = "6";
+
     }
 
 }

@@ -264,7 +264,7 @@ WHERE
         /// 
         /// </summary>
         /// <returns></returns>
-        public static DataTable GetPurchasingOrderGoodsCountStatics(List<int> listBizTypeIDs, List<int> listDepartmentIDs, List<int> listGoodsClassIDs, List<int> listGoodsIDs, DateTime? startTime, DateTime? endTime)
+        public static DataTable GetPurchasingOrderGoodsCountStatics(List<int> listBizTypeIDs, List<int> listDepartmentIDs, List<int> listGoodsClassIDs, List<int> listGoodsIDs, List<int> listPOStateIDs, DateTime? startTime, DateTime? endTime)
         {
             DataTable result = null;
             StringBuilder sb = new StringBuilder();
@@ -285,6 +285,11 @@ FROM
 WHERE
     1=1
 ");
+
+            if (listPOStateIDs != null && listPOStateIDs.Count > 0)
+            {
+                sb.Append($"    AND po_purchasing_order_state_id in ({ string.Join(',', listPOStateIDs.ToArray()) }) ");
+            }
             if (listBizTypeIDs != null && listBizTypeIDs.Count > 0)
             {
                 sb.Append($"    AND biz_type_id in ({ string.Join(',', listBizTypeIDs.ToArray()) }) ");
@@ -324,7 +329,7 @@ GROUP BY
             return result;
         }
 
-        public static DataTable GetPurchasingOrderTotal(List<int> listDepartmentIDs, List<int> listBizTypeIDs, DateTime? startTime, DateTime? endTime)
+        public static DataTable GetPurchasingOrderTotal(List<int> listDepartmentIDs, List<int> listBizTypeIDs, List<int> listPOStateIDs, DateTime? startTime, DateTime? endTime)
         {
             DataTable result = null;
 
@@ -341,6 +346,10 @@ FROM
 WHERE
     1=1
 ");
+            if (listPOStateIDs != null && listPOStateIDs.Count > 0)
+            {
+                sb.Append($"    AND po_purchasing_order_state_id in ({ string.Join(',', listPOStateIDs.ToArray()) }) ");
+            }
             if (listDepartmentIDs != null && listDepartmentIDs.Count > 0)
             {
                 sb.Append($"    AND department_id in ({ string.Join(',', listDepartmentIDs.ToArray()) }) ");
@@ -365,7 +374,7 @@ WHERE
             return result;
         }
 
-        public static DataTable GetPurchasingOrderGoodsSubtotal(List<int> listDepartmentIDs, List<int> listBizTypeIDs, List<int> listGoodsClassIDs, List<int> listGoodsIDs, DateTime? startTime, DateTime? endTime)
+        public static DataTable GetPurchasingOrderGoodsSubtotal(List<int> listDepartmentIDs, List<int> listBizTypeIDs, List<int> listGoodsClassIDs, List<int> listGoodsIDs, List<int> listPOStateIDs, DateTime? startTime, DateTime? endTime)
         {
             DataTable result = null;
 
@@ -384,6 +393,11 @@ FROM
 WHERE
     1=1
 ");
+            if (listPOStateIDs != null && listPOStateIDs.Count > 0)
+            {
+                sb.Append($"    AND po_purchasing_order_state_id in ({ string.Join(',', listPOStateIDs.ToArray()) }) ");
+            }
+
             if (listDepartmentIDs != null && listDepartmentIDs.Count > 0)
             {
                 sb.Append($"    AND department_id in ({ string.Join(',', listDepartmentIDs.ToArray()) }) ");
@@ -408,6 +422,9 @@ WHERE
             {
                 sb.Append($"    AND create_time < '{ endTime.Value.ToString("yyyy-MM-dd HH:mm:ss") }' ");
             }
+
+            sb.Append($"    ORDER BY  department_id");
+
             try
             {
                 result = DBHelper.ExecuteTable(sb.ToString());
@@ -416,7 +433,7 @@ WHERE
             return result;
         }
 
-        public static DataTable GetPurchasingOrderVendorSubtotal(List<int> listVendorIDs, List<int> listBizTypeIDs, List<int> listGoodsClassIDs, List<int> listGoodsIDs, DateTime? startTime, DateTime? endTime)
+        public static DataTable GetPurchasingOrderVendorSubtotal(List<int> listVendorIDs, List<int> listBizTypeIDs, List<int> listGoodsClassIDs, List<int> listGoodsIDs, List<int> listPOStateIDs, DateTime? startTime, DateTime? endTime)
         {
             DataTable result = null;
 
@@ -435,11 +452,10 @@ FROM
 WHERE
     1=1
 ");
-            ////if (vendorID > 0)
-            ////{
-            ////    sb.Append($" AND vendor_id = {vendorID}");
-            ////}
-
+            if (listPOStateIDs != null && listPOStateIDs.Count > 0)
+            {
+                sb.Append($"    AND po_purchasing_order_state_id in ({ string.Join(',', listPOStateIDs.ToArray()) }) ");
+            }
             if (listVendorIDs != null && listVendorIDs.Count > 0)
             {
                 sb.Append($"    AND vendor_id in ({ string.Join(',', listVendorIDs.ToArray()) }) ");
@@ -465,10 +481,12 @@ WHERE
             {
                 sb.Append($"    AND create_time < '{ endTime.Value.ToString("yyyy-MM-dd HH:mm:ss") }' ");
             }
+            sb.Append($"    ORDER BY  [vendor_id]");
             try
             {
                 result = DBHelper.ExecuteTable(sb.ToString());
             }
+
             catch (Exception) { throw; }
             return result;
         }
@@ -1137,7 +1155,7 @@ WHERE
 
             if (deparmentID > 0)
             {
-                sb.Append($" AND po.biz_type_id = { deparmentID } ");
+                sb.Append($" AND po.department_id = { deparmentID } ");
             }
             if (bizTypeID > 0)
             {

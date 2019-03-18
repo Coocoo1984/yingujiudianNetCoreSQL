@@ -28,7 +28,7 @@ namespace WebAPI_SQL.Controllers
         /// /api/DepartmentExport
         /// </summary>
         [HttpGet]
-        public IActionResult DataTableReport(string listBizTypeIDs, string listDepartmentIDs, string listGoodsClassIDs, string listGoodsIDs, DateTime? startTime, DateTime? endTime, int PageIndex, int PageSize)
+        public IActionResult DataTableReport(string listBizTypeIDs, string listDepartmentIDs, string listGoodsClassIDs, string listGoodsIDs, string listPOStateIDs, DateTime? startTime, DateTime? endTime, int PageIndex, int PageSize)
         {
             var result = new DataTable("Export");
 
@@ -39,12 +39,17 @@ namespace WebAPI_SQL.Controllers
             result.Columns.Add("数量", typeof(string));//实际数量
             result.Columns.Add("单位", typeof(string));
 
+            if (string.IsNullOrWhiteSpace(listPOStateIDs))
+            {
+                listPOStateIDs = BaseSettines.listDefualtPOStateIDs;
+            }
 
             DataTable dt = BL.GetPurchasingOrderGoodsCountStatics(
                     DataHelper.GetListInt(listBizTypeIDs),
                     DataHelper.GetListInt(listDepartmentIDs),
                     DataHelper.GetListInt(listGoodsClassIDs),
                     DataHelper.GetListInt(listGoodsIDs),
+                    DataHelper.GetListInt(listPOStateIDs),
                     DataHelper.GetDateTime(startTime),
                     DataHelper.GetDateTime(endTime));
 
