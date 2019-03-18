@@ -285,7 +285,13 @@ FROM
 WHERE
     1=1
 ");
-
+            if (listPOStateIDs == null && listPOStateIDs.Count == 0)
+            {
+                listPOStateIDs = new List<int>
+                {
+                    1
+                };
+            }
             if (listPOStateIDs != null && listPOStateIDs.Count > 0)
             {
                 sb.Append($"    AND po_purchasing_order_state_id in ({ string.Join(',', listPOStateIDs.ToArray()) }) ");
@@ -333,6 +339,8 @@ GROUP BY
         {
             DataTable result = null;
 
+
+
             StringBuilder sb = new StringBuilder();
             sb.Append(@"
 SELECT
@@ -346,6 +354,13 @@ FROM
 WHERE
     1=1
 ");
+            if (listPOStateIDs == null && listPOStateIDs.Count == 0)
+            {
+                listPOStateIDs = new List<int>
+                {
+                    1
+                };
+            }
             if (listPOStateIDs != null && listPOStateIDs.Count > 0)
             {
                 sb.Append($"    AND po_purchasing_order_state_id in ({ string.Join(',', listPOStateIDs.ToArray()) }) ");
@@ -393,6 +408,13 @@ FROM
 WHERE
     1=1
 ");
+            if (listPOStateIDs == null && listPOStateIDs.Count == 0)
+            {
+                listPOStateIDs = new List<int>
+                {
+                    1
+                };
+            }
             if (listPOStateIDs != null && listPOStateIDs.Count > 0)
             {
                 sb.Append($"    AND po_purchasing_order_state_id in ({ string.Join(',', listPOStateIDs.ToArray()) }) ");
@@ -452,6 +474,13 @@ FROM
 WHERE
     1=1
 ");
+            if (listPOStateIDs == null && listPOStateIDs.Count == 0)
+            {
+                listPOStateIDs = new List<int>
+                {
+                    1
+                };
+            }
             if (listPOStateIDs != null && listPOStateIDs.Count > 0)
             {
                 sb.Append($"    AND po_purchasing_order_state_id in ({ string.Join(',', listPOStateIDs.ToArray()) }) ");
