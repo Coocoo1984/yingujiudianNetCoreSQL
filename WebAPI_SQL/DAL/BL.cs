@@ -285,7 +285,7 @@ FROM
 WHERE
     1=1
 ");
-            if (listPOStateIDs == null && listPOStateIDs.Count == 0)
+            if (listPOStateIDs == null || listPOStateIDs.Count == 0)
             {
                 listPOStateIDs = new List<int>
                 {
@@ -354,7 +354,7 @@ FROM
 WHERE
     1=1
 ");
-            if (listPOStateIDs == null && listPOStateIDs.Count == 0)
+            if (listPOStateIDs == null || listPOStateIDs.Count == 0)
             {
                 listPOStateIDs = new List<int>
                 {
@@ -408,7 +408,7 @@ FROM
 WHERE
     1=1
 ");
-            if (listPOStateIDs == null && listPOStateIDs.Count == 0)
+            if (listPOStateIDs == null || listPOStateIDs.Count == 0)
             {
                 listPOStateIDs = new List<int>
                 {
@@ -474,7 +474,7 @@ FROM
 WHERE
     1=1
 ");
-            if (listPOStateIDs == null && listPOStateIDs.Count == 0)
+            if (listPOStateIDs == null || listPOStateIDs.Count == 0)
             {
                 listPOStateIDs = new List<int>
                 {
