@@ -14,7 +14,7 @@ namespace WebAPI_SQL.Controllers
     {
         // GET: api/StockByDept
         [HttpGet]
-        public string Get(string listBizTypeIDs, string listGoodsClassIDs, string listGoodsIDs, string listDeparmentIDs, string listVendorIDs, string listPOStateIDs, DateTime? startTime, DateTime?endTime)
+        public string Get(string listBizTypeIDs, string listGoodsClassIDs, string listGoodsIDs, string listDeparmentIDs, string listVendorIDs, string listPOStateIDs, DateTime? startTime, DateTime?endTime, string WechatID)
         {
             return JSONHelper.ToJSONString(PagingHelper.GetPagedTable(BL.GetStockByDept(
                 DataHelper.GetListInt(listBizTypeIDs),

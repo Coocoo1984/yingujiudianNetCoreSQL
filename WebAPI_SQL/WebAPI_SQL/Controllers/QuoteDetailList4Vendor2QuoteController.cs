@@ -14,7 +14,7 @@ namespace WebAPI_SQL.Controllers
     {
         // GET: api/QuoteDetailList4Vendor2Quote
         [HttpGet]
-        public string Get(int vendorID, string listIntBizTypeID, int PageIndex, int PageSize)
+        public string Get(int vendorID, string listIntBizTypeID, int PageIndex, int PageSize, string WechatID)
         {
             return JSONHelper.ToJSONString(PagingHelper.GetPagedTable(BL.GetQuoteDetailList4Vendor2Quote(
                 vendorID, 

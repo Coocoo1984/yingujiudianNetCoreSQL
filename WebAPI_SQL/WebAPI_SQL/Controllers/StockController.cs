@@ -28,7 +28,7 @@ namespace WebAPI_SQL.Controllers
         /// <returns></returns>
         // GET: api/Stock
         [HttpGet]
-        public string Get(string listBizTypeIDs, string listGoodsClassIDs, string listGoodsIDs, string listDeparmentIDs, string listVendorIDs, string listPOStateIDs, DateTime? startTime, DateTime? endTime, int PageIndex, int PageSize)
+        public string Get(string listBizTypeIDs, string listGoodsClassIDs, string listGoodsIDs, string listDeparmentIDs, string listVendorIDs, string listPOStateIDs, DateTime? startTime, DateTime? endTime, int PageIndex, int PageSize, string WechatID)
         {
             if (string.IsNullOrWhiteSpace(listPOStateIDs))
             {

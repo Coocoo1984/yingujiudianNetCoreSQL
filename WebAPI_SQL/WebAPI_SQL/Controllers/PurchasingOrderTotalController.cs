@@ -14,7 +14,7 @@ namespace WebAPI_SQL.Controllers
     {
         // GET: api/PurchasingOrderTotal
         [HttpGet]
-        public string Get(string listDepartmentIDs, string listBizTypeIDs, string listPOStateIDs, DateTime? startTime, DateTime? endTime)
+        public string Get(string listDepartmentIDs, string listBizTypeIDs, string listPOStateIDs, DateTime? startTime, DateTime? endTime, string WechatID)
         {
             if (string.IsNullOrWhiteSpace(listPOStateIDs))
             {

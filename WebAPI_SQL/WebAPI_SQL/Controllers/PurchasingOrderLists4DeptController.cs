@@ -14,7 +14,7 @@ namespace WebAPI_SQL.Controllers
     {
         // GET: api/PurchasingOrderLists4Dept
         [HttpGet]
-        public string Get(int departmentID,int PageIndex, int PageSize)
+        public string Get(int departmentID,int PageIndex, int PageSize, string WechatID)
         {
             return JSONHelper.ToJSONString(PagingHelper.GetPagedTable(BL.GetPurchasingOrderList4Dept(departmentID),
                 PageIndex, PageSize));

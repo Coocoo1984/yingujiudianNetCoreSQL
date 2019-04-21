@@ -13,10 +13,19 @@ namespace WebAPI_SQL.Controllers
     {
 
         [HttpGet]
-        public string GetDetailByQuoteID(int quoteID, int PageIndex, int PageSize)
+        public string GetDetailByQuoteID(int quoteID, int PageIndex, int PageSize, string WechatID)
         {
+            if (!string.IsNullOrWhiteSpace(WechatID))
+            {
+                if (!Common.CheckPermission(WechatID, this.RouteData))
+                {
+                    return BaseSettines.NoPermissionString;
+                }
+            }
+
             return JSONHelper.ToJSONString(PagingHelper.GetPagedTable(BL.GetQuoteDetailListByQuoteID(quoteID),
-                PageIndex, PageSize));
+                 PageIndex, PageSize));
         }
+            
     }
 }

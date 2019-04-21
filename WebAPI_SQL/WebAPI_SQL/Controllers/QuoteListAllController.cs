@@ -14,7 +14,7 @@ namespace WebAPI_SQL.Controllers
     {
         // GET: api/QuoteListAll
         [HttpGet]
-        public string Get(bool? disable, DateTime? startTime, DateTime? endTime, int PageIndex, int PageSize)
+        public string Get(bool? disable, DateTime? startTime, DateTime? endTime, int PageIndex, int PageSize, string WechatID)
         {
             ////DateTime endTime = DateTime.Now;
             ////DateTime startTime = endTime.AddMonths(-3);

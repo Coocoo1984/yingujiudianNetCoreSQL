@@ -28,7 +28,7 @@ namespace WebAPI_SQL.Controllers
         /// /api/DepartmentExport
         /// </summary>
         [HttpGet]
-        public IActionResult DataTableReport(string listBizTypeIDs, string listDepartmentIDs, string listGoodsClassIDs, string listGoodsIDs, string listPOStateIDs, DateTime? startTime, DateTime? endTime, int PageIndex, int PageSize)
+        public IActionResult DataTableReport(string listBizTypeIDs, string listDepartmentIDs, string listGoodsClassIDs, string listGoodsIDs, string listPOStateIDs, DateTime? startTime, DateTime? endTime, int PageIndex, int PageSize, string WechatID)
         {
             var result = new DataTable("Export");
 

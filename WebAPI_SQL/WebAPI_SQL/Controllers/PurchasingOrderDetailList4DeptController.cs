@@ -13,7 +13,7 @@ namespace WebAPI_SQL.Controllers
     public class PurchasingOrderDetailList4DeptController : ControllerBase
     {
         // GET: api/PurchasingOrderDetailList4Dept
-        public string Get(int orderID)
+        public string Get(int orderID, string WechatID)
         {
             return JSONHelper.ToJSONString(PagingHelper.GetPagedTable(BL.GetPurchasingOrderDetailList4Dept(orderID),
                 0, 0));

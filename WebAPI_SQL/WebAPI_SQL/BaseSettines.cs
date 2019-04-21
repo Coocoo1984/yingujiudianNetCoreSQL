@@ -14,6 +14,8 @@ namespace WebAPI_SQL
         //导出订单的默认值状态值
         public static string listDefualtPOStateIDs = "6";
 
+        public static string NoPermissionString = "没有访问权限";
+
     }
 
 }

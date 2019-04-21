@@ -14,7 +14,7 @@ namespace WebAPI_SQL.Controllers
     {
         // GET: api/PurchasingPlanGoodsClassVendorQuetoSUM
         [HttpGet]
-        public string Get(int purchasingPlanID, int goodsClassID, string listIntGoodsIds, int PageIndex, int PageSize)
+        public string Get(int purchasingPlanID, int goodsClassID, string listIntGoodsIds, int PageIndex, int PageSize, string WechatID)
         {
             string result = null;
             if (goodsClassID == 0)

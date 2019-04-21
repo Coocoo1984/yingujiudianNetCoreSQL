@@ -14,7 +14,7 @@ namespace WebAPI_SQL.Controllers
     {
         // GET: api/Usrs
         [HttpGet]
-        public string Get(bool? disable, int PageIndex, int PageSize)
+        public string Get(bool? disable, int PageIndex, int PageSize, string WechatID)
         {
             disable = BaseSettines.IsGlobalSelectTableRecordDisableClosed ?
                         disable : //关闭 全局查询状态

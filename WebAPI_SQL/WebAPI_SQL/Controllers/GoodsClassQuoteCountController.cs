@@ -14,7 +14,7 @@ namespace WebAPI_SQL.Controllers
     {
         // GET: api/GoodsClassQuoteCount
         [HttpGet]
-        public string Get(int bizTypeId, DateTime? StartTime, DateTime? EndTime)
+        public string Get(int bizTypeId, DateTime? StartTime, DateTime? EndTime, string WechatID)
         {
             return JSONHelper.ToJSONString(PagingHelper.GetPagedTable(BL.GetGoodsClassQuoteCount(
                 bizTypeId, 

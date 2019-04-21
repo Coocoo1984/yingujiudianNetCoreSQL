@@ -13,7 +13,7 @@ namespace WebAPI_SQL.Controllers
     {
         [HttpGet]
        
-        public string GetPurchasingOrderList4Vendor(int bizTypeID, DateTime? startTime, DateTime? endTime, int vendorID, int PageIndex, int PageSize)
+        public string GetPurchasingOrderList4Vendor(int bizTypeID, DateTime? startTime, DateTime? endTime, int vendorID, int PageIndex, int PageSize, string WechatID)
         {
             return JSONHelper.ToJSONString(PagingHelper.GetPagedTable(BL.GetPurchasingOrderList4Vendor(
                 bizTypeID,

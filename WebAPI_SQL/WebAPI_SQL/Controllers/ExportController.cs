@@ -23,7 +23,7 @@ namespace WebAPI_SQL.Controllers
         /// <returns></returns>
         [Route("export/PurchasingOrderTotal")]
         [HttpGet]
-        public IActionResult PurchasingOrderTotal(string listDepartmentIDs, string listPOStateIDs, DateTime? startTime, DateTime? endTime)
+        public IActionResult PurchasingOrderTotal(string listDepartmentIDs, string listPOStateIDs, DateTime? startTime, DateTime? endTime, string WechatID)
         {
             var result = new DataTable("Export");
 

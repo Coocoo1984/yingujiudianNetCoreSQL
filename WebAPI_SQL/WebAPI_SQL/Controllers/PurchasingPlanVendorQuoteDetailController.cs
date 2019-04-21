@@ -12,7 +12,7 @@ namespace WebAPI_SQL.Controllers
     public class PurchasingPlanVendorQuoteDetailController : ControllerBase
     {
         // GET: api/PurchasingPlanQuoteDetail
-        public string Get(int purchasiongPlanID, int vendorID, int PageIndex, int PageSize)
+        public string Get(int purchasiongPlanID, int vendorID, int PageIndex, int PageSize, string WechatID)
         {
             return JSONHelper.ToJSONString(PagingHelper.GetPagedTable(BL.GetPurchasingPlanVendorQuoteDetail(
                 purchasiongPlanID,

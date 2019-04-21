@@ -14,7 +14,7 @@ namespace WebAPI_SQL.Controllers
     {
         // GET: api/GoodsQuoteDetailVendorPriceRange
         [HttpGet]
-        public string Get(int bizTypeID, DateTime? startTime, DateTime? endTime, int PageIndex, int PageSize)
+        public string Get(int bizTypeID, DateTime? startTime, DateTime? endTime, int PageIndex, int PageSize, string WechatID)
         {
             return JSONHelper.ToJSONString(PagingHelper.GetPagedTable(BL.GetGoodsQuoteDetailVendorPriceRange(
                 bizTypeID,

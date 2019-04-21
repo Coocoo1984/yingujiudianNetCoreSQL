@@ -13,7 +13,7 @@ namespace WebAPI_SQL.Controllers
     public class GoodsQuoteDetailVendorListController : ControllerBase
     {
         // GET: api/GoodsQuoteDetailVendorList
-        public string Get(int bizTypeID, DateTime? startTime, DateTime? endTime,int goodsId, int PageIndex, int PageSize)
+        public string Get(int bizTypeID, DateTime? startTime, DateTime? endTime,int goodsId, int PageIndex, int PageSize, string WechatID)
         {
             return JSONHelper.ToJSONString(PagingHelper.GetPagedTable(BL.GetGoodsQuoteDetailVendorList(
                 bizTypeID,
