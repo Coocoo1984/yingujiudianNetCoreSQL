@@ -563,6 +563,25 @@ WHERE
         }
 
         /// <summary>
+        /// 待三审采购计划列表
+        /// </summary>
+        /// <returns></returns>
+        public static DataTable GetPurchasingPlanCount4Audit3()
+        {
+            DataTable result = null;
+            StringBuilder sb = new StringBuilder();
+            sb.Append("SELECT * FROM ");
+            sb.Append(" view_purchasing_plan_list_4_audit3");
+            try
+            {
+                result = DBHelper.ExecuteTable(sb.ToString());
+            }
+            catch (Exception) { throw; }
+            finally { }
+            return result;
+        }
+
+        /// <summary>
         /// 待复审采购计划列表外层分组结构
         /// </summary>
         /// <param name="purchasingPlanID">必须</param>
