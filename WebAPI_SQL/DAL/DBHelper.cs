@@ -147,7 +147,10 @@ namespace DAL
                     }
                     ///关闭数据读取器
                     dr.Close();
+                    cmd.Dispose();
                 }
+                if (conn.State != ConnectionState.Closed)
+                    conn.Close();
             }
 
             return dt;
@@ -209,7 +212,10 @@ namespace DAL
                     }
                     ///关闭数据读取器
                     dr.Close();
+                    cmd.Dispose();
                 }
+                if (conn.State != ConnectionState.Closed)
+                    conn.Close();
             }
 
             return dt;
