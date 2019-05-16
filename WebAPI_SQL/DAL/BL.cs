@@ -1073,7 +1073,7 @@ WHERE
         /// <param name="startTime">null:无该条件</param>
         /// <param name="endTime">null:无该条件</param>
         /// <returns></returns>
-        public static DataTable GetQuoteListAll(bool? disable, DateTime? startTime, DateTime? endTime)
+        public static DataTable GetQuoteListAll(bool? disable, List<int> listquoteStateIDs, DateTime? startTime, DateTime? endTime)
         {
             DataTable result = null;
             StringBuilder sb = new StringBuilder();
@@ -1087,19 +1087,17 @@ SELECT
        [q].[create_time] AS [quote_create_time], 
        [q].[biz_type_id] AS [quote_biz_type_id], 
        [bt].[name] AS [biz_type_name], 
-       [q].[disable] AS [disable]
+       [q].[disable] AS [disable],
+       [q].[quote_state_id] AS [quote_state_id],
+       [qs].[name] AS [quote_state_name]
 FROM   [quote] AS [q]
        LEFT JOIN [vendor] AS [v] ON [q].[vendor_id] = [v].[id]
        LEFT JOIN [biz_type] AS [bt] ON [q].[biz_type_id] = [bt].[id]
+       LEFT JOIN [quote_state] AS [qs] ON [q].[quote_state_id] = [qs].[id]
 WHERE
        1=1
 "
 );
-
-
-
-
-
             if (disable != null)
             {
                 sb.Append($" AND q.disable = { disable.Value }");
@@ -1111,6 +1109,10 @@ WHERE
             if (endTime != null)
             {
                 sb.Append($" AND quote_create_time < '{ endTime.Value.ToString("yyyy-MM-dd HH:mm:ss") }' ");
+            }
+            if (listquoteStateIDs != null && listquoteStateIDs.Count > 0)
+            {
+                sb.Append($" AND qs.goods_class_id in ({ string.Join(',', listquoteStateIDs.ToArray()) }) ");
             }
             sb.Append(" ORDER BY  quote_create_time DESC");
             try

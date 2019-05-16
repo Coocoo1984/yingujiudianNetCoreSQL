@@ -14,7 +14,7 @@ namespace WebAPI_SQL.Controllers
     {
         // GET: api/QuoteListAll
         [HttpGet]
-        public string Get(bool? disable, DateTime? startTime, DateTime? endTime, int PageIndex, int PageSize, string WechatID)
+        public string Get(bool? disable, DateTime? startTime, DateTime? endTime,string listQuoteStateIDs, int PageIndex, int PageSize, string WechatID)
         {
             ////DateTime endTime = DateTime.Now;
             ////DateTime startTime = endTime.AddMonths(-3);
@@ -24,6 +24,7 @@ namespace WebAPI_SQL.Controllers
 
             return JSONHelper.ToJSONString(PagingHelper.GetPagedTable(BL.GetQuoteListAll(
                 disable,
+                DataHelper.GetListInt(listQuoteStateIDs),
                 DataHelper.GetDateTime(startTime),
                 DataHelper.GetDateTime(endTime)),
                 PageIndex, PageSize));
