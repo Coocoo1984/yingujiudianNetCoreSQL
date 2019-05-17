@@ -1095,7 +1095,8 @@ FROM   [quote] AS [q]
        LEFT JOIN [biz_type] AS [bt] ON [q].[biz_type_id] = [bt].[id]
        LEFT JOIN [quote_state] AS [qs] ON [q].[quote_state_id] = [qs].[id]
 WHERE
-       1=1
+       1=1 AND quote_state_id > 0
+        
 "
 );
             if (disable != null)
