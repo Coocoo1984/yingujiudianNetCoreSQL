@@ -17,9 +17,9 @@ namespace WebAPI_SQL.Controllers
         {
             if (!string.IsNullOrWhiteSpace(WechatID))
             {
-                if (!Common.CheckPermission(WechatID, this.RouteData))
+                if (!Common.CheckPermission(WechatID, this.RouteData, null))
                 {
-                    return BaseSettines.NoPermissionString;
+                    return BaseSettings.NoPermissionString;
                 }
             }
 

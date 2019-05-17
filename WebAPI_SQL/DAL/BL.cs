@@ -1112,7 +1112,7 @@ WHERE
             }
             if (listquoteStateIDs != null && listquoteStateIDs.Count > 0)
             {
-                sb.Append($" AND qs.goods_class_id in ({ string.Join(',', listquoteStateIDs.ToArray()) }) ");
+                sb.Append($" AND quote_state_id in ({ string.Join(',', listquoteStateIDs.ToArray()) }) ");
             }
             sb.Append(" ORDER BY  quote_create_time DESC");
             try
@@ -1433,6 +1433,31 @@ WHERE
         {
             DataTable result = null;
             StringBuilder sb = new StringBuilder();
+            sb.Append(@"SELECT * FROM");
+            sb.Append(" view_purchasing_order_detail_list_4_vendor WHERE 1=1 ");
+            if (purchasingOrderID > 0)
+            {
+                sb.Append($" AND purchasing_order_id = {purchasingOrderID} ");
+            }
+            sb.Append(" ORDER BY goods_id");
+            try
+            {
+                result = DBHelper.ExecuteTable(sb.ToString());
+            }
+            catch (Exception) { throw; }
+            finally { }
+            return result;
+        }
+
+        /// <summary>
+        /// 通过订单ID、采购计划ID 获取采购流程状态
+        /// </summary>
+        /// <param name="purchasingOrderID">0</param>
+        /// <returns></returns>
+        public static DataTable GetPurchasingStates(int purchasingOrderID)
+        {
+            DataTable result = null;
+            StringBuilder sb = new StringBuilder();
             sb.Append("SELECT * FROM");
             sb.Append(" view_purchasing_order_detail_list_4_vendor WHERE 1=1 ");
             if (purchasingOrderID > 0)
@@ -1448,6 +1473,47 @@ WHERE
             finally { }
             return result;
         }
+
+        /// <summary>
+        /// 获取权限
+        /// </summary>
+        /// <param name="usrWechatID">可不传</param>
+        /// <param name="listPermissonIDs">可不传</param>
+        /// <returns></returns>
+        public static DataTable GetPermissionsByWechatID(string usrWechatID,  List<int> listPermissonIDs)
+        {
+            DataTable result = null;
+            StringBuilder sb = new StringBuilder();
+            sb.Append(@"
+SELECT 
+       [rs].[id] AS [id], 
+       [rs].[usr_wechat_id] AS [usr_wechat_id], 
+       [rs].[permission_id] AS [permission_id], 
+       [rs].[disable] AS [disable], 
+       [p].[name] AS [permission_name]
+FROM   [rs_permission] [rs]
+       LEFT JOIN [permission] [p] ON [rs].[permission_id] = [p].[id]
+WHERE 
+       1=1 AND 
+       Disable = 0
+");
+            if (string.IsNullOrWhiteSpace(usrWechatID))
+            {
+                sb.Append($" AND biz_type_id = '{usrWechatID}'");
+            }
+            if (listPermissonIDs != null && listPermissonIDs.Count > 0)
+            {
+                sb.Append($" AND permission_id in ({ string.Join(',', listPermissonIDs.ToArray()) }) ");
+            }
+            try
+            {
+                result = DBHelper.ExecuteTable(sb.ToString());
+            }
+            catch (Exception) { throw; }
+            finally { }
+            return result;
+        }
+
 
     }
 }

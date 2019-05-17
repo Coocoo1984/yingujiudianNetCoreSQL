@@ -41,7 +41,7 @@ namespace WebAPI_SQL.Controllers
 
             if (string.IsNullOrWhiteSpace(listPOStateIDs))
             {
-                listPOStateIDs = BaseSettines.listDefualtPOStateIDs;
+                listPOStateIDs = BaseSettings.listDefualtPOStateIDs;
             }
 
             DataTable dt = BL.GetPurchasingOrderGoodsCountStatics(

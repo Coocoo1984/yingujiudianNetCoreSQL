@@ -32,7 +32,7 @@ namespace WebAPI_SQL.Controllers
         {
             if (string.IsNullOrWhiteSpace(listPOStateIDs))
             {
-                listPOStateIDs = BaseSettines.listDefualtPOStateIDs;
+                listPOStateIDs = BaseSettings.listDefualtPOStateIDs;
             }
             return JSONHelper.ToJSONString(PagingHelper.GetPagedTable(BL.GetStock(
                 DataHelper.GetListInt(listBizTypeIDs),

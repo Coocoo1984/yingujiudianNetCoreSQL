@@ -36,7 +36,7 @@ namespace WebAPI_SQL.Controllers
 
             if(string.IsNullOrWhiteSpace(listPOStateIDs))
             {
-                listPOStateIDs = BaseSettines.listDefualtPOStateIDs;
+                listPOStateIDs = BaseSettings.listDefualtPOStateIDs;
             }
 
             DataTable dt = BL.GetPurchasingOrderTotal(
@@ -119,7 +119,7 @@ namespace WebAPI_SQL.Controllers
 
             if(string.IsNullOrWhiteSpace(listPOStateIDs))
             {
-                listPOStateIDs = BaseSettines.listDefualtPOStateIDs;
+                listPOStateIDs = BaseSettings.listDefualtPOStateIDs;
             }
 
             DataTable dt = BL.GetPurchasingOrderGoodsSubtotal(
@@ -209,7 +209,7 @@ namespace WebAPI_SQL.Controllers
 
             if (string.IsNullOrWhiteSpace(listPOStateIDs))
             {
-                listPOStateIDs = BaseSettines.listDefualtPOStateIDs;
+                listPOStateIDs = BaseSettings.listDefualtPOStateIDs;
             }
 
             DataTable dt = BL.GetPurchasingOrderVendorSubtotal(

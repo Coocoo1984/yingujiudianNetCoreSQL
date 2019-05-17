@@ -16,10 +16,10 @@ namespace WebAPI_SQL.Controllers
         [HttpGet]
         public string Get(bool? disable, int PageIndex, int PageSize, string WechatID)
         {
-            disable = BaseSettines.IsGlobalSelectTableRecordDisableClosed ?
+            disable = BaseSettings.IsGlobalSelectTableRecordDisableClosed ?
                         disable : //关闭 全局查询状态
                         (disable == null) ? 
-                            BaseSettines.DefualtDisableValue : 
+                            BaseSettings.DefualtDisableValue : 
                             disable;//开启 检查请求是否有该参数 （有则不干预,无则设置为默认值)
             return JSONHelper.ToJSONString(PagingHelper.GetPagedTable(BL.GetGoods(disable),
                 PageIndex, PageSize));

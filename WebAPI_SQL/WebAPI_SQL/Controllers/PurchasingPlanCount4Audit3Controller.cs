@@ -16,6 +16,13 @@ namespace WebAPI_SQL.Controllers
         [HttpGet]
         public string Get(int PageIndex, int PageSize, string WechatID)
         {
+            if (!string.IsNullOrWhiteSpace(WechatID))
+            {
+                if (!Common.CheckPermission(WechatID, this.RouteData, null))
+                {
+                    return BaseSettings.NoPermissionString;
+                }
+            }
             return JSONHelper.ToJSONString(PagingHelper.GetPagedTable(BL.GetPurchasingPlanCount4Audit3(),
                 PageIndex, PageSize));
         }
