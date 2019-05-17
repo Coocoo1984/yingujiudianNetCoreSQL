@@ -55,21 +55,26 @@ namespace WebAPI_SQL
                 }
                 if (strController == "QuoteListAll")
                 {
-                    if(requestParma.Contains("2"))
+                    if (requestParma == null)
                     {
-                        //报价初审
-                        if (dt.Select("permission_id" + "=" + (int)BaseSettings.PermissionDefine.QuoteAudit).Length > 0)
-                            result = true;
+                        result = true;
                     }
-                    if (requestParma.Contains("4"))
+                    else
                     {
-                        //报价复审
-                        if (dt.Select("permission_id" + "=" + (int)BaseSettings.PermissionDefine.QuoteAudit2).Length > 0)
-                            result = true;
+                        if (requestParma.Contains("2"))
+                        {
+                            //报价初审
+                            if (dt.Select("permission_id" + "=" + (int)BaseSettings.PermissionDefine.QuoteAudit).Length > 0)
+                                result = true;
+                        }
+                        if (requestParma.Contains("4"))
+                        {
+                            //报价复审
+                            if (dt.Select("permission_id" + "=" + (int)BaseSettings.PermissionDefine.QuoteAudit2).Length > 0)
+                                result = true;
+                        }
                     }
-
                 }
-
             }
 
 
