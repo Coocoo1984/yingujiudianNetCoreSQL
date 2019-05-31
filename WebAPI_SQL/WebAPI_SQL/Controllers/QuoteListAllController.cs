@@ -35,7 +35,7 @@ namespace WebAPI_SQL.Controllers
                 disable,
                 DataHelper.GetListInt(listQuoteStateIDs),
                 DataHelper.GetDateTime(startTime),
-                DataHelper.GetDateTime(endTime)),
+                DataHelper.GetDateTimeAddOneDay(endTime)),
                 PageIndex, PageSize));
         }
 

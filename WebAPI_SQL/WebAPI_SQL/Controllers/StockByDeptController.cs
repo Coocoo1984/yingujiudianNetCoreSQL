@@ -24,7 +24,7 @@ namespace WebAPI_SQL.Controllers
                 DataHelper.GetListInt(listVendorIDs),
                 DataHelper.GetListInt(listPOStateIDs),
                 DataHelper.GetDateTime(startTime),
-                DataHelper.GetDateTime(endTime)),
+                DataHelper.GetDateTimeAddOneDay(endTime)),
                 0, 0));
         }
     }

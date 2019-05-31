@@ -19,7 +19,7 @@ namespace WebAPI_SQL.Controllers
             return JSONHelper.ToJSONString(PagingHelper.GetPagedTable(BL.GetGoodsClassQuoteCount(
                 bizTypeId, 
                 DataHelper.GetDateTime(StartTime),
-                DataHelper.GetDateTime(EndTime)),
+                DataHelper.GetDateTimeAddOneDay(EndTime)),
                 0, 0));
         }
     }

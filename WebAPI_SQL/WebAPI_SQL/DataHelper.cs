@@ -23,6 +23,25 @@ namespace WebAPI_SQL
             return result;
         }
 
+        /// <summary>
+        /// 2019-05-31 转换为 2019-06-01
+        /// </summary>
+        /// <param name="dateTime"></param>
+        /// <returns></returns>
+        public static DateTime? GetDateTimeAddOneDay(DateTime? dateTime)
+        {
+            DateTime? result = null;
+            if (dateTime == null || dateTime == DateTime.MinValue || dateTime == DateTime.MaxValue)
+            {
+                result = null;
+            }
+            else
+            {
+                result = dateTime?.AddDays(1);
+            }
+            return result;
+        }
+
         public static DateTime? GetDateTime(DateTime dateTime)
         {
             DateTime? result = null;

@@ -18,7 +18,7 @@ namespace WebAPI_SQL.Controllers
             return JSONHelper.ToJSONString(PagingHelper.GetPagedTable(BL.GetGoodsQuoteDetailVendorList(
                 bizTypeID,
                 DataHelper.GetDateTime(startTime),
-                DataHelper.GetDateTime(endTime),
+                DataHelper.GetDateTimeAddOneDay(endTime),
                 goodsId),
                 PageIndex, PageSize));
         }
