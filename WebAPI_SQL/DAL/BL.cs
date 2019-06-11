@@ -1414,7 +1414,7 @@ WHERE
             {
                 sb.Append($" AND po.create_time < '{ endTime.Value.ToString("yyyy-MM-dd HH:mm:ss") }' ");
             }
-            sb.Append($"    AND po.purchasing_order_state_id in (1,3,4,6) ");
+            sb.Append($"    AND po.purchasing_order_state_id in (1,3,4,5,6,10,11) ");
             sb.Append(" ORDER BY po.purchasing_order_state_id");
             try
             {
