@@ -1516,5 +1516,45 @@ WHERE
         }
 
 
+        /// <summary>
+        /// 获取退货
+        /// </summary>
+        /// <param name="usrWechatID">可不传</param>
+        /// <param name="listPermissonIDs">可不传</param>
+        /// <returns></returns>
+        public static DataTable GetChargeBack(string usrWechatID, List<int> listPermissonIDs)
+        {
+            DataTable result = null;
+            StringBuilder sb = new StringBuilder();
+            sb.Append(@"
+SELECT 
+       [rs].[id] AS [id], 
+       [rs].[usr_wechat_id] AS [usr_wechat_id], 
+       [rs].[permission_id] AS [permission_id], 
+       [rs].[disable] AS [disable], 
+       [p].[name] AS [permission_name]
+FROM   [rs_permission] [rs]
+       LEFT JOIN [permission] [p] ON [rs].[permission_id] = [p].[id]
+WHERE 
+       1=1 AND 
+       Disable = 0
+");
+            if (string.IsNullOrWhiteSpace(usrWechatID))
+            {
+                sb.Append($" AND biz_type_id = '{usrWechatID}'");
+            }
+            if (listPermissonIDs != null && listPermissonIDs.Count > 0)
+            {
+                sb.Append($" AND permission_id in ({ string.Join(',', listPermissonIDs.ToArray()) }) ");
+            }
+            try
+            {
+                result = DBHelper.ExecuteTable(sb.ToString());
+            }
+            catch (Exception) { throw; }
+            finally { }
+            return result;
+        }
+
     }
 }
