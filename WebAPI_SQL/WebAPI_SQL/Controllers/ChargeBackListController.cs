@@ -14,9 +14,10 @@ namespace WebAPI_SQL.Controllers
     {
         // GET: api/ChargeBackList
         [HttpGet]
-        public string Get(int PageIndex, int PageSize, DateTime? startTime, DateTime? endTime, string listBizTypeIDs, string listDepartmentIDs, string WechatID)
+        public string Get(int PageIndex, int PageSize, DateTime? startTime, DateTime? endTime, string listStateIds, string listBizTypeIDs, string listDepartmentIDs, string WechatID)
         {
             return JSONHelper.ToJSONString(PagingHelper.GetPagedTable(BL.GetChargeBackList(
+                    DataHelper.GetListInt(listStateIds),
                     DataHelper.GetListInt(listBizTypeIDs),
                     DataHelper.GetListInt(listDepartmentIDs),
                     DataHelper.GetDateTime(startTime),

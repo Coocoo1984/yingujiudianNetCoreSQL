@@ -1516,12 +1516,16 @@ WHERE
         /// 获取退货按部门
         /// </summary>
         /// <returns></returns>
-        public static DataTable GetChargeBackList(List<int> listBizTypeIDs, List<int> listDepartmentIDs, DateTime? startTime, DateTime? endTime)
+        public static DataTable GetChargeBackList(List<int> listStateIds, List<int> listBizTypeIDs, List<int> listDepartmentIDs, DateTime? startTime, DateTime? endTime)
         {
             DataTable result = null;
             StringBuilder sb = new StringBuilder();
             sb.Append("SELECT * FROM ");
             sb.Append(" view_charge_back_list");
+            if (listStateIds?.Count > 0)
+            {
+                sb.Append($" WHERE purchasing_order_state_id = ({ string.Join(',', listStateIds.ToArray()) }) ");
+            }
             if (listDepartmentIDs?.Count > 0)
             {
                 sb.Append($" WHERE department_id = ({ string.Join(',', listDepartmentIDs.ToArray()) }) ");
