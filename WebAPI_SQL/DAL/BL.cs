@@ -1582,15 +1582,15 @@ WHERE
 
             if (ChargeBackID > 0)
             {
-                sb.Append($" WHERE charge_back_id = ({ ChargeBackID }) ");
+                sb.Append($" WHERE charge_back_id = { ChargeBackID } ");
             }
             if (OrderID > 0)
             {
-                sb.Append($" WHERE purchasing_order_id = ({ OrderID }) ");
+                sb.Append($" WHERE purchasing_order_id = { OrderID } ");
             }
             if (PlanID > 0)
             {
-                sb.Append($" WHERE purchasing_plan_id = ({ PlanID }) ");
+                sb.Append($" WHERE purchasing_plan_id = { PlanID } ");
             }
             try
             {
