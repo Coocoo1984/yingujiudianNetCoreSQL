@@ -1516,7 +1516,7 @@ WHERE
         /// 获取退货按部门
         /// </summary>
         /// <returns></returns>
-        public static DataTable GetChargeBackList(List<int> listStateIds, List<int> listBizTypeIDs, List<int> listDepartmentIDs, DateTime? startTime, DateTime? endTime)
+        public static DataTable GetChargeBackList(List<int> listStateIds, List<int> listBizTypeIDs, List<int> listDepartmentIDs, List<int> listVendorIDs, DateTime? startTime, DateTime? endTime)
         {
             DataTable result = null;
             StringBuilder sb = new StringBuilder();
@@ -1525,11 +1525,15 @@ WHERE
             sb.Append(" WHERE 1=1");
             if (listStateIds?.Count > 0)
             {
-                sb.Append($" AND purchasing_order_state_id = ({ string.Join(',', listStateIds.ToArray()) }) ");
+                sb.Append($" AND purchasing_order_state_id in ({ string.Join(',', listStateIds.ToArray()) }) ");
             }
             if (listDepartmentIDs?.Count > 0)
             {
-                sb.Append($" AND department_id = ({ string.Join(',', listDepartmentIDs.ToArray()) }) ");
+                sb.Append($" AND department_id in ({ string.Join(',', listDepartmentIDs.ToArray()) }) ");
+            }
+            if (listVendorIDs?.Count > 0)
+            {
+                sb.Append($" AND vendor_id in ({ string.Join(',', listVendorIDs.ToArray()) }) ");
             }
             if (startTime != null)
             {
