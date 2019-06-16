@@ -1522,13 +1522,14 @@ WHERE
             StringBuilder sb = new StringBuilder();
             sb.Append("SELECT * FROM ");
             sb.Append(" view_charge_back_list");
+            sb.Append(" WHERE 1=1");
             if (listStateIds?.Count > 0)
             {
-                sb.Append($" WHERE purchasing_order_state_id = ({ string.Join(',', listStateIds.ToArray()) }) ");
+                sb.Append($" AND purchasing_order_state_id = ({ string.Join(',', listStateIds.ToArray()) }) ");
             }
             if (listDepartmentIDs?.Count > 0)
             {
-                sb.Append($" WHERE department_id = ({ string.Join(',', listDepartmentIDs.ToArray()) }) ");
+                sb.Append($" AND department_id = ({ string.Join(',', listDepartmentIDs.ToArray()) }) ");
             }
             if (startTime != null)
             {
@@ -1582,15 +1583,15 @@ WHERE
 
             if (ChargeBackID > 0)
             {
-                sb.Append($" WHERE charge_back_id = { ChargeBackID } ");
+                sb.Append($" AND charge_back_id = { ChargeBackID } ");
             }
             if (OrderID > 0)
             {
-                sb.Append($" WHERE purchasing_order_id = { OrderID } ");
+                sb.Append($" AND purchasing_order_id = { OrderID } ");
             }
             if (PlanID > 0)
             {
-                sb.Append($" WHERE purchasing_plan_id = { PlanID } ");
+                sb.Append($" AND purchasing_plan_id = { PlanID } ");
             }
             try
             {
