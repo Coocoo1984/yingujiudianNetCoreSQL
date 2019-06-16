@@ -492,8 +492,6 @@ WHERE
             return result;
         }
 
-
-
         public static DataTable GetPurchasingOrderDetailList4Dept(int purchasingOrderID)
         {
             DataTable result = null;
@@ -604,7 +602,6 @@ WHERE
             }
             return result;
         }
-
 
         /// <summary>
         /// 
@@ -797,7 +794,6 @@ ORDER BY
             }
             return result;
         }
-
  
         /// <summary>
         /// 采购进度 - 取得所有订单
@@ -1517,35 +1513,80 @@ WHERE
 
 
         /// <summary>
-        /// 获取退货
+        /// 获取退货按部门
         /// </summary>
-        /// <param name="usrWechatID">可不传</param>
-        /// <param name="listPermissonIDs">可不传</param>
         /// <returns></returns>
-        public static DataTable GetChargeBack(string usrWechatID, List<int> listPermissonIDs)
+        public static DataTable GetChargeBackList(List<int> listBizTypeIDs, List<int> listDepartmentIDs, DateTime? startTime, DateTime? endTime)
         {
             DataTable result = null;
             StringBuilder sb = new StringBuilder();
-            sb.Append(@"
-SELECT 
-       [rs].[id] AS [id], 
-       [rs].[usr_wechat_id] AS [usr_wechat_id], 
-       [rs].[permission_id] AS [permission_id], 
-       [rs].[disable] AS [disable], 
-       [p].[name] AS [permission_name]
-FROM   [rs_permission] [rs]
-       LEFT JOIN [permission] [p] ON [rs].[permission_id] = [p].[id]
-WHERE 
-       1=1 AND 
-       Disable = 0
-");
-            if (string.IsNullOrWhiteSpace(usrWechatID))
+            sb.Append("SELECT * FROM ");
+            sb.Append(" view_charge_back_list");
+            if (listDepartmentIDs?.Count > 0)
             {
-                sb.Append($" AND biz_type_id = '{usrWechatID}'");
+                sb.Append($" WHERE department_id = ({ string.Join(',', listDepartmentIDs.ToArray()) }) ");
             }
-            if (listPermissonIDs != null && listPermissonIDs.Count > 0)
+            if (startTime != null)
             {
-                sb.Append($" AND permission_id in ({ string.Join(',', listPermissonIDs.ToArray()) }) ");
+                sb.Append($"    AND create_time > '{ startTime.Value.ToString("yyyy-MM-dd HH:mm:ss") }' \r\n");
+            }
+            if (endTime != null)
+            {
+                sb.Append($"    AND create_time < '{ endTime.Value.ToString("yyyy-MM-dd HH:mm:ss") }' ");
+            }
+            try
+            {
+                result = DBHelper.ExecuteTable(sb.ToString());
+            }
+            catch (Exception) { throw; }
+            finally { }
+            return result;
+        }
+
+
+        /// <summary>
+        /// 取得所有退货
+        /// </summary>
+        /// <returns></returns>
+        public static DataTable GetChargeBackList()
+        {
+            DataTable result = null;
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append("SELECT * FROM ");
+            sb.Append(" view_charge_back_list");
+            try
+            {
+                result = DBHelper.ExecuteTable(sb.ToString());
+            }
+            catch (Exception) { throw; }
+            finally { }
+            return result;
+        }
+
+        /// <summary>
+        /// 取得退货明细
+        /// </summary>
+        /// <returns></returns>
+        public static DataTable GetChargeBackDetailList(int ChargeBackID, int OrderID, int PlanID)
+        {
+            DataTable result = null;
+            StringBuilder sb = new StringBuilder();
+            sb.Append("SELECT * FROM ");
+            sb.Append(" view_charge_back_detail_list");
+            sb.Append(" WHERE 1=1");
+
+            if (ChargeBackID > 0)
+            {
+                sb.Append($" WHERE charge_back_id = ({ ChargeBackID }) ");
+            }
+            if (OrderID > 0)
+            {
+                sb.Append($" WHERE purchasing_order_id = ({ OrderID }) ");
+            }
+            if (PlanID > 0)
+            {
+                sb.Append($" WHERE purchasing_plan_id = ({ PlanID }) ");
             }
             try
             {
