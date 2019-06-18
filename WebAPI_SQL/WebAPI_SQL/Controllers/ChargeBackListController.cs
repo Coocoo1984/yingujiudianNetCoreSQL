@@ -19,14 +19,20 @@ namespace WebAPI_SQL.Controllers
             if(!string.IsNullOrWhiteSpace(listStateIds))
             {
                 //前端参数传错了 特殊处理
+
                 if (listStateIds == "11,12,13,14,15")
                 {
-                    listStateIds = "8,9,10";
+                    listStateIds = "7,8,9,10";
+                }
+                if (listStateIds == "11")
+                {
+                    listStateIds = "7";
                 }
                 if (listStateIds == "16")
                 {
                     listStateIds = "11";
                 }
+
             }
 
             return JSONHelper.ToJSONString(PagingHelper.GetPagedTable(BL.GetChargeBackList(
