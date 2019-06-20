@@ -12,7 +12,7 @@ namespace WebAPI_SQL
         //value 默认值
         public static bool DefualtDisableValue = false;
         //导出订单的默认值状态值
-        public static string listDefualtPOStateIDs = "6";
+        public static string listDefualtPOStateIDs = "6,7,8,9,10,11";
 
         public static string NoPermissionString = "没有访问权限";
 

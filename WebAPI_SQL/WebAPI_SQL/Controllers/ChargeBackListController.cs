@@ -20,18 +20,18 @@ namespace WebAPI_SQL.Controllers
             {
                 //前端参数传错了 特殊处理
 
-                if (listStateIds == "11,12,13,14,15")
-                {
-                    listStateIds = "7,8,9,10";
-                }
-                if (listStateIds == "11")
-                {
-                    listStateIds = "7";
-                }
-                if (listStateIds == "16")
-                {
-                    listStateIds = "11";
-                }
+                ////if (listStateIds == "11,12,13,14,15")
+                ////{
+                ////    listStateIds = "7,8,9,10";
+                ////}
+                ////if (listStateIds == "11")
+                ////{
+                ////    listStateIds = "7";
+                ////}
+                ////if (listStateIds == "16")
+                ////{
+                ////    listStateIds = "11";
+                ////}
 
             }
 

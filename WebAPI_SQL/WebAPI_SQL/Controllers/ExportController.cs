@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using DAL;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
 
@@ -12,6 +14,12 @@ namespace WebAPI_SQL.Controllers
     public class ExportController : Controller
     {
         private const string XlsxContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+        private IHostingEnvironment _hostingEnvironment;
+
+        public ExportController(IHostingEnvironment hostingEnvironment)
+        {
+            _hostingEnvironment = hostingEnvironment;
+        }
 
         /// <summary>
         /// 统表
@@ -25,6 +33,8 @@ namespace WebAPI_SQL.Controllers
         [HttpGet]
         public IActionResult PurchasingOrderTotal(string listDepartmentIDs, string listPOStateIDs, DateTime? startTime, DateTime? endTime, string WechatID)
         {
+
+
             var result = new DataTable("Export");
 
             result.Columns.Add("采购部门", typeof(string));
@@ -34,7 +44,7 @@ namespace WebAPI_SQL.Controllers
             result.Columns.Add("供应商", typeof(string));
 
 
-            if(string.IsNullOrWhiteSpace(listPOStateIDs))
+            if (string.IsNullOrWhiteSpace(listPOStateIDs))
             {
                 listPOStateIDs = BaseSettings.listDefualtPOStateIDs;
             }
@@ -82,6 +92,9 @@ namespace WebAPI_SQL.Controllers
                     result.Rows.Add(NewRow);
                 }
             }
+
+            FileStream fsReuslt = null;
+            FileInfo file = new FileInfo(Path.Combine(_hostingEnvironment.ContentRootPath, "File", "Export", DateTime.Now.ToString("yyyyMMdd_HHmmss_fff") + ".xlsx"));
             using (var package = new ExcelPackage())
             {
                 var worksheet = package.Workbook.Worksheets.Add("Sheet1");
@@ -90,8 +103,14 @@ namespace WebAPI_SQL.Controllers
                 {
                     worksheet.Column(col).AutoFit();
                 }
-                return File(package.GetAsByteArray(), XlsxContentType, $"PurchasingOrderTotal{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}.xlsx");
+
+                using (Stream stream = new FileStream(file.ToString(), FileMode.Create))
+                {
+                    package.SaveAs(stream);
+                }
             }
+            fsReuslt = System.IO.File.OpenRead(file.ToString());
+            return File(fsReuslt, XlsxContentType, $"PurchasingOrderTotal{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}.xlsx");
         }
 
         /// <summary>
@@ -117,7 +136,7 @@ namespace WebAPI_SQL.Controllers
             result.Columns.Add("采购时间", typeof(string));//实际数量
             result.Columns.Add("供应商", typeof(string));
 
-            if(string.IsNullOrWhiteSpace(listPOStateIDs))
+            if (string.IsNullOrWhiteSpace(listPOStateIDs))
             {
                 listPOStateIDs = BaseSettings.listDefualtPOStateIDs;
             }
@@ -170,6 +189,9 @@ namespace WebAPI_SQL.Controllers
                     result.Rows.Add(NewRow);
                 }
             }
+
+            FileStream fsReuslt = null;
+            FileInfo file = new FileInfo(Path.Combine(_hostingEnvironment.ContentRootPath, "File", "Export", DateTime.Now.ToString("yyyyMMdd_HHmmss_fff") + ".xlsx"));
             using (var package = new ExcelPackage())
             {
                 var worksheet = package.Workbook.Worksheets.Add("Sheet1");
@@ -178,9 +200,15 @@ namespace WebAPI_SQL.Controllers
                 {
                     worksheet.Column(col).AutoFit();
                 }
-                return File(package.GetAsByteArray(), XlsxContentType, $"PurchasingOrderGoodsSubtotal{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}.xlsx");
-            }
 
+                using (Stream stream = new FileStream(file.ToString(), FileMode.Create))
+                {
+                    package.SaveAs(stream);
+                }
+            }
+            fsReuslt = System.IO.File.OpenRead(file.ToString());
+
+            return File(fsReuslt, XlsxContentType, $"PurchasingOrderGoodsSubtotal{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}.xlsx");
         }
 
         /// <summary>
@@ -265,6 +293,9 @@ namespace WebAPI_SQL.Controllers
                     result.Rows.Add(NewRow);
                 }
             }
+
+            FileStream fsReuslt = null;
+            FileInfo file = new FileInfo(Path.Combine(_hostingEnvironment.ContentRootPath, "File", "Export", DateTime.Now.ToString("yyyyMMdd_HHmmss_fff") + ".xlsx"));
             using (var package = new ExcelPackage())
             {
                 var worksheet = package.Workbook.Worksheets.Add("Sheet1");
@@ -273,7 +304,9 @@ namespace WebAPI_SQL.Controllers
                 {
                     worksheet.Column(col).AutoFit();
                 }
-                return File(package.GetAsByteArray(), XlsxContentType, $"PurchasingOrderGoodsSubtotal{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}.xlsx");
+                fsReuslt = System.IO.File.OpenRead(file.ToString());
+
+                return File(fsReuslt, XlsxContentType, $"PurchasingOrderGoodsSubtotal{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}.xlsx");
             }
 
         }
