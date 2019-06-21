@@ -7,10 +7,12 @@
 
   <ItemGroup>
     <Folder Include="File\Export\" />
+    <Folder Include="File\Template\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="DotNetCore.NPOI" Version="1.2.1" />
     <PackageReference Include="EPPlus.Core" Version="1.5.4" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.2.0" />

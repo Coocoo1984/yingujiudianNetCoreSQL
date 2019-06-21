@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using DAL;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using NPOI.XSSF.UserModel;
 using OfficeOpenXml;
 
 namespace WebAPI_SQL.Controllers
@@ -33,9 +34,18 @@ namespace WebAPI_SQL.Controllers
         [HttpGet]
         public IActionResult PurchasingOrderTotal(string listDepartmentIDs, string listPOStateIDs, DateTime? startTime, DateTime? endTime, string WechatID)
         {
+            FileStream fsReuslt = null;
+            XSSFWorkbook wk = null;
+            FileInfo strFileTemplate = new FileInfo(Path.Combine(_hostingEnvironment.ContentRootPath, "File", "Template", "PurchasingOrderTotalTemplate.xlsx"));
+            using (FileStream excelTemplate = new FileStream(strFileTemplate.ToString(), FileMode.Open))
+            {
+                //把xls文件读入workbook变量里后就关闭
+                wk = new XSSFWorkbook(excelTemplate);
+                excelTemplate.Close();
+            }
 
 
-            var result = new DataTable("Export");
+            var result = new DataTable("PurchasingOrderTotal");
 
             result.Columns.Add("采购部门", typeof(string));
             result.Columns.Add("采购类型", typeof(string));
@@ -93,23 +103,19 @@ namespace WebAPI_SQL.Controllers
                 }
             }
 
-            FileStream fsReuslt = null;
+            DataSet ds = new DataSet();
+            ds.Tables.Add(result);
+            //写入新对象
+            int exportRows = ExcelUtil.SetDataSet2Workbook(ds, wk);
+            //生成新excel
             FileInfo file = new FileInfo(Path.Combine(_hostingEnvironment.ContentRootPath, "File", "Export", DateTime.Now.ToString("yyyyMMdd_HHmmss_fff") + ".xlsx"));
-            using (var package = new ExcelPackage())
+            using (FileStream fs = new FileStream(file.ToString(), FileMode.Create))
             {
-                var worksheet = package.Workbook.Worksheets.Add("Sheet1");
-                worksheet.Cells["A1"].LoadFromDataTable(result, PrintHeaders: true);
-                for (var col = 1; col < result.Columns.Count + 1; col++)
-                {
-                    worksheet.Column(col).AutoFit();
-                }
-
-                using (Stream stream = new FileStream(file.ToString(), FileMode.Create))
-                {
-                    package.SaveAs(stream);
-                }
+                wk.Write(fs);
             }
+
             fsReuslt = System.IO.File.OpenRead(file.ToString());
+
             return File(fsReuslt, XlsxContentType, $"PurchasingOrderTotal{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}.xlsx");
         }
 
@@ -127,7 +133,17 @@ namespace WebAPI_SQL.Controllers
         [HttpGet]
         public IActionResult PurchasingOrderGoodsSubtotal(string listDepartmentIDs, string listBizTypeIDs, string listGoodsClassIDs, string listGoodsIDs, string listPOStateIDs, DateTime? startTime, DateTime? endTime)
         {
-            var result = new DataTable("Export");
+            FileStream fsReuslt = null;
+            XSSFWorkbook wk = null;
+            FileInfo strFileTemplate = new FileInfo(Path.Combine(_hostingEnvironment.ContentRootPath, "File", "Template", "PurchasingOrderGoodsSubtotalTemplate.xlsx"));
+            using (FileStream excelTemplate = new FileStream(strFileTemplate.ToString(), FileMode.Open))
+            {
+                //把xls文件读入workbook变量里后就关闭
+                wk = new XSSFWorkbook(excelTemplate);
+                excelTemplate.Close();
+            }
+
+            var result = new DataTable("PurchasingOrderGoodsSubtotal");
 
             result.Columns.Add("采购部门", typeof(string));
             result.Columns.Add("采购类型", typeof(string));
@@ -173,9 +189,9 @@ namespace WebAPI_SQL.Controllers
                         {
                             NewRow["采购项目"] = Convert.ToString(dt.Rows[i]["goods_name"]);
                         }
-                        if (column.ColumnName == "total")
+                        if (column.ColumnName == "subtotal")
                         {
-                            NewRow["采购金额"] = Convert.ToString(dt.Rows[i]["total"]);
+                            NewRow["采购金额"] = Convert.ToString(dt.Rows[i]["subtotal"]);
                         }
                         if (column.ColumnName == "create_time")
                         {
@@ -190,25 +206,21 @@ namespace WebAPI_SQL.Controllers
                 }
             }
 
-            FileStream fsReuslt = null;
+            DataSet ds = new DataSet();
+            ds.Tables.Add(result);
+            //写入新对象
+            int exportRows = ExcelUtil.SetDataSet2Workbook(ds, wk);
+            //生成新excel
             FileInfo file = new FileInfo(Path.Combine(_hostingEnvironment.ContentRootPath, "File", "Export", DateTime.Now.ToString("yyyyMMdd_HHmmss_fff") + ".xlsx"));
-            using (var package = new ExcelPackage())
+            using (FileStream fs = new FileStream(file.ToString(), FileMode.Create))
             {
-                var worksheet = package.Workbook.Worksheets.Add("Sheet1");
-                worksheet.Cells["A1"].LoadFromDataTable(result, PrintHeaders: true);
-                for (var col = 1; col < result.Columns.Count + 1; col++)
-                {
-                    worksheet.Column(col).AutoFit();
-                }
-
-                using (Stream stream = new FileStream(file.ToString(), FileMode.Create))
-                {
-                    package.SaveAs(stream);
-                }
+                wk.Write(fs);
             }
+
             fsReuslt = System.IO.File.OpenRead(file.ToString());
 
             return File(fsReuslt, XlsxContentType, $"PurchasingOrderGoodsSubtotal{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}.xlsx");
+
         }
 
         /// <summary>
@@ -225,7 +237,18 @@ namespace WebAPI_SQL.Controllers
         [HttpGet]
         public IActionResult PurchasingOrderVendorSubtotal(string listVendorIDs, string listBizTypeIDs, string listGoodsClassIDs, string listGoodsIDs, string listPOStateIDs, DateTime? startTime, DateTime? endTime)
         {
-            var result = new DataTable("Export");
+            FileStream fsReuslt = null;
+            XSSFWorkbook wk = null;
+            FileInfo strFileTemplate = new FileInfo(Path.Combine(_hostingEnvironment.ContentRootPath, "File", "Template", "PurchasingOrderVendorSubtotalTemplate.xlsx"));
+            using (FileStream excelTemplate = new FileStream(strFileTemplate.ToString(), FileMode.Open))
+            {
+                //把xls文件读入workbook变量里后就关闭
+                wk = new XSSFWorkbook(excelTemplate);
+                excelTemplate.Close();
+            }
+
+
+            var result = new DataTable("PurchasingOrderVendorSubtotal");
 
             result.Columns.Add("供应商", typeof(string));
             result.Columns.Add("采购类型", typeof(string));
@@ -280,9 +303,9 @@ namespace WebAPI_SQL.Controllers
                         {
                             NewRow["数量"] = Convert.ToString(dt.Rows[i]["count_for_show"]);
                         }
-                        if (column.ColumnName == "countactual_subtotal_for_show")
+                        if (column.ColumnName == "actual_subtotal")
                         {
-                            NewRow["小计金额"] = Convert.ToString(dt.Rows[i]["countactual_subtotal_for_show"]);
+                            NewRow["小计金额"] = Convert.ToString(dt.Rows[i]["actual_subtotal"]);
                         }
                         if (column.ColumnName == "create_time")
                         {
@@ -294,21 +317,20 @@ namespace WebAPI_SQL.Controllers
                 }
             }
 
-            FileStream fsReuslt = null;
+            DataSet ds = new DataSet();
+            ds.Tables.Add(result);
+            //写入新对象
+            int exportRows = ExcelUtil.SetDataSet2Workbook(ds, wk);
+            //生成新excel
             FileInfo file = new FileInfo(Path.Combine(_hostingEnvironment.ContentRootPath, "File", "Export", DateTime.Now.ToString("yyyyMMdd_HHmmss_fff") + ".xlsx"));
-            using (var package = new ExcelPackage())
+            using (FileStream fs = new FileStream(file.ToString(), FileMode.Create))
             {
-                var worksheet = package.Workbook.Worksheets.Add("Sheet1");
-                worksheet.Cells["A1"].LoadFromDataTable(result, PrintHeaders: true);
-                for (var col = 1; col < result.Columns.Count + 1; col++)
-                {
-                    worksheet.Column(col).AutoFit();
-                }
-                fsReuslt = System.IO.File.OpenRead(file.ToString());
-
-                return File(fsReuslt, XlsxContentType, $"PurchasingOrderGoodsSubtotal{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}.xlsx");
+                wk.Write(fs);
             }
 
+            fsReuslt = System.IO.File.OpenRead(file.ToString());
+
+            return File(fsReuslt, XlsxContentType, $"PurchasingOrderVendorSubtotal{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}.xlsx");
         }
 
     }

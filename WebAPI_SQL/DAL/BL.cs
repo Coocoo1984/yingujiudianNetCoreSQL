@@ -447,7 +447,8 @@ SELECT
     goods_name,
     unit_price,
     count_for_show,
-    actual_subtotal
+    actual_subtotal,
+    create_time
 FROM
     view_statics_vendor_goods_subtotal
 WHERE
