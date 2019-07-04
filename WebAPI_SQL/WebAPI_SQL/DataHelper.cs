@@ -72,7 +72,7 @@ namespace WebAPI_SQL
 
         public static List<int> GetListInt(string listIntString)
         {
-            List<int> result = null;
+            List<int> result = new List<int>();
 
             if (!string.IsNullOrWhiteSpace(listIntString))
             {
