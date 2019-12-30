@@ -776,6 +776,7 @@ FROM
 WHERE
 	q.disable = 0 
 	AND qd.disable = 0
+    AND q.quote_state_id = 6
                 ");
                 sb.Append($"	AND ppd.purchasing_plan_id = {purchasingPlanID}");
                 sb.Append($"	AND ppd.goods_class_id = {goodsClassID}");
@@ -786,6 +787,7 @@ GROUP BY
                 sb.Append(@"
 ORDER BY
 	subtotal");
+                //quote_state_id = 6 供应商报价二审通过
                 try
                 {
                     result = DBHelper.ExecuteTable(sb.ToString());
