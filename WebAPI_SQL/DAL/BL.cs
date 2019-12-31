@@ -605,7 +605,7 @@ WHERE
         }
 
         /// <summary>
-        /// 
+        /// 通过采购计划ID获取采购计划、供应商报价选择、采购计划明细
         /// </summary>
         /// <param name="purchasingPlanID">必须</param>
         /// <returns></returns>
@@ -615,10 +615,38 @@ WHERE
             if (purchasingPlanID > 0)
             {
                 StringBuilder sb = new StringBuilder();
-                sb.Append("SELECT * FROM ");
-                sb.Append(" view_purchasing_plan_detail_list WHERE ");
-                sb.Append($" purchasing_plan_id = {purchasingPlanID}");
-                sb.Append(" ORDER BY goods_id");
+                ////sb.Append("SELECT * FROM ");
+                ////sb.Append(" view_purchasing_plan_detail_list WHERE ");
+                ////sb.Append($" purchasing_plan_id = {purchasingPlanID}");
+                ////sb.Append(" ORDER BY goods_id");
+                ///
+                sb.Append(@"
+SELECT 
+       [ppd].[purchasing_plan_id] AS [purchasing_plan_id], 
+       [pp].code AS [purchasing_plan_code],
+       [ppd].[goods_class_id], 
+       [gc].[name] AS [goods_class_name], 
+       [ppd].[goods_id] AS [goods_id], 
+       [g].[name] AS [goods_name], 
+       [g].[specification] AS [specification],
+       [ppd].[count], 
+       [gu].[name] AS [goods_unit_name],
+       [ppd].[vendor_id] is not null AS [is_quote_relation],
+       CASE WHEN [v].[name] IS NULL THEN '' ELSE [v].[name] END AS [vendor_name],
+       CASE WHEN [qd].[unit_price] IS NULL THEN 0 ELSE [qd].[unit_price] END AS [unit_price],
+       CASE WHEN [qd].[unit_price] IS NULL THEN 0 ELSE [qd].[unit_price]*[ppd].[count] END AS [subtotal]  
+FROM   
+       [purchasing_plan] AS [pp]
+       LEFT JOIN [purchasing_plan_detail] AS [ppd] ON [ppd].[purchasing_plan_id] = [pp].[id]
+       LEFT JOIN [goods_class] AS [gc] ON [ppd].[goods_class_id] = [gc].[id]
+       LEFT JOIN [goods] AS [g] ON [ppd].[goods_id] = [g].[id]
+       LEFT JOIN [goods_unit] AS [gu] ON [g].[goods_unit_id] = [gu].[id]
+       LEFT JOIN [vendor] AS [v] ON [v].[id] = [ppd].[vendor_id]
+       LEFT JOIN [quote_detail] AS [qd] ON [qd].[id] = [ppd].[quote_detail_id]
+WHERE  1=1
+"
+);              sb.Append($"	AND purchasing_plan_id = {purchasingPlanID}");
+
                 try
                 {
                     result = DBHelper.ExecuteTable(sb.ToString());
@@ -628,6 +656,7 @@ WHERE
             }
             return result;
         }
+
 
         /// <summary>
         /// 采购计划复审时 1对1指定供应商 获取对应供应商列表
