@@ -1366,7 +1366,9 @@ WHERE 1=1
 $@"
 SELECT 
        g.name AS goods_name, 
+       g.specification AS goods_specification,
        qd.unit_price AS unit_price, 
+       gu.name AS goods_unit,
        qd.id, 
        qd.goods_class_id, 
        qd.goods_id, 
@@ -1376,6 +1378,7 @@ SELECT
 FROM   quote AS q
        left join quote_detail AS qd on q.id = qd.quote_id
        left join goods AS g on qd.goods_id = g.id
+       LEFT JOIN goods_unit AS gu on g.goods_unit_id = gu.id
        left join goods_class AS gc on qd.goods_class_id = gc.id
 WHERE
        q.id = {quoteID}
