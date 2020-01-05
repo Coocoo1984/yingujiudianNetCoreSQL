@@ -1641,5 +1641,77 @@ WHERE
             return result;
         }
 
+        /// <summary>
+        /// 取得采购计划/采购订单的审核记录
+        /// </summary>
+        /// <returns></returns>
+        public static DataTable GetPAPOAuditList(int purchasingPlanID, int purchasingOrderID)
+        {
+            DataTable result = null;
+
+                StringBuilder sb = new StringBuilder();
+            sb.Append(@"
+SELECT 
+       [pa].[id],
+       [pa].[audit_usr_id],
+       [pa].[audit_time],
+       [pa].[audit_type],
+       CASE [pa].[audit_type] 
+       WHEN 1 THEN '初审驳回' 
+       WHEN 2 THEN '初审通过' 
+       WHEN 3 THEN '复审驳回' 
+       WHEN 4 THEN '复审通过' 
+       WHEN 5 THEN '三审驳回' 
+       WHEN 6 THEN '三审通过' 
+       WHEN 7 THEN '订单被供应商否定' 
+       WHEN 8 THEN '订单被供应商确认' 
+       WHEN 9 THEN '供应商已发货' 
+       WHEN 10 THEN '需求部门收货中' 
+       WHEN 11 THEN '需求部门已完整收货'
+       WHEN 12 THEN '需求部门发起退货'
+       WHEN 13 THEN '采购中心驳回退货'
+       WHEN 14 THEN '采购中心退货审核通过'
+       WHEN 15 THEN '供应商确认退货'
+       WHEN 16 THEN '需求部门确认退货完成'
+       END AS [audit_type_name],
+       [pa].[audit_desc],
+       [pa].[purchasing_plan_id] AS [purchasing_plan_id],
+       [pp].[department_id] AS [department_id],
+       [d].[name] AS [department_name],
+       [po].[id] AS [purchasing_order_id],
+       [v].[id] AS [vendor_id],
+       [d].[name] AS [vendor_name]
+FROM
+       purchasing_audit AS [pa]
+       LEFT JOIN [purchasing_plan] AS [pp] ON [pa].[purchasing_plan_id] = [pp].[id]
+       LEFT JOIN [department] AS [d] ON [pp].[department_id] = [d].[id]
+       LEFT JOIN [purchasing_order] AS [po] ON [po].[purchasing_plan_id] = [pp].[id]
+       LEFT JOIN [vendor] AS [v] ON [po].[vendor_id] = [v].[id]
+WHERE
+    1=1 
+");
+            if(purchasingPlanID >0)
+            {
+                sb.Append($" AND purchasing_plan_id = { purchasingPlanID } ");
+            }
+            else if(purchasingOrderID >0)
+            {
+                sb.Append($" AND purchasing_order_id = { purchasingOrderID } ");
+            }
+            sb.Append(@"
+      purchasingPlanID =1
+ORDER BY 
+      audit_time
+"
+);
+            try
+            {
+                result = DBHelper.ExecuteTable(sb.ToString());
+            }
+            catch (Exception) { throw; }
+            finally { }
+            return result;
+        }
+
     }
 }

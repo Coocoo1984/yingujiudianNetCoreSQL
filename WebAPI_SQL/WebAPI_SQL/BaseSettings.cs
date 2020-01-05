@@ -192,7 +192,7 @@ namespace WebAPI_SQL
             VendorNegative = 7,
 
             /// <summary>
-            /// 订单被供应商已确认
+            /// 订单被供应商确认
             /// </summary>
             VendorConfirmed = 8,
 
