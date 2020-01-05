@@ -10,10 +10,10 @@ namespace WebAPI_SQL.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class GetPAPOAuditListController : Controller
+    public class GetPAPOAuditListController : ControllerBase
     {
         [HttpGet]
-        public string GetPAPOAuditList(int purchasingPlanID, int purchasingOrderID, int PageIndex, int PageSize, string WechatID)
+        public string Get(int purchasingPlanID, int purchasingOrderID, int PageIndex, int PageSize, string WechatID)
         {
             //if (!string.IsNullOrWhiteSpace(WechatID))
             //{

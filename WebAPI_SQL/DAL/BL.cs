@@ -1699,7 +1699,6 @@ WHERE
                 sb.Append($" AND purchasing_order_id = { purchasingOrderID } ");
             }
             sb.Append(@"
-      purchasingPlanID =1
 ORDER BY 
       audit_time
 "
