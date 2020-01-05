@@ -13,7 +13,7 @@ namespace WebAPI_SQL.Controllers
     public class GetPAPOAuditListController : ControllerBase
     {
         [HttpGet]
-        public string Get(int purchasingPlanID, int purchasingOrderID, int PageIndex, int PageSize, string WechatID)
+        public string Get(int purchasingPlanID, int purchasingOrderID)
         {
             //if (!string.IsNullOrWhiteSpace(WechatID))
             //{
