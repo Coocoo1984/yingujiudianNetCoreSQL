@@ -1700,7 +1700,7 @@ WHERE
             }
             sb.Append(@"
 ORDER BY 
-      audit_time
+      [pa].[audit_time]
 "
 );
             try

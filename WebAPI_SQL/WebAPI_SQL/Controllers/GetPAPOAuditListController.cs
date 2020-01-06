@@ -24,7 +24,7 @@ namespace WebAPI_SQL.Controllers
             //}
 
             return JSONHelper.ToJSONString(PagingHelper.GetPagedTable(BL.GetPAPOAuditList(purchasingPlanID, purchasingOrderID),
-                 PageIndex, PageSize));
+                 0, 0));
         }
     }
 }

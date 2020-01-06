@@ -198,6 +198,10 @@ namespace DAL
                                 //itemDataRow[i] = string.Format("{0:yyyy-MM-dd HH:mm:ss}", dr.GetDateTime(i));
                                 itemDataRow[i] = dr.GetDateTime(i).ToString("yyyy-MM-dd HH:mm:ss");
                             }
+                            //else if (Type.Equals(Type.GetType("System.Int32"), t) && dr.GetName(i).Contains("desc"))
+                            //{
+                            //    itemDataRow[i] = dr.IsDBNull(i) ? "" : dr.GetString(i);
+                            //}
                             else
                             {
                                 if(dr.IsDBNull(i))
